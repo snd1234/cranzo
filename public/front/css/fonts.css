@@ -1,0 +1,46 @@
+@font-face {
+    font-family: 'AvenirRegular';
+    src: url('../fonts/AvenirRegular.eot');
+    src: url('../fonts/AvenirRegular.eot') format('embedded-opentype'),
+         url('../fonts/AvenirRegular.woff2') format('woff2'),
+         url('../fonts/AvenirRegular.woff') format('woff'),
+         url('../fonts/AvenirRegular.ttf') format('truetype'),
+         url('../fonts/AvenirRegular.svg#AvenirRegular') format('svg');
+}
+@font-face {
+    font-family: 'AvenirBook';
+    src: url('../fonts/AvenirBook.eot');
+    src: url('../fonts/AvenirBook.eot') format('embedded-opentype'),
+         url('../fonts/AvenirBook.woff2') format('woff2'),
+         url('../fonts/AvenirBook.woff') format('woff'),
+         url('../fonts/AvenirBook.ttf') format('truetype'),
+         url('../fonts/AvenirBook.svg#AvenirBook') format('svg');
+}
+@font-face {
+    font-family: 'AvenirHeavy';
+    src: url('../fonts/AvenirHeavy.eot');
+    src: url('../fonts/AvenirHeavy.eot') format('embedded-opentype'),
+         url('../fonts/AvenirHeavy.woff2') format('woff2'),
+         url('../fonts/AvenirHeavy.woff') format('woff'),
+         url('../fonts/AvenirHeavy.ttf') format('truetype'),
+         url('../fonts/AvenirHeavy.svg#AvenirHeavy') format('svg');
+}
+@font-face {
+    font-family: 'AvenirLight';
+    src: url('../fonts/AvenirLight.eot');
+    src: url('../fonts/AvenirLight.eot') format('embedded-opentype'),
+         url('../fonts/AvenirLight.woff2') format('woff2'),
+         url('../fonts/AvenirLight.woff') format('woff'),
+         url('../fonts/AvenirLight.ttf') format('truetype'),
+         url('../fonts/AvenirLight.svg#AvenirLight') format('svg');
+}
+@font-face {
+    font-family: 'AvenirBlack';
+    src: url('../fonts/AvenirBlack.eot');
+    src: url('../fonts/AvenirBlack.eot') format('embedded-opentype'),
+         url('../fonts/AvenirBlack.woff2') format('woff2'),
+         url('../fonts/AvenirBlack.woff') format('woff'),
+         url('../fonts/AvenirBlack.ttf') format('truetype'),
+         url('../fonts/AvenirBlack.svg#AvenirBlack') format('svg');
+}
+

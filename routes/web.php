@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    // call HomeController@index for the site's homepage
+    return app(\App\Http\Controllers\HomeController::class)->index();
 });
 
 // frontend authentication routes
