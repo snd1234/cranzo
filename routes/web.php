@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     //return view('welcome');
@@ -34,8 +36,38 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/update-user/{id}', [AdminController::class, 'updateUser'])->name('updateuser.submit')->middleware('auth:admin');
     Route::get('/view-user/{id}', [AdminController::class, 'viewUser'])->name('viewuser.form')->middleware('auth:admin');
     Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('deleteuser.submit')->middleware('auth:admin');
+  
+    // Page management routes
+    Route::get('/page-management', [PageController::class, 'index'])->name('pagemgmt.index')->middleware('auth:admin');
+    Route::get('/add-page', [PageController::class, 'showAddForm'])->name('pagemgmt.showAddForm')->middleware('auth:admin');
+    Route::post('/save-page-data', [PageController::class, 'store'])->name('pagemgmt.store')->middleware('auth:admin');
+    Route::get('/edit-page/{id}', [PageController::class, 'edit'])->name('pagemgmt.edit')->middleware('auth:admin');
+    Route::put('/page-management/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
+    Route::get('/page-management/{id}', [PageController::class, 'show'])->name('pagemgmt.show')->middleware('auth:admin');
+    Route::delete('/page-management/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
+
+   // Route for product category and subcategory management
     
+    Route::get('/product-category', [ProductController::class, 'categoryIndex'])->name('productcategory.index')
+    ->middleware('auth:admin');
+    Route::get('/add-product-category', [ProductController::class, 'showAddCategoryForm'])->name('productcategory.showAddForm')->middleware('auth:admin');
+    Route::post('/save-product-category', [ProductController::class, 'storeCategory'])->name('productcategory.store')->middleware('auth:admin');
+    Route::get('/edit-product-category/{id}', [ProductController::class, 'editCategory'])->name('productcategory.edit')->middleware('auth:admin');
+    Route::put('/update-product-category/{id}', [ProductController::class, 'updateCategory'])->name('productcategory.update')->middleware('auth:admin');
+   
 
-
-
+    Route::get('/product-sub-category', [ProductController::class, 'subCategoryIndex'])->name('productsubcategory.index')
+    ->middleware('auth:admin');
+    Route::get('/add-product-sub-category', [ProductController::class, 'showAddSubCategoryForm'])->name('productsubcategory.showAddForm')->middleware('auth:admin');
+    Route::post('/save-product-sub-category', [ProductController::class, 'storeSubCategory'])->name('productsubcategory.store')->middleware('auth:admin');
+    Route::get('/edit-product-sub-category/{id}', [ProductController::class, 'editSubCategory'])->name('productsubcategory.edit')->middleware('auth:admin');
+    Route::put('/update-product-sub-category/{id}', [ProductController::class, 'updateSubCategory'])->name('productsubcategory.update')->middleware('auth:admin');
+   
+    Route::get('/product', [ProductController::class, 'productIndex'])->name('product.index')
+    ->middleware('auth:admin');
+    Route::get('/add-product', [ProductController::class, 'showAddProductForm'])->name('product.showAddForm')->middleware('auth:admin');
+    Route::post('/save-product', [ProductController::class, 'storeProduct'])->name('product.store')->middleware('auth:admin');
+    Route::get('/edit-product/{id}', [ProductController::class, 'editProduct'])->name('product.edit')->middleware('auth:admin');
+    Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('product.update')->middleware('auth:admin');
+    Route::get('/view-product/{id}', [ProductController::class, 'viewProduct'])->name('product.view')->middleware('auth:admin');
 });
