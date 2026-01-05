@@ -3,12 +3,16 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Integrated Gulf Biosystems</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <title>Laboratory — Tailwind Demo</title>
+    <!-- <script src="assets/js/tailwind.3.4.17.js"></script> -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('front/js/lucide-icon.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('front/css/fonts.css') }}">
-    <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- <script src="assets/js/lucide-icon.js"></script> -->
+    <link rel="stylesheet" href="{{asset('front/css/swiper-bundle.min.css')}}">
+    <link rel="stylesheet" href="{{asset('front/css/fonts.css')}}">
+    <link rel="stylesheet" href="{{asset('front/css/style.css')}}">
 
     <script>
         function toggleMenu() {
@@ -20,151 +24,242 @@
 
 <body class="bg-gray-100">
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200 shadow-md sticky top-0 z-20">
-        <div class="max-w-full mx-auto px-4 flex justify-between items-center">
+    <!-- Header -->
+    <header class="header shadow-md sticky top-0 z-20">
+        <div class="max-w-full mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center space-x-6">
-                <div class="text-green-600 font-bold text-lg">
-                    <a href="{{ url('/') }}"><img src="{{ asset('front/images/IGB-Logo.png') }}" class="h-20" alt="IGB Logo"></a>
+                <div class="company-logo">
+                    <a href="{{ url('/') }}"><img src="{{asset('front/images/IGB-Logo_white.png')}}" alt="IGB Logo"></a>
                 </div>
             </div>
-            <div class="flex items-center space-x-4 text-sm">
-                <nav class="hidden md:block">
-                    <ul class="menu-items flex space-x-6 text-sm text-gray-600">
-                        <li><a href="#" class="uppercase hover:text-green-600">About us</a></li>
-                        <li><a href="products.html" class="uppercase hover:text-green-600">Products</a></li>
-                        <li><a href="#" class="uppercase hover:text-green-600">Our partners</a></li>
-                        <li><a href="#" class="uppercase hover:text-green-600">Events</a></li>
-                        <li><a href="#" class="uppercase hover:text-green-600">Newsroom</a></li>
-                        <li><a href="#" class="uppercase hover:text-green-600">Contact Us</a></li>
+            <div class="flex flex-col items-end">
+                <div class="header-right-top flex items-end gap-10 pt-5">
+                    <div class="contact-info flex items-center space-x-6">
+                        <a href="#" class="flex items-center space-x-2 group">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>+91 9876543210</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 group">
+                            <i class="fa-regular fa-envelope"></i>
+                            <span>info@yourmail.com</span>
+                        </a>
+                    </div>
+                    <div class="social-icons flex items-center justify-end space-x-5">
+
+                        <a href="#" class="icon-hover">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="icon-hover">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="icon-hover">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+        
+                        <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-youtube"></i>
+                        </a>
+        
+                        <!-- Mobile menu button -->
+                        <button onclick="toggleMenu()" class="lg:hidden focus:outline-none">
+                            <i data-lucide="menu" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+                <nav class="hidden lg:block">
+                    <ul class="menu-items flex items-center space-x-10 text-sm text-gray-600">
+                        <li><a href="{{ url('/about-us') }}" class="uppercase flex items-center">About us</a></li>
+                        <li><a href="{{ url('/products') }}" class="uppercase flex items-center gap-2">Products <span class="arrow"><i data-lucide="chevron-down"></i></span></a>
+                            <div class="submenu bg-white">
+                                <div class="grid grid-cols-3 gap-10">
+                                    <div class="space-y-3">
+                                        <h6 class="mb-4">Equipment</h6>
+                                        <a href="#">GBA Analyzer</a>
+                                        <a href="#">GBA Solutions</a>
+                                        <a href="#">Chromatography</a>
+                                        <a href="#">Mass Spectrometry</a>
+                                        <a href="#">Sample Preparation</a>
+                                        <a href="#">Titration</a>
+                                        <a href="#">Electrochemistry</a>
+                                        <a href="#">Ion Analysis</a>
+                                        <a href="#">TOC Analyzer</a>
+                                        <a href="#">Spectroscopy</a>
+                                        <a href="#">Automation</a>
+                                        <a href="#">Elemental Analysis</a>
+                                        <a href="#">Physical Properties</a>
+                                        <a href="#">Lab water systems</a>
+                                        <a href="#">Amino Acid Analyzer</a>
+                                        <a href="#">Vaccum Products</a>
+                                        <a href="#">Pyrolyzers</a>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <h6>Consumables</h6>
+                                        <a href="#">LC Columns</a>
+                                        <a href="#">GC Columns</a>
+                                        <a href="#">LC Supplies</a>
+                                        <a href="#">GC Supplies</a>
+                                        <a href="#">Spectroscopy Supplies</a>
+                                        <a href="#">Standards</a>
+                                        <a href="#">Sample Preparation</a>
+                                        <a href="#">Vials</a>
+                                        <a href="#">General Lab Consumables</a>
+                                        <a href="#">Gas Generators</a>
+                                        <a href="#">Safety and Aparel</a>
+                                        <a href="#">Food Safety Diagnostic Kits</a>
+
+                                    </div>
+                                    <div class="space-y-3">
+                                        <h6>Services</h6>
+                                        <a href="#">Onsite and repair Services</a>
+                                        <a href="#">Compliance</a>
+                                        <a href="#">Asset Management</a>
+                                        <a href="#">Relocation</a>
+                                        <a href="#">Operation and Maintenance</a>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li><a href="{{ url('/our-partners') }}" class="uppercase flex items-center">Our partners</a></li>
+                        <li><a href="{{ url('/events') }}" class="uppercase flex items-center">Events</a></li>
+                        <li><a href="{{ url('/news-room') }}" class="uppercase flex items-center">Newsroom</a></li>
+                        <li><a href="{{ url('/contact-us') }}" class="uppercase flex items-center">Contact Us</a></li>
                     </ul>
                 </nav>
-                <!-- Mobile menu button -->
-                <button onclick="toggleMenu()" class="md:hidden focus:outline-none">
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
+               
             </div>
         </div>
         <!-- Mobile Nav -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <ul class="menu-items flex flex-col p-4 space-y-3 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-green-600">Products</a></li>
-                <li><a href="#" class="hover:text-green-600">Applications</a></li>
-                <li><a href="#" class="hover:text-green-600">Solutions</a></li>
-                <li><a href="#" class="hover:text-green-600">Service & Support</a></li>
-                <li><a href="#" class="hover:text-green-600">About</a></li>
-                <li><a href="#" class="hover:text-green-600">News</a></li>
-                <li><a href="#" class="hover:text-green-600">Contact</a></li>
+                <li><a href="#" class="">Products</a></li>
+                <li><a href="#" class="">Applications</a></li>
+                <li><a href="#" class="">Solutions</a></li>
+                <li><a href="#" class="">Service & Support</a></li>
+                <li><a href="#" class="">About</a></li>
+                <li><a href="#" class="">News</a></li>
+                <li><a href="#" class="">Contact</a></li>
             </ul>
         </div>
     </header>
+
     @yield('content')
 
     <!--footer -->
     <footer>
-        <div class="footer py-12 px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="space-y-3">
-                    <h3 class="text-2xl mb-5 pb-3 border-b border-white text-white">Support</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Request a Quote
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Service & Support Request
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Training & Custom Project
-                        </a>
-                    </div>
+    <div class="footer p-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div>
+                <div class="mb-5 p-4 bg-white rounded-lg overflow-hidden w-[80%]">
+                    <img src="{{asset('front/images/IGB-Logo.png')}}" class="w-full object-cover" />
                 </div>
-                <div class="space-y-3">
-                    <h3 class="text-2xl mb-5 pb-3 border-b border-white text-white">Our Products</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Clinical Diagnostics & HLA
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Scientific Resources
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Applied Markets
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Publications
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Basic Research
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> New & Featured Products
-                        </a>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <h3 class="text-2xl mb-5 pb-3 border-b border-white text-white">Corporate</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> About IGB
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Careers
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Contact Us
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Promotions
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Online Registration
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Events Calendar
-                        </a>
-                        <a href="#"
-                            class="flex items-center inline-block text-lg text-white hover:underline transition duration-300">
-                            <i data-lucide="chevrons-right" class="w-5 h-5 mr-2"></i> Global Partners
-                        </a>
-                    </div>
+                <p >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec vestibulum
+                    magna, et dapibus lacus. Duis nec vestibulum magna, et dapibus lacus.</p>
+            </div>
+            <div>
+                <h3 class="mb-5 text-white uppercase">Our Products</h3>
+                <div class="grid grid-cols-1 gap-1">
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Clinical Diagnostics & HLA
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Scientific Resources
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Applied Markets
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Publications
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Basic Research
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        New & Featured Products
+                    </a>
                 </div>
             </div>
-        </div>
-        <div class="copyright-socials p-4 flex flex-col md:flex-row items-center justify-between">
-            <p class="flex items-center text-white">Copyright <i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
-                Integrated Gulf Biosystems, 2022. All Rights Reserved</p>
-            <!-- Social Icons -->
-            <div class="flex space-x-6">
-                <a href="#" aria-label="Facebook" class="text-white hover:text-blue-500 transition">
-                    <i data-lucide="facebook" class="w-6 h-6"></i>
-                </a>
-                <a href="#" aria-label="Instagram" class="text-white  hover:text-blue-500 transition">
-                    <i data-lucide="instagram" class="w-6 h-6"></i>
-                </a>
-                <a href="#" aria-label="LinkedIn" class="text-white hover:text-blue-500 transition">
-                    <i data-lucide="linkedin" class="w-6 h-6"></i>
-                </a>
-                <a href="#" aria-label="YouTube" class="text-white hover:text-blue-500 transition">
-                    <i data-lucide="youtube" class="w-6 h-6"></i>
-                </a>
+            <div>
+                <h3 class="mb-5 text-white uppercase">Customer Service</h3>
+                <div class="grid grid-cols-1 gap-1">
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        About IGB
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Careers
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Contact Us
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Promotions
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Online Registration
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Events Calendar
+                    </a>
+                    <a href="#" class="inline-block text-white transition duration-300">
+                        Global Partners
+                    </a>
+                </div>
             </div>
-        </div>
+            <div>
+                <h3 class="mb-5 text-white uppercase">Contact Info</h3>
+                <ul class="space-y-2 mb-6">
+                    <li class="flex flex-col gap-1">
+                        <h6 class="text-white uppercase">Address :</h6>
+                        <p>123 Street Name, City, England</p>
+                    </li>
 
-    </footer>
+                    <li class="flex flex-col gap-1">
+                        <h6 class="text-white uppercase">Phone :</h6>
+                        <a href="tel:(123)456-7890" class=" hover:underline">(123) 456-7890</a>
+                    </li>
+
+                    <li class="flex flex-col gap-1">
+                        <h6 class="text-white uppercase">Email :</h6>
+                        <a href="mailto:mail@example.com" class=" hover:underline">
+                            mail@example.com
+                        </a>
+                    </li>
+
+                    <li class="flex flex-col gap-1">
+                        <h6 class="text-white uppercase">Working Days/Hours :</h6>
+                        <p>Mon - Sun / 9:00 AM - 8:00 PM</p>
+                    </li>
+                </ul>
+                <div class="social-icons flex space-x-6">
+                    <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" class="icon-hover">
+                    <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                    <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+    
+                    <a href="#" class="icon-hover">
+                    <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="copyright-socials border-t border-gray-700 py-4 px-12 ">
+        <p class="flex items-center justify-center"><i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
+            Integrated Gulf Biosystems, 2025. All Rights Reserved</p>
+    </div>
+
+</footer>

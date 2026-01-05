@@ -1,5 +1,8 @@
 :root{
-    --text-purple-color: #332f82;
-    --text-orange-color: #f2931f;
-    --text-green-color: #92c13e
+    --tw-blue-color: #2f2c7d;
+    --tw-blue-light-color: #5a57a6;
+    --tw-orange-color: #f2931f;
+    --tw-green-color: #92c13e;
+    --tw-black-color:#242424;
+    --tw-white-color: #ffffff;
 }

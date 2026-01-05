@@ -5,12 +5,21 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
-    //return view('welcome');
-    // call HomeController@index for the site's homepage
     return app(\App\Http\Controllers\HomeController::class)->index();
 });
+Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
+Route::get('/our-partners', [HomeController::class, 'ourPartners'])->name('ourPartners');
+Route::get('/events', [HomeController::class, 'events'])->name('events');
+Route::get('/news-room', [HomeController::class, 'newsRoom'])->name('newsRoom');
+Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
+
+Route::get('/products', [HomeController::class, 'products'])->name('products');
+Route::get('/product-detail', [HomeController::class, 'productDetail'])->name('productDetail');
+Route::get('/our-solution-detail', [HomeController::class, 'ourSolutionDetail'])->name('ourSolutionDetail');
+Route::get('/common-detail-page', [HomeController::class, 'commonDetailPage'])->name('commonDetailPage');
 
 // frontend authentication routes
 // Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
