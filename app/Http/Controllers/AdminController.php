@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -113,5 +115,78 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'User marked inactive successfully.');
     }
     
+
+    public function blogIndex()
+    {
+        $blogs = \App\Models\Blog::all();
+        return view('admin.blogs', compact('blogs'));
+    }   
+    public function showAddBlogForm()
+    {
+        return view('admin.add_blogs');
+    }
+    public function storeBlog(Request $request)
+    {
+        if($request->isMethod('post')){
+            //echo "<pre>";print_r($request->all());die;
+        
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'type' => 'required|in:1,2,3,4',
+                'short_description' => 'required|string|max:500',
+                'content' => 'required|string',
+                'image' => 'nullable|image|max:2048',
+                'status' => 'required|boolean',
+            ]);
+
+            $blog = new \App\Models\Blog();
+            $blog->title = $request->title;
+            $blog->type = $request->type;
+            $blog->short_description = $request->short_description;
+            $blog->content = $request->content;
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('uploads/blogs', 'public');
+                $blog->image = $path;
+            }
+            $blog->status = $request->status;
+            $blog->save();
+            return redirect()->route('admin.blog.index')->with('success', 'Blog added successfully.');
+        }
+        
+    }
+    
+    public function editBlog($id)
+    {
+        $blog = Blog::findOrFail($id);
+        return view('admin.edit_blogs', compact('blog'));
+    }
+    public function updateBlog(Request $request, $id)
+    {
+        $blog = Blog::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'type' => 'required|in:1,2,3,4',
+            'short_description' => 'required|string|max:500',
+            'content' => 'required|string',
+            'image' => 'nullable|image|max:2048',
+            'status' => 'required|boolean',
+        ]);
+
+        $blog->title = $request->title;
+        $blog->type = $request->type;
+        $blog->short_description = $request->short_description;
+        $blog->content = $request->content;
+        if ($request->hasFile('image')) {
+            if ($blog->image) {
+                Storage::disk('public')->delete($blog->image);
+            }
+            $path = $request->file('image')->store('uploads/blogs', 'public');
+            $blog->image = $path;
+        }
+        $blog->status = $request->status;
+        $blog->save();
+        return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
+    }
 
 }

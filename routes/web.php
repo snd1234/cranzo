@@ -79,4 +79,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/edit-product/{id}', [ProductController::class, 'editProduct'])->name('product.edit')->middleware('auth:admin');
     Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('product.update')->middleware('auth:admin');
     Route::get('/view-product/{id}', [ProductController::class, 'viewProduct'])->name('product.view')->middleware('auth:admin');
+
+    Route::get('/blogs', [AdminController::class, 'blogIndex'])->name('blog.index')
+    ->middleware('auth:admin');
+    Route::get('/add-blog', [AdminController::class, 'showAddBlogForm'])->name('blog.showAddForm')->middleware('auth:admin');
+    Route::post('/save-blog', [AdminController::class, 'storeBlog'])->name('blog.store')->middleware('auth:admin');
+    Route::get('/edit-blog/{id}', [AdminController::class, 'editBlog'])->name('blog.edit')->middleware('auth:admin');
+    Route::put('/update-blog/{id}', [AdminController::class, 'updateBlog'])->name('blog.update')->middleware('auth:admin');
+
 });

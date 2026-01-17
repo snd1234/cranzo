@@ -75,7 +75,9 @@
                             </a>
                             <div class="collapse" id="collapseContent" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('/admin/page-management') }}">Page</a>
+                                    <a class="nav-link" href="{{ url('/admin/blogs') }}">Page Listing</a>
+                                    <!-- <a class="nav-link" href="{{ url('/admin/page-management') }}">Page</a> -->
+
                                     <!-- <a class="nav-link" href="#">Pages</a> -->
                                 </nav>
                             </div>
