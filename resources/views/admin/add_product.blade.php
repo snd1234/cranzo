@@ -78,11 +78,11 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Product Image</label>
-                                    <input type="file" name="image" id="productImage" class="form-control" accept="image/*">
-                                    <img id="imagePreview" src="" alt="Preview" class="img-fluid mt-2 d-none" style="max-height:160px;">
+                                    <label class="form-label">Product Images (Max 3)</label>
+                                    <input type="file" name="images[]" id="productImages" class="form-control" accept="image/*" multiple>
+                                    <div id="imagePreviewContainer" class="mt-2 d-flex gap-2 flex-wrap"></div>
+                                    <small class="text-muted">You can upload up to 3 images.</small>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
                                     @php $status = old('status','1'); @endphp
@@ -143,22 +143,42 @@
    
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Product image preview
-    var productInput = document.getElementById('productImage');
-    var imagePreview = document.getElementById('imagePreview');
-    if (productInput) {
-        productInput.addEventListener('change', function (e) {
-            var file = e.target.files[0];
-            if (!file) { imagePreview.classList.add('d-none'); imagePreview.src = ''; return; }
-            if (!file.type.startsWith('image/')) { alert('Select an image file.'); productInput.value = ''; return; }
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-                imagePreview.src = ev.target.result;
-                imagePreview.classList.remove('d-none');
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-});
+    document.addEventListener('DOMContentLoaded', function () {
+        var productImagesInput = document.getElementById('productImages');
+        var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+        if (productImagesInput) {
+            productImagesInput.addEventListener('change', function (e) {
+                imagePreviewContainer.innerHTML = ''; // Clear previous previews
+                var files = e.target.files;
+
+                if (files.length > 3) {
+                    alert('You can upload a maximum of 3 images.');
+                    productImagesInput.value = ''; // Reset input
+                    return;
+                }
+
+                Array.from(files).forEach(function (file) {
+                    if (!file.type.startsWith('image/')) {
+                        alert('Only image files are allowed.');
+                        productImagesInput.value = ''; // Reset input
+                        return;
+                    }
+
+                    var reader = new FileReader();
+                    reader.onload = function (ev) {
+                        var img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.alt = 'Preview';
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.objectFit = 'cover';
+                        img.classList.add('rounded', 'border');
+                        imagePreviewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+    });
 </script>

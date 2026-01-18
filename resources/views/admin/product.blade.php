@@ -24,7 +24,7 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Category</th>
-                                <th>Slug</th>
+                                <th>Sub Category</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th>Actions</th>
@@ -37,12 +37,12 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $product->title }}</td>
                                     <td>{{ $product->productCategory->name ?? 'N/A' }}</td>
-                                    <td>{{ $product->slug }}</td>
+                                    <td>{{ $product->productSubCategory->name ?? 'N/A' }}</td>
                                     <td>
                                         @if($product->status == 1)
-                                            Active
+                                           <span class="badge bg-success">Active</span>
                                         @else
-                                            Inactive
+                                            <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
                                     <td>{{ optional($product->created_at)->format('Y-m-d') }}</td>

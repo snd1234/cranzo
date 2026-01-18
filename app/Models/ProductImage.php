@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Products extends Model
+class ProductImage extends Model
 {
     use HasFactory;
 
@@ -53,18 +53,11 @@ class Products extends Model
      * @var array
      */
     protected $fillable = [
-        'category_id',
-        'sub_category_id',
-        'title',
-        'slug',
-        'short_description',
-        'description',
-        'image',
+        'product_id',
+        'image_path',
         'status',
         'created_at',
         'updated_at',
-        'created_by',
-        'updated_by',
     ];
 
     /**
@@ -81,18 +74,13 @@ class Products extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function productCategory()
-    {
-        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
-    }
-
-     public function productSubCategory()
-    {
-        return $this->belongsTo(ProductSubCategory::class, 'sub_category_id', 'id');
-    }
+    // public function productCategory()
+    // {
+    //     return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+    // }
 
     public function productImage()
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+        return $this->belongsTo(ProductImage::class, 'product_id', 'id');
     }
 }

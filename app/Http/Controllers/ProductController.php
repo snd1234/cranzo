@@ -167,7 +167,7 @@ class ProductController extends Controller
 
     public function productIndex()
     {
-        $products = DB::table('products')->get();
+        $products = Products::with('productCategory:id,name')->with('productSubCategory:id,name')->where('status', 1)->orderBy('id', 'DESC')->get();
         return view('admin.product', compact('products'));
     }
     public function showAddProductForm()
@@ -179,15 +179,15 @@ class ProductController extends Controller
     }
     public function storeProduct(Request $request)
     {
-        if($request->isMethod('post')){
-           //echo "<pre>";print_r($request->all());die;
-
+        if ($request->isMethod('post')) {
             $request->validate([
                 'name' => 'required|string|max:255',
                 'slug' => 'required|string|alpha_dash|max:255|unique:products,slug',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate each image
             ]);
 
-            DB::table('products')->insert([
+            // Insert product data into the products table
+            $productId = DB::table('products')->insertGetId([
                 'title' => $request->name,
                 'slug' => $request->slug,
                 'category_id' => $request->category_id,
@@ -201,20 +201,33 @@ class ProductController extends Controller
                 'updated_at' => now(),
             ]);
 
+            // Handle image uploads and store in product_image table
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('uploads/product_images', 'public'); // Store image in 'storage/app/public/product_images'
+                    DB::table('product_image')->insert([
+                        'product_id' => $productId,
+                        'image_path' => $path,
+                        'created_at' => now(),
+                        'status' => 1,
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
             return redirect('/admin/product')->with('success', 'Product added successfully.');
-       
         }
-        // Logic to store new product
     }
     public function editProduct($id)
     {
-        $product = DB::table('product')->where('id', $id)->first();
 
+        $product = DB::table('products')->where('id', $id)->first();
+        $product_images = DB::table('product_image')->where('product_id', $id)->get();
         if (!$product) {
             return redirect('/admin/product')->with('error', 'Product not found.');
         }
 
-        return view('admin.edit_product', compact('product'));
+        return view('admin.edit_product', compact('product', 'product_images'));
     }
     public function updateProduct(Request $request, $id)
     {
