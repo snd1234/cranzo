@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AjaxController;
 
 Route::get('/', function () {
     return app(\App\Http\Controllers\HomeController::class)->index();
@@ -20,6 +21,11 @@ Route::get('/products', [HomeController::class, 'products'])->name('products');
 Route::get('/product-detail', [HomeController::class, 'productDetail'])->name('productDetail');
 Route::get('/our-solution-detail', [HomeController::class, 'ourSolutionDetail'])->name('ourSolutionDetail');
 Route::get('/common-detail-page', [HomeController::class, 'commonDetailPage'])->name('commonDetailPage');
+
+Route::get('/blog/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
+
+Route::post('/ajax/subscribe-newsletter', [AjaxController::class, 'subscribeNewsletter'])->name('ajax.subscribeNewsletter');
+
 
 // frontend authentication routes
 // Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');

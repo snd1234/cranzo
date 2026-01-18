@@ -148,7 +148,9 @@
     </header>
 
     @yield('content')
-
+    <!-- <script src="{{asset('front/js/jquery.min.js')}}"></script>
+    <script src="{{asset('front/js/swiper-bundle.min.js')}}"></script>
+    <script src="{{asset('front/js/custom.js')}}"></script> -->
     <!--footer -->
     <footer>
     <div class="footer p-12">
@@ -263,3 +265,5 @@
     </div>
 
 </footer>
+
+

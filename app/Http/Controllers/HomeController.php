@@ -3,13 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as Input;
+use App\Models\{Page, Product, Category, Subcategory, Blog };
+use Illuminate\Support\Facades\DB, Hash, Auth, Crypt, Mail;
+use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Arr;
+use DataTables;
+use Validator;
+use Response;
+use Illuminate\Support\Str; 
 
 class HomeController extends Controller
 {
     //
     public function index()
     {
-        return view('index');
+        $blogs = DB::table('blogs')->where('status', 1)->where('type', 1)->get()->take(3);
+        $latestnews = DB::table('blogs')->where('status', 1)->where('type', 2)->get()->take(5);
+        $webinar = DB::table('blogs')->where('status', 1)->where('type', 3)->get()->take(3);
+        $events = DB::table('blogs')->where('status', 1)->where('type', 4)->get()->take(3);
+        $countries = DB::table('countries')->select('iso3', 'name')->where('status', 1)->orderBy('name', 'asc')->get();
+        $countries = $countries->mapWithKeys(function ($item) {
+            return [$item->iso3 => $item->name];
+        });
+        //echo "<pre>";print_r($countries);die;
+        return view('index',compact('blogs','latestnews','webinar','events','countries'));
     }
 
 
@@ -55,5 +73,14 @@ class HomeController extends Controller
         return view('common_detail_page');
     }
 
+    public function blogDetail($slug)
+    {
+        $blog = Blog::where('slug', $slug)->firstOrFail();
+        if (!$blog) {
+            abort(404);
+        }
+        //echo "<pre>";print_r($blog);die;
+        return view('blog_detail', compact('blog'));
+    }
 
 }
