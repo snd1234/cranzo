@@ -61,3 +61,6 @@ const homeSwiper = new Swiper('.homeSwiper', {
       $(this).next(".acc-content").slideToggle();
     });
   });
+
+
+  

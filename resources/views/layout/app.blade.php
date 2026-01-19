@@ -77,7 +77,15 @@
                                 <div class="grid grid-cols-3 gap-10">
                                     <div class="space-y-3">
                                         <h6 class="mb-4">Equipment</h6>
-                                        <a href="#">GBA Analyzer</a>
+                                        <a href="#" class="submenu-trigger flex items-center gap-4">
+                                            <i class="fa-solid fa-plus"></i>
+                                            <span>GBA Analyzer</span>
+                                            <div class="sub-submenu">
+                                                <a href="#">GBA Solutions</a>
+                                                <a href="#">Chromatography</a>
+                                                <a href="#">Mass Spectrometry</a>
+                                            </div>
+                                        </a>
                                         <a href="#">GBA Solutions</a>
                                         <a href="#">Chromatography</a>
                                         <a href="#">Mass Spectrometry</a>
@@ -148,122 +156,156 @@
     </header>
 
     @yield('content')
-    <!-- <script src="{{asset('front/js/jquery.min.js')}}"></script>
-    <script src="{{asset('front/js/swiper-bundle.min.js')}}"></script>
-    <script src="{{asset('front/js/custom.js')}}"></script> -->
+   
     <!--footer -->
+
     <footer>
-    <div class="footer p-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-            <div>
-                <div class="mb-5 p-4 bg-white rounded-lg overflow-hidden w-[80%]">
-                    <img src="{{asset('front/images/IGB-Logo.png')}}" class="w-full object-cover" />
+        <div class="footer p-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                    <div class="mb-5">
+                        <img src="{{asset('front/images/IGB-Logo.png')}}" class="w-full object-cover" />
+                    </div>
+                    <p >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec vestibulum
+                        magna, et dapibus lacus. Duis nec vestibulum magna, et dapibus lacus.</p>
                 </div>
-                <p >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec vestibulum
-                    magna, et dapibus lacus. Duis nec vestibulum magna, et dapibus lacus.</p>
-            </div>
-            <div>
-                <h3 class="mb-5 text-white uppercase">Our Products</h3>
-                <div class="grid grid-cols-1 gap-1">
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Clinical Diagnostics & HLA
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Scientific Resources
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Applied Markets
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Publications
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Basic Research
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        New & Featured Products
-                    </a>
-                </div>
-            </div>
-            <div>
-                <h3 class="mb-5 text-white uppercase">Customer Service</h3>
-                <div class="grid grid-cols-1 gap-1">
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        About IGB
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Careers
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Contact Us
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Promotions
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Online Registration
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Events Calendar
-                    </a>
-                    <a href="#" class="inline-block text-white transition duration-300">
-                        Global Partners
-                    </a>
-                </div>
-            </div>
-            <div>
-                <h3 class="mb-5 text-white uppercase">Contact Info</h3>
-                <ul class="space-y-2 mb-6">
-                    <li class="flex flex-col gap-1">
-                        <h6 class="text-white uppercase">Address :</h6>
-                        <p>123 Street Name, City, England</p>
-                    </li>
-
-                    <li class="flex flex-col gap-1">
-                        <h6 class="text-white uppercase">Phone :</h6>
-                        <a href="tel:(123)456-7890" class=" hover:underline">(123) 456-7890</a>
-                    </li>
-
-                    <li class="flex flex-col gap-1">
-                        <h6 class="text-white uppercase">Email :</h6>
-                        <a href="mailto:mail@example.com" class=" hover:underline">
-                            mail@example.com
+                <div>
+                    <h3 class="mb-5 text-white uppercase">Our Products</h3>
+                    <div class="grid grid-cols-1 gap-1">
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Clinical Diagnostics & HLA
                         </a>
-                    </li>
-
-                    <li class="flex flex-col gap-1">
-                        <h6 class="text-white uppercase">Working Days/Hours :</h6>
-                        <p>Mon - Sun / 9:00 AM - 8:00 PM</p>
-                    </li>
-                </ul>
-                <div class="social-icons flex space-x-6">
-                    <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="#" class="icon-hover">
-                    <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-                    <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
-    
-                    <a href="#" class="icon-hover">
-                    <i class="fa-brands fa-youtube"></i>
-                    </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Scientific Resources
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Applied Markets
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Publications
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Basic Research
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            New & Featured Products
+                        </a>
+                    </div>
                 </div>
+                <div>
+                    <h3 class="mb-5 text-white uppercase">Customer Service</h3>
+                    <div class="grid grid-cols-1 gap-1">
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            About IGB
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Careers
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Contact Us
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Promotions
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Online Registration
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Events Calendar
+                        </a>
+                        <a href="#" class="inline-block text-white transition duration-300">
+                            Global Partners
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="mb-5 text-white uppercase">Contact Info</h3>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex flex-col gap-1">
+                            <h6 class="text-white uppercase">Address :</h6>
+                            <p>123 Street Name, City, England</p>
+                        </li>
+
+                        <li class="flex flex-col gap-1">
+                            <h6 class="text-white uppercase">Phone :</h6>
+                            <a href="tel:(123)456-7890" class=" hover:underline">(123) 456-7890</a>
+                        </li>
+
+                        <li class="flex flex-col gap-1">
+                            <h6 class="text-white uppercase">Email :</h6>
+                            <a href="mailto:mail@example.com" class=" hover:underline">
+                                mail@example.com
+                            </a>
+                        </li>
+
+                        <li class="flex flex-col gap-1">
+                            <h6 class="text-white uppercase">Working Days/Hours :</h6>
+                            <p>Mon - Sun / 9:00 AM - 8:00 PM</p>
+                        </li>
+                    </ul>
+                    <div class="social-icons flex space-x-6">
+                        <a href="#" class="icon-hover">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="icon-hover">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="icon-hover">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+        
+                        <a href="#" class="icon-hover">
+                        <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+
             </div>
-
-
         </div>
-    </div>
-    <div class="copyright-socials border-t border-gray-700 py-4 px-12 ">
-        <p class="flex items-center justify-center"><i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
-            Integrated Gulf Biosystems, 2025. All Rights Reserved</p>
-    </div>
+        <div class="copyright-socials border-t border-gray-700 py-4 px-12 ">
+            <p class="flex items-center justify-center"><i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
+                Integrated Gulf Biosystems, 2025. All Rights Reserved</p>
+        </div>
+   </footer>
 
-</footer>
+<div class="sideButtons">
+    <div class="phone-widget">
+        <i class="fa-solid fa-phone"></i>
+        <a href="tel:+919876543210">+91 98765 43210</a>
+    </div>
+    <div class="phone-widget email">
+        <i class="fa-regular fa-envelope"></i>
+        <a href="mailto:info@yourmail.com">info@yourmail.com</a>
+    </div>
+</div>
+
+<script src="{{asset('front/js/jquery.min.js')}}"></script>
+<script src="{{asset('front/js/swiper-bundle.min.js')}}"></script>
+<script src="{{asset('front/js/custom.js')}}"></script>
+<script>
+    document.querySelectorAll('.submenu-trigger').forEach(trigger => {
+        trigger.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const subMenu = this.nextElementSibling;
+
+            // Close other open sub-submenus
+            document.querySelectorAll('.sub-submenu').forEach(menu => {
+                if (menu !== subMenu) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            // Toggle current
+            subMenu.style.display = 
+                subMenu.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+</script>
+
 
 

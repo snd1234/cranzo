@@ -18,14 +18,16 @@ p{font-family:'AvenirLight';font-size:1.2rem}
 .group:hover .animated-icon { transform: rotate(10deg) scale(1.15); color: var(--tw-blue-color); }
 @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
 
-.header{background:var(--tw-blue-color);transition: all 0.5s;--webkit-transition: all 0.5s;--moz-transition: all 0.5s;position: sticky;}
+.header{transition: all 0.5s;--webkit-transition: all 0.5s;--moz-transition: all 0.5s;position: sticky;
+  background: linear-gradient(to right, #332F82, #4a47b0);;
+}
 .menu-items li{position:static;}
 .menu-items > li{padding:28px 0;}
 .menu-items li > a{font-size:16px;line-height:1;color: var(--tw-white-color);}
 .menu-items li:hover > a{color: rgba(160, 168, 179, 1)}
 .arrow{transition: all 0.5s;-webkit-transition: all 0.5s;-moz-transition: all 0.5s;}
 .menu-items li:hover .arrow{transform: rotate(180deg);-moz-transform: rotate(180deg);-webkit-transform: rotate(180deg);}
-.submenu{position:absolute;top:100%;left:18px;min-width:98%;padding:30px;box-shadow:0 5px 25px rgba(0,0,0,0.1);opacity:0;visibility:hidden;transform:translateY(10px);transition:all 0.3s ease;z-index:999;border-radius:4px;}
+.submenu{position:absolute;top:100%;right:10%;min-width:60%;padding:30px;box-shadow:0 5px 25px rgba(0,0,0,0.1);opacity:0;visibility:hidden;transform:translateY(10px);transition:all 0.3s ease;z-index:999;border-radius:4px;}
 .submenu a{display:block;color: var(--tw-black-color);font-size:15px;transition:0.3s;}
 .submenu a:hover{color: var(--tw-green-color);}
 .menu-items li:hover>.submenu{opacity:1;visibility:visible;transform:translateY(0);}
@@ -74,19 +76,22 @@ p{font-family:'AvenirLight';font-size:1.2rem}
 .product-description .more-btn,.product-description p{font-size: 16px;}
 .product-description h2{font-size: 20px;font-family: 'AvenirHeavy';color: var(--tw-black-color);}
 .product-description .btn{padding: 14px 20px;margin-top: 1.2rem; color: var(--tw-white-color);}
-.btn{background: var(--tw-blue-color);color: var(--tw-white-color);padding: 14px 30px;border-radius: 24px;font-family: 'AvenirHeavy';
+.btn{background: var(--tw-bg-gradient-color);color: var(--tw-white-color);padding: 14px 30px;border-radius: 24px;font-family: 'AvenirHeavy';
     transition: all 0.5s;-webkit-transition: all 0.5s;-moz-transition: all 0.5s;border: 2px solid var(--tw-blue-color);
 }
 .btn:hover{background: var(--tw-white-color);color: var(--tw-blue-color); border: 2px solid var(--tw-blue-color);}
 .date svg{color: var(--tw-blue-color);}
 .company-logo img{height: 68px;}
-.footer,.copyright-socials{background: #222529;}
-.footer a,.footer p,.copyright-socials p{color: #a8a8a8;font-size: 16px;transition: all 0.5s;-webkit-transition: all 0.5s;-moz-transition: all 0.5s;}
+footer{
+  background: rgba(0, 90, 160, 0.04)
+}
+.footer a,.footer p,.copyright-socials p{color: #808285;font-size: 16px;transition: all 0.5s;-webkit-transition: all 0.5s;-moz-transition: all 0.5s;}
 .footer a:hover{color: var(--tw-green-color);}
-.footer h3{font-size: 1.2rem;line-height: 1;font-family: 'AvenirHeavy';}
-.footer h6{font-size: 1rem;line-height: 1;}
+.footer h3{font-size: 1.2rem;line-height: 1;font-family: 'AvenirHeavy';color: #332F82;}
+.footer h6{font-size: 1rem;line-height: 1;color: #332F82;}
+.footer .social-icons .icon-hover{color: #332F82;}
 
-.btn-hover{width:200px;font-size:16px;font-family:'AvenirHeavy';color: var(--tw-white-color);background: var(--tw-blue-color);cursor:pointer;margin:20px;height:55px;text-align:center;text-transform:uppercase;border-radius:50px;-moz-transition:all .5s;-o-transition:all .5s;-webkit-transition:all .5s;transition:all .5s;border: var(--tw-blue-color);}
+.btn-hover{width:200px;font-size:16px;font-family:'AvenirHeavy';color: var(--tw-white-color);background: var(--tw-bg-gradient-color);cursor:pointer;margin:20px;height:55px;text-align:center;text-transform:uppercase;border-radius:50px;-moz-transition:all .5s;-o-transition:all .5s;-webkit-transition:all .5s;transition:all .5s;border: var(--tw-blue-color);}
 .btn-hover:hover{background: var(--tw-white-color);color: var(--tw-blue-color);border:2px solid var(--tw-blue-color);}
 .btn-hover:focus{outline:none;}
 
@@ -219,3 +224,21 @@ textarea.form-input{height:60px;}
     margin: 6px 0 16px 16px;
     border-radius: 8px;  
   }
+
+  .sub-submenu {
+    display: none;
+    margin-left: 15px;
+    padding-left: 12px;
+    border-left: 2px solid #e5e7eb;
+}
+
+.sub-submenu a {
+    display: block;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.sub-submenu a:hover {
+    color: var(--tw-green-color);
+}
