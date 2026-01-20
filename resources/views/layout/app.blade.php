@@ -72,21 +72,41 @@
                 <nav class="hidden lg:block">
                     <ul class="menu-items flex items-center space-x-10 text-sm text-gray-600">
                         <li><a href="{{ url('/about-us') }}" class="uppercase flex items-center">About us</a></li>
-                        <li><a href="{{ url('/products') }}" class="uppercase flex items-center gap-2">Products <span class="arrow"><i data-lucide="chevron-down"></i></span></a>
+                        <li class="submenu-trigger">
+
+                            <a href="{{ url('/products') }}" class="uppercase flex items-center gap-2">Products <span class="arrow"><i data-lucide="chevron-down"></i></span></a>
                             <div class="submenu bg-white">
                                 <div class="grid grid-cols-3 gap-10">
                                     <div class="space-y-3">
                                         <h6 class="mb-4">Equipment</h6>
-                                        <a href="#" class="submenu-trigger flex items-center gap-4">
-                                            <i class="fa-solid fa-plus"></i>
-                                            <span>GBA Analyzer</span>
-                                            <div class="sub-submenu">
-                                                <a href="#">GBA Solutions</a>
-                                                <a href="#">Chromatography</a>
-                                                <a href="#">Mass Spectrometry</a>
-                                            </div>
-                                        </a>
-                                        <a href="#">GBA Solutions</a>
+                                        <ul class="p-0 m-0 space-y-3">
+                                            <li class="sub-submenu-trigger">
+                                                <a href="#" class="flex items-center gap-4">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                    <span>GBA Analyzer</span>
+                                                </a>
+                                                <div class="sub-submenu">
+                                                    <span class="angle-left"></span>
+                                                    <a href="#">GBA Solutions</a>
+                                                    <a href="#">Chromatography</a>
+                                                    <a href="#">Mass Spectrometry</a>
+                                                </div>
+                                            </li>
+                                            <li class="sub-submenu-trigger">
+                                                <a href="#" class="flex items-center gap-4">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                    <span>GBA Solutions</span>
+                                                </a>
+                                                <div class="sub-submenu">
+                                                    <span class="angle-left"></span>
+                                                    <a href="#">GBA Solutions</a>
+                                                    <a href="#">Chromatography</a>
+                                                    <a href="#">Mass Spectrometry</a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        
+                                        
                                         <a href="#">Chromatography</a>
                                         <a href="#">Mass Spectrometry</a>
                                         <a href="#">Sample Preparation</a>
@@ -130,7 +150,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                         </li>
                         <li><a href="{{ url('/our-partners') }}" class="uppercase flex items-center">Our partners</a></li>
                         <li><a href="{{ url('/events') }}" class="uppercase flex items-center">Events</a></li>
@@ -286,26 +306,7 @@
 <script src="{{asset('front/js/jquery.min.js')}}"></script>
 <script src="{{asset('front/js/swiper-bundle.min.js')}}"></script>
 <script src="{{asset('front/js/custom.js')}}"></script>
-<script>
-    document.querySelectorAll('.submenu-trigger').forEach(trigger => {
-        trigger.addEventListener('click', function (e) {
-            e.preventDefault();
 
-            const subMenu = this.nextElementSibling;
-
-            // Close other open sub-submenus
-            document.querySelectorAll('.sub-submenu').forEach(menu => {
-                if (menu !== subMenu) {
-                    menu.style.display = 'none';
-                }
-            });
-
-            // Toggle current
-            subMenu.style.display = 
-                subMenu.style.display === 'block' ? 'none' : 'block';
-        });
-    });
-</script>
 
 
 
