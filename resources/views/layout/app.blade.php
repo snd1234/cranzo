@@ -80,7 +80,7 @@
                             <a href="{{ url('/products') }}" class="uppercase flex items-center gap-2">Products <span class="arrow"><i data-lucide="chevron-down"></i></span></a>
                             <div class="submenu bg-white">
                                 <div class="grid grid-cols-3 gap-10">
-                                    @foreach($headerCategories as $category)
+                                   @foreach($headerCategories as $category)
                                     <div class="space-y-3">
                                         <!-- Category Name -->
                                         <h6 class="mb-4">
@@ -91,25 +91,29 @@
                                             <ul class="p-0 m-0 space-y-3">
                                                 @foreach($category->subcategories as $sub)
                                                     <li class="sub-submenu-trigger">
-                                                        <a href="#"
-                                                        class="flex items-center gap-4">
-                                                            <i class="fa-solid fa-plus"></i>
+                                                        <a href="#" class="flex items-center gap-4">
+                                                            <!-- <i class="fa-solid fa-plus"></i> -->
                                                             <span>{{ $sub->name }}</span>
                                                         </a>
 
-                                                        {{-- If you add 3rd level later --}}
-                                                        <div class="sub-submenu">
-                                                            <span class="angle-left"></span>
-                                                            <a href="{{ url('subcategory/'.$sub->slug) }}">
-                                                                {{ $sub->name }}
-                                                            </a>
-                                                        </div>
+                                                        @if($sub->products->isNotEmpty())
+                                                            <div class="sub-submenu">
+                                                                <span class="angle-left"></span>
+
+                                                                @foreach($sub->products as $product)
+                                                                    <a href="{{ url($product->slug) }}">
+                                                                        {{ $product->title }}
+                                                                    </a>
+                                                                @endforeach
+
+                                                            </div>
+                                                        @endif
                                                     </li>
                                                 @endforeach
                                             </ul>
                                         @endif
                                     </div>
-                                    @endforeach
+                                @endforeach
                                     <!-- <div class="space-y-3">
                                         <h6 class="mb-4">Equipment</h6>
                                         <ul class="p-0 m-0 space-y-3">

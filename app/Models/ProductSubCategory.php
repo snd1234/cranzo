@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * App\Models\ContentCategory
  *
@@ -81,5 +82,12 @@ class ProductSubCategory extends Model
     public function productCategory()
     {
         return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+    }
+    public function products()
+    {
+        return $this->hasMany(
+            Products::class,
+            'sub_category_id'
+        )->where('status', 1);
     }
 }
