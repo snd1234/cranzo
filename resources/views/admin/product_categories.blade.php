@@ -23,7 +23,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Slug</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th>Actions</th>
@@ -36,15 +35,14 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $category->name }}</td>
-                                    <td>{{ $category->slug }}</td>
                                     <td>
                                         @if($category->status == 1)
-                                            Active
+                                           <span class="badge bg-success">Active</span>
                                         @else
-                                            Inactive
+                                            <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>{{optional($category->created_at)->format('Y-m-d') }}</td>
+                                    <td>{{ date("Y-m-d", strtotime($category->created_at)) }}</td>
                                     <td>
                                         <!-- <a href="{{ url('admin/view-category/'.$category->id) }}" class="btn btn-sm btn-info ms-1">View</a> -->
                                         <a href="{{ url('admin/edit-product-category/'.$category->id) }}" class="btn btn-sm btn-warning ms-1">Edit</a>

@@ -13,7 +13,7 @@ use Validator;
 use Response;
 use Illuminate\Support\Str; 
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     //
     public function index()

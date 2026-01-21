@@ -26,6 +26,9 @@
     <!-- Header -->
     <!-- Header -->
     <header class="header shadow-md sticky top-0 z-20">
+        <?php  
+        //echo "<pre>";print_r($headerCategories);die;
+        ?>
         <div class="max-w-full mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center space-x-6">
                 <div class="company-logo">
@@ -77,7 +80,37 @@
                             <a href="{{ url('/products') }}" class="uppercase flex items-center gap-2">Products <span class="arrow"><i data-lucide="chevron-down"></i></span></a>
                             <div class="submenu bg-white">
                                 <div class="grid grid-cols-3 gap-10">
+                                    @foreach($headerCategories as $category)
                                     <div class="space-y-3">
+                                        <!-- Category Name -->
+                                        <h6 class="mb-4">
+                                            {{ $category->name }}
+                                        </h6>
+
+                                        @if($category->subcategories->isNotEmpty())
+                                            <ul class="p-0 m-0 space-y-3">
+                                                @foreach($category->subcategories as $sub)
+                                                    <li class="sub-submenu-trigger">
+                                                        <a href="#"
+                                                        class="flex items-center gap-4">
+                                                            <i class="fa-solid fa-plus"></i>
+                                                            <span>{{ $sub->name }}</span>
+                                                        </a>
+
+                                                        {{-- If you add 3rd level later --}}
+                                                        <div class="sub-submenu">
+                                                            <span class="angle-left"></span>
+                                                            <a href="{{ url('subcategory/'.$sub->slug) }}">
+                                                                {{ $sub->name }}
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </div>
+                                    @endforeach
+                                    <!-- <div class="space-y-3">
                                         <h6 class="mb-4">Equipment</h6>
                                         <ul class="p-0 m-0 space-y-3">
                                             <li class="sub-submenu-trigger">
@@ -147,7 +180,7 @@
                                         <a href="#">Relocation</a>
                                         <a href="#">Operation and Maintenance</a>
 
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             

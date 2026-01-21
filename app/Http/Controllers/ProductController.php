@@ -33,13 +33,13 @@ class ProductController extends Controller
 
             $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|alpha_dash|max:255|unique:product_category,slug',
+                //'slug' => 'required|string|alpha_dash|max:255|unique:product_category,slug',
             ]);
 
             DB::table('product_category')->insert([
                 'name' => $request->name,
-                'slug' => $request->slug,
-                'main_category_id' => $request->main_category_id,
+                // 'slug' => $request->slug,
+                // 'main_category_id' => $request->main_category_id,
                 'description' => $request->description,
                 'status' => $request->status,
                 'created_by' => auth()->id(),
@@ -70,13 +70,13 @@ class ProductController extends Controller
 
             $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|alpha_dash|max:255|unique:product_category,slug,'.$id,
+                // 'slug' => 'required|string|alpha_dash|max:255|unique:product_category,slug,'.$id,
             ]);
 
             DB::table('product_category')->where('id', $id)->update([
                 'name' => $request->name,
-                'slug' => $request->slug,
-                'main_category_id' => $request->main_category_id,
+                // 'slug' => $request->slug,
+                // 'main_category_id' => $request->main_category_id,
                 'description' => $request->description,
                 'status' => $request->status,
                 'updated_by' => auth()->id(),
@@ -107,13 +107,13 @@ class ProductController extends Controller
             $request->validate([
                 'category_id' => 'required|exists:product_category,id',
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|alpha_dash|max:255|unique:product_sub_category,slug',
+                // 'slug' => 'required|string|alpha_dash|max:255|unique:product_sub_category,slug',
             ]);
 
             DB::table('product_sub_category')->insert([
                 'category_id' => $request->category_id,
                 'name' => $request->name,
-                'slug' => $request->slug,
+                //'slug' => $request->slug,
                 'description' => $request->description,
                 'status' => $request->status,
                 'created_by' => auth()->id(),
@@ -147,13 +147,13 @@ class ProductController extends Controller
             $request->validate([
                 'category_id' => 'required|exists:product_category,id',
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|alpha_dash|max:255|unique:product_sub_category,slug,'.$id,
+                //'slug' => 'required|string|alpha_dash|max:255|unique:product_sub_category,slug,'.$id,
             ]);
 
             DB::table('product_sub_category')->where('id', $id)->update([
                 'category_id' => $request->category_id,
                 'name' => $request->name,
-                'slug' => $request->slug,
+                //'slug' => $request->slug,
                 'description' => $request->description,
                 'status' => $request->status,
                 'updated_by' => auth()->id(),
@@ -220,14 +220,15 @@ class ProductController extends Controller
     }
     public function editProduct($id)
     {
-
+        $categories = DB::table('product_category')->get();
+        $subCategories = DB::table('product_sub_category')->get();
         $product = DB::table('products')->where('id', $id)->first();
         $product_images = DB::table('product_image')->where('product_id', $id)->get();
         if (!$product) {
             return redirect('/admin/product')->with('error', 'Product not found.');
         }
 
-        return view('admin.edit_product', compact('product', 'product_images'));
+        return view('admin.edit_product', compact('product', 'product_images','categories','subCategories'));
     }
     public function updateProduct(Request $request, $id)
     {

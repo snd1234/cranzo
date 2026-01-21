@@ -54,7 +54,7 @@ class ProductCategory extends Model
      */
     protected $fillable = [
         'name',
-        'slug',
+        //'slug',
         'description',
         'status',
         'created_at',
@@ -71,4 +71,12 @@ class ProductCategory extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function subcategories()
+    {
+        return $this->hasMany(
+            ProductSubCategory::class,
+            'category_id'
+        )->where('status', 1);
+    }
 }

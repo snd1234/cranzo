@@ -42,13 +42,13 @@
                                     <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required aria-required="true">
                                 </div>
 
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label">Slug <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug') }}" required aria-required="true">
                                     </div>
                                     <small class="text-muted">URL friendly identifier (lowercase, hyphens).</small>
-                                </div>
+                                </div> -->
 
                                 <div class="mb-3">
                                     <label class="form-label">Product Category <span class="text-danger">*</span></label>
@@ -63,8 +63,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Description <span class="text-danger">*</span></label>
-                                    <textarea name="description" class="form-control" rows="3" required aria-required="true">{{ old('description') }}</textarea>
+                                    <label class="form-label">Description </label>
+                                    <textarea name="description" class="form-control" rows="3" aria-required="true">{{ old('description') }}</textarea>
                                 </div>
 
                                 <div class="mb-3">

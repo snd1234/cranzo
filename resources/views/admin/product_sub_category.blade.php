@@ -24,7 +24,6 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Category</th>
-                                <th>Slug</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th>Actions</th>
@@ -37,15 +36,14 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $subCategory->name }}</td>
                                     <td>{{ $subCategory->productCategory->name ?? 'N/A' }}</td>
-                                    <td>{{ $subCategory->slug }}</td>
                                     <td>
                                         @if($subCategory->status == 1)
-                                            Active
+                                            <span class="badge bg-success">Active</span>
                                         @else
-                                            Inactive
+                                            <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
-                                    <td>{{ optional($subCategory->created_at)->format('Y-m-d') }}</td>
+                                    <td>{{ date("Y-m-d", strtotime($subCategory->created_at)) }}</td>
                                     <td>
                                         <a href="{{ url('admin/edit-product-sub-category/'.$subCategory->id) }}" class="btn btn-sm btn-warning ms-1">Edit</a>
                                     </td>

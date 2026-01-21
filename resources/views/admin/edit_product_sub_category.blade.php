@@ -43,13 +43,13 @@
                                     <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $subCategory->name) }}" required aria-required="true">
                                 </div>
                                
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label">Slug <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug', $subCategory->slug) }}" required aria-required="true">
                                     </div>
                                     <small class="text-muted">URL friendly identifier (lowercase, hyphens).</small>
-                                </div>
+                                </div> -->
                                
                                 <div class="mb-3">
                                     <label class="form-label">Description <span class="text-danger">*</span></label>
