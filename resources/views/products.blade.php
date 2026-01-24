@@ -19,83 +19,28 @@
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <!-- Product Card -->
+             @foreach($products as $product)
             <div class="card p-4 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
                 <div class="product-img bg-gray-200 h-60 overflow-hidden">
                     <figure>
-                        <img src="{{asset('front/images/one.jpg') }}" class="w-full object-cover">
+                        @if(isset($product->productImages[0]) && !empty($product->productImages[0]))
+                        <img src="{{ asset('storage/' . $product->productImages[0]['image_path']) }}" class="w-full object-cover">
+                         @endif
                     </figure>
 
                 </div>
                 <div class="product-description p-4">
-                    <h2>Product Title</h2>
-                    <p class="text-gray-600">It is a long established fact that a reader will be distracted by the
-                        readable content of a page when looking at its layout. </p>
+                    <h2>{{ strlen($product->title) > 20 ? substr($product->title, 0, 20) . '...' : $product->title }}</h2>
+                    <p class="text-gray-600">{{ strlen($product->short_description) > 66 ? substr($product->short_description, 0, 66) . '...' : $product->short_description }} </p>
                     <div class="flex items-center justify-end">
-                        <a href="{{ url('/product-detail') }}" class="btn uppercase">Read More</a>
+                        <a href="{{ url('product-detail/' . $product->slug) }}" class="btn uppercase">Read More</a>
                     </div>
 
                 </div>
             </div>
+            @endforeach
 
-
-            <!-- Repeat product cards -->
-            <div class="card p-4 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
-                <div class="product-img bg-gray-200 h-60 overflow-hidden">
-                    <figure>
-                        <img src="{{asset('front/images/two.jpg') }}" class="w-full object-cover">
-                    </figure>
-
-                </div>
-                <div class="product-description p-4">
-                    <h2>Product Title</h2>
-                    <p class="text-gray-600">It is a long established fact that a reader will be distracted by the
-                        readable content of a page when looking at its layout. </p>
-
-                    <div class="flex items-center justify-end">
-                        <a href="{{ url('/product-detail') }}" class="btn uppercase">Read More</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="card p-4 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
-                <div class="product-img bg-gray-200 h-60 overflow-hidden">
-                    <figure>
-                        <img src="{{asset('front/images/three.jpg') }}" class="w-full object-cover">
-                    </figure>
-
-                </div>
-                <div class="product-description p-4">
-                    <h2>Product Title</h2>
-                    <p class="text-gray-600">It is a long established fact that a reader will be distracted by the
-                        readable content of a page when looking at its layout. </p>
-
-                    <div class="flex items-center justify-end">
-                        <a href="{{ url('/product-detail') }}" class="btn uppercase">Read More</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="card p-4 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
-                <div class="product-img bg-gray-200 h-60 overflow-hidden">
-                    <figure>
-                        <img src="{{asset('front/images/one.jpg') }}" class="w-full object-cover">
-                    </figure>
-
-                </div>
-                <div class="product-description p-4">
-                    <h2>Product Title</h2>
-                    <p class="text-gray-600">It is a long established fact that a reader will be distracted by the
-                        readable content of a page when looking at its layout. </p>
-
-                    <div class="flex items-center justify-end">
-                        <a href="{{ url('/product-detail') }}" class="btn uppercase">Read More</a>
-                    </div>
-                </div>
-            </div>
-
-
+          
         </div>
     </div>
 @endsection

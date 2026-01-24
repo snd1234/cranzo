@@ -24,7 +24,7 @@ class ProductImage extends Model
      *
      * @var string
      */
-    protected $table = 'products';
+    protected $table = 'product_image';
 
     /**
      * Primary key.
@@ -79,8 +79,8 @@ class ProductImage extends Model
     //     return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
     // }
 
-    public function productImage()
+    public function product()
     {
-        return $this->belongsTo(ProductImage::class, 'product_id', 'id');
+        return $this->belongsTo(Products::class, 'product_id', 'id');
     }
 }

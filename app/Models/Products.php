@@ -91,9 +91,9 @@ class Products extends Model
         return $this->belongsTo(ProductSubCategory::class, 'sub_category_id', 'id');
     }
 
-    public function productImage()
+    public function productImages()
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+        return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
 }

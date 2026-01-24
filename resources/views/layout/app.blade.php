@@ -99,7 +99,7 @@
                                                                 <span class="angle-left"></span>
 
                                                                 @foreach($sub->products as $product)
-                                                                    <a href="{{ url('product/' . $product->slug) }}">
+                                                                    <a href="{{ url('product-detail/' . $product->slug) }}">
                                                                         {{ $product->title }}
                                                                     </a>
                                                                 @endforeach

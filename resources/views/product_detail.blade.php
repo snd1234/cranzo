@@ -150,7 +150,7 @@
                                 <div class="flex flex-col space-y-3">
                                    
                                         @foreach($sub->products as $product)
-                                        <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i> {{ $product->title }}</a>
+                                        <a href="{{ url('product-detail/' . $product->slug) }}" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i> {{ $product->title }}</a>
                                         @endforeach
                                    
                                     <!-- <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>GFood Safety Solutions</a>
