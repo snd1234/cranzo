@@ -81,110 +81,37 @@
                             <div class="submenu bg-white">
                                 <div class="grid grid-cols-3 gap-10">
                                    @foreach($headerCategories as $category)
-                                    <div class="space-y-3">
-                                        <!-- Category Name -->
-                                        <h6 class="mb-4">
-                                            {{ $category->name }}
-                                        </h6>
-
-                                        @if($category->subcategories->isNotEmpty())
-                                            <ul class="p-0 m-0 space-y-3">
-                                                @foreach($category->subcategories as $sub)
-                                                    <li class="sub-submenu-trigger">
-                                                        <a href="#" class="flex items-center gap-4">
-                                                            <!-- <i class="fa-solid fa-plus"></i> -->
-                                                            <span>{{ $sub->name }}</span>
-                                                        </a>
-
+                                    @if($category->subcategories->contains(fn($sub) => $sub->products->isNotEmpty()))
+                                        <div class="space-y-3">
+                                            <h6 class="mb-4">
+                                                {{ $category->name }}
+                                            </h6>
+                                            @if($category->subcategories->isNotEmpty())
+                                                <ul class="p-0 m-0 space-y-3">
+                                                    @foreach($category->subcategories as $sub)
                                                         @if($sub->products->isNotEmpty())
+                                                        <li class="sub-submenu-trigger">
+                                                            <a href="#" class="flex items-center gap-4">
+                                                                <!-- <i class="fa-solid fa-plus"></i> -->
+                                                                <span>{{ $sub->name }}</span>
+                                                            </a>
                                                             <div class="sub-submenu">
                                                                 <span class="angle-left"></span>
 
                                                                 @foreach($sub->products as $product)
-                                                                    <a href="{{ url($product->slug) }}">
+                                                                    <a href="{{ url('product/' . $product->slug) }}">
                                                                         {{ $product->title }}
                                                                     </a>
                                                                 @endforeach
-
                                                             </div>
+                                                        </li>
                                                         @endif
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </div>
                                         @endif
-                                    </div>
-                                @endforeach
-                                    <!-- <div class="space-y-3">
-                                        <h6 class="mb-4">Equipment</h6>
-                                        <ul class="p-0 m-0 space-y-3">
-                                            <li class="sub-submenu-trigger">
-                                                <a href="#" class="flex items-center gap-4">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                    <span>GBA Analyzer</span>
-                                                </a>
-                                                <div class="sub-submenu">
-                                                    <span class="angle-left"></span>
-                                                    <a href="#">GBA Solutions</a>
-                                                    <a href="#">Chromatography</a>
-                                                    <a href="#">Mass Spectrometry</a>
-                                                </div>
-                                            </li>
-                                            <li class="sub-submenu-trigger">
-                                                <a href="#" class="flex items-center gap-4">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                    <span>GBA Solutions</span>
-                                                </a>
-                                                <div class="sub-submenu">
-                                                    <span class="angle-left"></span>
-                                                    <a href="#">GBA Solutions</a>
-                                                    <a href="#">Chromatography</a>
-                                                    <a href="#">Mass Spectrometry</a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        
-                                        
-                                        <a href="#">Chromatography</a>
-                                        <a href="#">Mass Spectrometry</a>
-                                        <a href="#">Sample Preparation</a>
-                                        <a href="#">Titration</a>
-                                        <a href="#">Electrochemistry</a>
-                                        <a href="#">Ion Analysis</a>
-                                        <a href="#">TOC Analyzer</a>
-                                        <a href="#">Spectroscopy</a>
-                                        <a href="#">Automation</a>
-                                        <a href="#">Elemental Analysis</a>
-                                        <a href="#">Physical Properties</a>
-                                        <a href="#">Lab water systems</a>
-                                        <a href="#">Amino Acid Analyzer</a>
-                                        <a href="#">Vaccum Products</a>
-                                        <a href="#">Pyrolyzers</a>
-                                    </div>
-                                    <div class="space-y-3">
-                                        <h6>Consumables</h6>
-                                        <a href="#">LC Columns</a>
-                                        <a href="#">GC Columns</a>
-                                        <a href="#">LC Supplies</a>
-                                        <a href="#">GC Supplies</a>
-                                        <a href="#">Spectroscopy Supplies</a>
-                                        <a href="#">Standards</a>
-                                        <a href="#">Sample Preparation</a>
-                                        <a href="#">Vials</a>
-                                        <a href="#">General Lab Consumables</a>
-                                        <a href="#">Gas Generators</a>
-                                        <a href="#">Safety and Aparel</a>
-                                        <a href="#">Food Safety Diagnostic Kits</a>
-
-                                    </div>
-                                    <div class="space-y-3">
-                                        <h6>Services</h6>
-                                        <a href="#">Onsite and repair Services</a>
-                                        <a href="#">Compliance</a>
-                                        <a href="#">Asset Management</a>
-                                        <a href="#">Relocation</a>
-                                        <a href="#">Operation and Maintenance</a>
-
-                                    </div> -->
+                                    @endforeach
                                 </div>
                             </div>
                             

@@ -21,65 +21,10 @@
             <div
                 class="product-info p-8 bg-white rounded-lg shadow hover:shadow-lg transition duration-300 min-h-[520px]">
                 <div class="page-heading relative mb-4">
-                    <span class="bg-white  uppercase">KingFisher Duo Prime</span>
+                    <span class="bg-white  uppercase">{{$product->title}}</span>
                 </div>
-                <p class="text-gray-700 mb-4">The Thermo Scientific KingFisher Duo Prime is the most versatile compact
-                    benchtop sample
-                    preparation instrument in the lab for 6 or 12 samples per run. It offers consistent extraction
-                    and purification of DNA, RNA, proteins, and cells, and includes an ultraviolet lamp for
-                    decontamination. The KingFisher Duo Prime is an affordable choice for academic or small
-                    labs.</p>
-                <div class="mb-5">
-                    <h4 class="mb-3">Features</h4>
-                    <p class="text-gray-700 mb-3">In addition to the common features of all KingFisher Purification
-                        Systems, the Duo Prime
-                        offers:</p>
-                    <div class="features-info space-y-4">
-                        <div class="features-item">
-                            <h4>Automated purification</h4>
-                            <p>6–12 samples per run</p>
-                        </div>
-                        <div class="features-item">
-                            <h4>Choose from two plate formats</h4>
-                            <p>Wide 20 μL–5 mL volume range</p>
-                        </div>
-                        <div class="features-item">
-                            <h4>Download protocols from our library</h4>
-                            <p>Or easily customize protocols using ThermoScientific BindIt Software</p>
-                        </div>
-                        <div class="features-item">
-                            <h4>Easy to install and run</h4>
-                            <p>Ready to run in 10 minutes or less</p>
-                        </div>
-                        <div class="features-item">
-                            <h4>Simple workflow</h4>
-                            <p>Just follow the on-screen instructions</p>
-                        </div>
-                        <div class="features-item">
-                            <h4>Ultraviolet lamp</h4>
-                            <p>Decontamination is standard</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-5">
-                    <h4 class="mb-3">Applications</h4>
-                    <p class="text-gray-700">The KingFisher Duo Prime can gently and efficiently isolate and purify
-                        nucleic acids, proteins,
-                        and cells from a range of sample types for a wide variety of downstream applications. For a
-                        selection of application kits, reagents, and protocols that run on the KingFisher Duo Prime,
-                        reach out to us.</p>
-                </div>
-                <div class="mb-5">
-                    <h4 class="mb-3">Protocols and software</h4>
-                    <p class="text-gray-700 mb-3">Thermo Scientific BindIt software is included with KingFisher Duo
-                        Prime and Flex
-                        instruments. The software makes it easy to create, download, run, modify, and store
-                        protocols for your KingFisher applications.</p>
-                    <p class="text-gray-700 mb-3">Protocols are available for nucleic acid and protein purification
-                        procedures with reagent kits.
-                        The software allows you to define and edit steps, parameters, plates, and reagents for every
-                        part of your protocol—bind, wash, and elute.</p>
-                </div>
+                {!! $product->description !!}
+                
                 <div class="my-10">
                     <div class="page-heading relative mb-4">
                         <span class="bg-white uppercase">Form Fill Up</span>
@@ -180,15 +125,11 @@
                         <div class="slider-overlay"></div>
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img src="{{ asset('front/images/one.jpg') }}" alt="">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="{{ asset('front/images/two.jpg') }}" alt="">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="{{ asset('front/images/three.jpg') }}" alt="">
-                            </div>
+                            @foreach($product_images as $image)
+                                <div class="swiper-slide">
+                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="product image">
+                                </div>
+                            @endforeach                           
                         </div>
                         <div class="swiper-pagination"></div>
                         <div class="swiper-button-next"></div>
@@ -200,29 +141,26 @@
                         <span class="bg-white uppercase">Browse by</span>
                     </div>
                     <div class="accordion">
-
-                        <div class="acc-item">
-                          <div class="acc-title">GBA Solutions</div>
-                          <div class="acc-content">
-                            <div class="flex flex-col space-y-3">
-                                <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>GBA Solutions</a>
-                                <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>GFood Safety Solutions</a>
-                                <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>Clinical Research</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="acc-item">
-                            <div class="acc-title">GBA Solutions</div>
+                        @if($subcategories->isNotEmpty())
+                            @foreach($subcategories as $sub)
+                             @if($sub->products->isNotEmpty())
+                            <div class="acc-item">
+                            <div class="acc-title">{{ $sub->name }}</div>
                             <div class="acc-content">
-                              <div class="flex flex-col space-y-3">
-                                  <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>GBA Solutions</a>
-                                  <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>GFood Safety Solutions</a>
-                                  <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>Clinical Research</a>
-                              </div>
+                                <div class="flex flex-col space-y-3">
+                                   
+                                        @foreach($sub->products as $product)
+                                        <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i> {{ $product->title }}</a>
+                                        @endforeach
+                                   
+                                    <!-- <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>GFood Safety Solutions</a>
+                                    <a href="#" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i>Clinical Research</a> -->
+                                </div>
                             </div>
-                          </div>
-                      
-                       
+                            </div>
+                             @endif
+                            @endforeach
+                        @endif
                       
                       </div>
                     

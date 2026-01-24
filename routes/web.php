@@ -17,8 +17,8 @@ Route::get('/events', [HomeController::class, 'events'])->name('events');
 Route::get('/news-room', [HomeController::class, 'newsRoom'])->name('newsRoom');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 
-Route::get('/products', [HomeController::class, 'products'])->name('products');
-Route::get('/product-detail', [HomeController::class, 'productDetail'])->name('productDetail');
+// Route::get('/products', [HomeController::class, 'products'])->name('products');
+// Route::get('/product-detail', [HomeController::class, 'productDetail'])->name('productDetail');
 Route::get('/our-solution-detail', [HomeController::class, 'ourSolutionDetail'])->name('ourSolutionDetail');
 Route::get('/common-detail-page', [HomeController::class, 'commonDetailPage'])->name('commonDetailPage');
 
@@ -26,6 +26,7 @@ Route::get('/blog/{slug}', [HomeController::class, 'blogDetail'])->name('blog.de
 
 Route::post('/ajax/subscribe-newsletter', [AjaxController::class, 'subscribeNewsletter'])->name('ajax.subscribeNewsletter');
 
+Route::get('/product/{slug}', [HomeController::class, 'productDetail'])->name('productDetail');
 
 // frontend authentication routes
 // Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');

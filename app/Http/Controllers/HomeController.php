@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as Input;
-use App\Models\{Page, Product, Category, Subcategory, Blog };
+use App\Models\{Page, Products, ProductCategory, ProductSubCategory, Blog };
 use Illuminate\Support\Facades\DB, Hash, Auth, Crypt, Mail;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Arr;
@@ -58,9 +58,17 @@ class HomeController extends BaseController
         return view('products');
     }
 
-    public function productDetail()
+    public function productDetail($slug)
     {
-        return view('product_detail');
+       
+        $product = Products::where('slug', $slug)->where('status', 1)->firstOrFail();
+        if (!$product) {
+            abort(404);
+        }
+        $product_images = DB::table('product_image')->where('product_id', $product->id)->get();
+       
+        $subcategories =  ProductSubCategory::with(['products'])->where('status', 1)->orderBy('name')->get();
+        return view('product_detail', compact('product','product_images','subcategories'));
     }
 
     public function ourSolutionDetail()
