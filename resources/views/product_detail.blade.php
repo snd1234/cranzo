@@ -104,22 +104,22 @@
                     <h4 class="mb-3 text-center">Our Resources</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="resource-box">
-                            <div class="mb-2"><i data-lucide="download"></i></div>
+                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
                             <p class="title">Catalog (English)</p>
                             <p class="link">Data Connectivity Catalog</p>
                         </div>
                         <div class="resource-box">
-                            <div class="mb-2"><i data-lucide="download"></i></div>
+                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
                             <p class="title">Catalog (English)</p>
                             <p class="link">Data Connectivity Catalog</p>
                         </div>
                         <div class="resource-box">
-                            <div class="mb-2"><i data-lucide="download"></i></div>
+                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
                             <p class="title">Catalog (English)</p>
                             <p class="link">Data Connectivity Catalog</p>
                         </div>
                         <div class="resource-box">
-                            <div class="mb-2"><i data-lucide="download"></i></div>
+                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
                             <p class="title">Catalog (English)</p>
                             <p class="link">Data Connectivity Catalog</p>
                         </div>

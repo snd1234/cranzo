@@ -31,60 +31,67 @@
                 <div class="mt-8 space-y-6">
 
                     <!-- Address -->
-                    <div class="contact-info flex items-start gap-4">
+                    <div class="contact-info flex items-start gap-4 mb-4">
                         <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
                             <h4>Office Address</h4>
-                            <p class="text-gray-700">
+                            <p class="text-gray-700 mb-4">
                                 123 Business Avenue, Technology Park,<br>
                                 New Delhi, India – 110001
                             </p>
-                             <br>
-                            <div>
-                                <p class="text-gray-700">  <i class="fa-solid fa-phone"></i> :  +91 98765 43210</p>
-                                <br>
-                                <p class="text-gray-700">  <i class="fa-solid fa-envelope"></i> : info@company.com</p>
-                            </div>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
                         </div>
                     </div>
-
-                    <!-- Phone -->
-                    <!-- <div class="contact-info flex items-start gap-4">
+                     <!-- Address -->
+                     <div class="contact-info flex items-start gap-4 mb-4">
                         <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
-                            <i class="fa-solid fa-phone"></i>
+                            <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
-                            <h4>Phone</h4>
-                            <p class="text-gray-700">+91 98765 43210</p>
-                        </div>
-                    </div> -->
-
-                    <!-- Email -->
-                    <!-- <div class="contact-info flex items-start gap-4">
-                        <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-                        <div>
-                            <h4>Email</h4>
-                            <p class="text-gray-700">info@company.com</p>
-                        </div>
-                    </div> -->
-
-                    <!-- Working Hours -->
-                    <!-- <div class="contact-info flex items-start gap-4">
-                        <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
-                            <i class="fa-regular fa-clock"></i>
-                        </div>
-                        <div>
-                            <h4>Working Hours</h4>
-                            <p class="text-gray-700">
-                                Mon – Fri: 9:00 AM – 6:00 PM<br>
-                                Sat: 10:00 AM – 2:00 PM
+                            <h4>Office Address</h4>
+                            <p class="text-gray-700 mb-4">
+                                123 Business Avenue, Technology Park,<br>
+                                New Delhi, India – 110001
                             </p>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
                         </div>
-                    </div> -->
+                    </div>
+                     <!-- Address -->
+                     <div class="contact-info flex items-start gap-4 mb-4">
+                        <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4>Office Address</h4>
+                            <p class="text-gray-700 mb-3">
+                                123 Business Avenue, Technology Park,<br>
+                                New Delhi, India – 110001
+                            </p>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
+                        </div>
+                    </div>
+                     <!-- Address -->
+                     <div class="contact-info flex items-start gap-4 mb-4">
+                        <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4>Office Address</h4>
+                            <p class="text-gray-700 mb-4">
+                                123 Business Avenue, Technology Park,<br>
+                                New Delhi, India – 110001
+                            </p>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
+                        </div>
+                    </div>
+                  
+                   
 
                 </div>
             </div>
