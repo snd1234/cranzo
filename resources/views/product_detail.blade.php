@@ -253,9 +253,7 @@ $(document).ready(function() {
             $('#errorText').text('Country / Region is required.');
             return false;
         }
-
-
-
+        
         var formData = $(this).serialize();
         $.ajax({
             url: '{{ url("ajax/product-enquiry") }}',

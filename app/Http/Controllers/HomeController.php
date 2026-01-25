@@ -26,8 +26,20 @@ class HomeController extends BaseController
         $countries = $countries->mapWithKeys(function ($item) {
             return [$item->iso3 => $item->name];
         });
-        //echo "<pre>";print_r($countries);die;
-        return view('index',compact('blogs','latestnews','webinar','events','countries'));
+
+        $featuredProducts = Products::with('productCategory')
+            ->whereIn('id', function ($query) {
+            $query->select(DB::raw('MAX(id)'))
+                  ->from('products')
+                  ->where('status', 1)
+                  ->groupBy('category_id');
+            })
+            ->where('status', 1)
+            ->orderBy('title')
+            ->get();
+
+        // echo "<pre>";print_r($featuredProducts);die;
+        return view('index',compact('blogs','latestnews','webinar','events','countries','featuredProducts'));
     }
 
 

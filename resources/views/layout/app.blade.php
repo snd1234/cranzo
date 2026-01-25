@@ -156,48 +156,30 @@
                 <div>
                     <h3 class="mb-5 text-white uppercase">Our Products</h3>
                     <div class="grid grid-cols-1 gap-1">
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Clinical Diagnostics & HLA
+                        <?php foreach($latestProducts as $prod){ ?>
+                        <a href="{{ url('product-detail/' . $prod->slug) }}" class="inline-block text-white transition duration-300">
+                            {{ $prod->title }}
                         </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Scientific Resources
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Applied Markets
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Publications
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Basic Research
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            New & Featured Products
-                        </a>
+                        <?php } ?>
                     </div>
                 </div>
                 <div>
                     <h3 class="mb-5 text-white uppercase">Customer Service</h3>
                     <div class="grid grid-cols-1 gap-1">
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            About IGB
+                        <a href="{{ url('/about-us') }}" class="inline-block text-white transition duration-300">
+                            About IGB 
                         </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Careers
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
+
+                        <a href="{{ url('/contact-us') }}" class="inline-block text-white transition duration-300">
                             Contact Us
                         </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Promotions
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
-                            Online Registration
-                        </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
+                        <a href="{{ url('/events') }}" class="inline-block text-white transition duration-300">
                             Events Calendar
                         </a>
-                        <a href="#" class="inline-block text-white transition duration-300">
+                        <a href="{{ url('/news-room') }}" class="inline-block text-white transition duration-300">
+                            News Room
+                        </a>
+                        <a href="{{ url('/our-partners') }}" class="inline-block text-white transition duration-300">
                             Global Partners
                         </a>
                     </div>
@@ -252,7 +234,7 @@
         </div>
         <div class="copyright-socials border-t border-gray-700 py-4 px-12 ">
             <p class="flex items-center justify-center"><i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
-                Integrated Gulf Biosystems, 2025. All Rights Reserved</p>
+                Integrated Gulf Biosystems, <?php echo date('Y'); ?>. All Rights Reserved</p>
         </div>
    </footer>
 

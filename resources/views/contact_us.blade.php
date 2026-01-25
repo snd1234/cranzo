@@ -41,11 +41,17 @@
                                 123 Business Avenue, Technology Park,<br>
                                 New Delhi, India – 110001
                             </p>
+                             <br>
+                            <div>
+                                <p class="text-gray-700">  <i class="fa-solid fa-phone"></i> :  +91 98765 43210</p>
+                                <br>
+                                <p class="text-gray-700">  <i class="fa-solid fa-envelope"></i> : info@company.com</p>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Phone -->
-                    <div class="contact-info flex items-start gap-4">
+                    <!-- <div class="contact-info flex items-start gap-4">
                         <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
                             <i class="fa-solid fa-phone"></i>
                         </div>
@@ -53,10 +59,10 @@
                             <h4>Phone</h4>
                             <p class="text-gray-700">+91 98765 43210</p>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Email -->
-                    <div class="contact-info flex items-start gap-4">
+                    <!-- <div class="contact-info flex items-start gap-4">
                         <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
                             <i class="fa-solid fa-envelope"></i>
                         </div>
@@ -64,10 +70,10 @@
                             <h4>Email</h4>
                             <p class="text-gray-700">info@company.com</p>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Working Hours -->
-                    <div class="contact-info flex items-start gap-4">
+                    <!-- <div class="contact-info flex items-start gap-4">
                         <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
                             <i class="fa-regular fa-clock"></i>
                         </div>
@@ -78,7 +84,7 @@
                                 Sat: 10:00 AM – 2:00 PM
                             </p>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>

@@ -2,7 +2,7 @@
 @section('content')
 <!-- HERO -->
     <section class="inner-banner relative">
-        <div class="h-72 lg:h-96 bg-cover bg-center" style="background-image: url('assets/images/banner1.jpg');">
+        <div class="h-72 lg:h-96 bg-cover bg-center" style="background-image: url('{{ asset('front/images/banner1.jpg') }}');">
             <div class="h-full w-full bg-black/45 flex items-center">
                 <div class="max-w-7xl mx-auto px-6 text-center">
                     <h2 class="text-white mb-5">Products Integrated Gulf Biosystems</h2>
