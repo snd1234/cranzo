@@ -214,6 +214,19 @@ class ProductController extends Controller
                     ]);
                 }
             }
+             // Handle image uploads and store in product_image table
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('uploads/product_catlog', 'public'); // Store image in 'storage/app/public/product_images'
+                    DB::table('product_image')->insert([
+                        'product_id' => $productId,
+                        'image_path' => $path,
+                        'created_at' => now(),
+                        'status' => 1,
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
 
             return redirect('/admin/product')->with('success', 'Product added successfully.');
         }

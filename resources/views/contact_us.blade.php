@@ -8,8 +8,7 @@
             <div class="h-full w-full bg-black/45 flex items-center">
                 <div class="max-w-7xl mx-auto px-6 text-center">
                     <h2 >Get in Touch</h2>
-                    <p class="text-white/90 my-3 max-w-2xl">We’re here to assist with your inquiries, partnerships, or
-                        support needs.</p>
+                    <p class="text-white/90 my-3 max-w-2xl">We’re here to assist with your inquiries, partnerships, or support needs.</p>
                 </div>
             </div>
         </div>
@@ -36,12 +35,11 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
-                            <h4>Office Address</h4>
+                            <h4>Dubai (United Arab Emirates)</h4>
                             <p class="text-gray-700 mb-4">
-                                123 Business Avenue, Technology Park,<br>
-                                New Delhi, India – 110001
+                                10th Floor, Office No: 002, Reach Business Centre, Concord Tower, Media City, PO Box 122304, Dubai, United Arab Emirates
                             </p>
-                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+971 4 234 5050</span></div>
                             <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
                         </div>
                     </div>
@@ -51,12 +49,10 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
-                            <h4>Office Address</h4>
-                            <p class="text-gray-700 mb-4">
-                                123 Business Avenue, Technology Park,<br>
-                                New Delhi, India – 110001
+                            <h4>Abu Dhabi (United Arab Emirates)</h4>
+                            <p class="text-gray-700 mb-4">Garden Tower, C-15, Khalifa Street PO Box 130395, Abu Dhabi, United Arab Emirates
                             </p>
-                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+971 2 627 8772</span></div>
                             <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
                         </div>
                     </div>
@@ -66,12 +62,11 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
-                            <h4>Office Address</h4>
+                            <h4>Riyadh (Saudi Arabia)</h4>
                             <p class="text-gray-700 mb-3">
-                                123 Business Avenue, Technology Park,<br>
-                                New Delhi, India – 110001
+                                Office No: 29, 3rd Floor, Building No 5 Al Bayt Project, Salahuddin Ayyubi Road, after Riyadh Air-Base roundabout, Sulaimanya, Riyadh P.O. Box 250310, Riyadh 11391, Kingdom of Saudi Arabia
                             </p>
-                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+966 11 239 6161</span></div>
                             <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
                         </div>
                     </div>
@@ -81,16 +76,29 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
-                            <h4>Office Address</h4>
+                            <h4>Jeddah (Saudi Arabia)</h4>
                             <p class="text-gray-700 mb-4">
-                                123 Business Avenue, Technology Park,<br>
-                                New Delhi, India – 110001
+                                Office No-1102, Al Andaluz Plaza, Near Eritrean Consulate, Sitteen Street, Mushrefah District, P.O.Box 110372, Jeddah 21361, Kingdom of Saudi Arabia
                             </p>
-                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 98765 43210</span></div>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+966 12 286 9482</span></div>
                             <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
                         </div>
                     </div>
-                  
+
+                    <!-- Address -->
+                     <div class="contact-info flex items-start gap-4 mb-4">
+                        <div class="bg-indigo-100 text-indigo-600 py-3 px-4 rounded-lg">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4>India</h4>
+                            <p class="text-gray-700 mb-4">
+                               183/2, 3rd Floor, Union Bank Building, Bagaluru Cross, Katagenhalli Post, Yelahanka 560 063
+                            </p>
+                            <div class="text-gray-700 flex items-center gap-3 mb-2"><i class="fa-solid fa-phone"></i><span>+91 80 29721188 / +91 80 29721189</span></div>
+                            <div class="text-gray-700 flex items-center gap-3"><i class="fa-solid fa-envelope"></i><span>info@company.com</span></div>
+                        </div>
+                    </div>
                    
 
                 </div>
@@ -146,8 +154,15 @@
         </div>
         <div class="h-[340px] w-full  rounded-xl overflow-hidden shadow">
             <iframe
+            src="https://www.google.com/maps?q=25.287571,55.368733&z=16&output=embed"
+            width="100%" height="100%"  style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+            <!-- <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.1598209348782!2d77.22343737530115!3d28.625005575656497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd35aa1db9ef%3A0xa01bbf7c8b1a1bc!2sConnaught%20Place%2C%20New%20Delhi%2C%20Delhi%20110001!5e0!3m2!1sen!2sin!4v1709988430000"
-                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
         </div>
     </section>
 @endsection
