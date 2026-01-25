@@ -21,49 +21,22 @@
             <span class="uppercase">Latest News & Updates</span>
         </div>
         <div class="grid md:grid-cols-3 gap-10">
-
-            <!-- News Card 1 -->
+            <?php foreach($latestnews as $news){ ?>
             <div class="event-card bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1500080209535-717dd4ebaa6b"
-                    class="rounded-lg mb-4 w-full h-48 object-cover">
-                <h4 class="mb-2">New Genomic Sequencing Platform Launched</h4>
+                <img src="{{asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="rounded-lg mb-4 w-full h-48 object-cover">
+                <h4 class="mb-2">{{ strlen($news->title) > 66 ? substr($news->title, 0, 66) . '...' : $news->title }}</h4>
                 <p class="text-gray-700 mb-4">
-                    Our latest platform delivers ultra-fast sequencing with unmatched accuracy for clinical labs.
+                     {{ \Illuminate\Support\Str::words($news->short_description, 30, '...') }}
                 </p>
-                <p class="text-md text-gray-700">Published: Jan 12, 2025</p>
+                <p class="text-md text-gray-700">{{ \Carbon\Carbon::parse($news->created_at)->format('jS F Y') }}</p>
             </div>
-
-            <!-- News Card 2 -->
-            <div class="event-card bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786"
-                    class="rounded-lg mb-4 w-full h-48 object-cover">
-                <h4 class="mb-2">Partnership with Global Diagnostics Leader</h4>
-                <p class="text-gray-700 mb-4">
-                    We have partnered with a global biotech firm to expand molecular testing solutions across regions.
-                </p>
-                <p class="text-md text-gray-700">Published: Feb 04, 2025</p>
-            </div>
-
-            <!-- News Card 3 -->
-            <div class="event-card bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1500080209535-717dd4ebaa6b"
-                    class="rounded-lg mb-4 w-full h-48 object-cover">
-                <h4 class="mb-2">Awarded Excellence in Innovation 2025</h4>
-                <p class="text-gray-700 mb-4">
-                    Recognized for our contribution to advancing genetic testing and biomolecular technologies.
-                </p>
-                <p class="text-md text-gray-700">Published: Mar 01, 2025</p>
-            </div>
-
+            <?php } ?>
+          
         </div>
-
-        <!-- MORE NEWS -->
-
-
 
     </section>
 
-    <div class="p-12">
+    <!-- <div class="p-12">
         <div class="page-heading relative mb-4">
             <span class="uppercase">More Articles</span>
         </div>
@@ -89,7 +62,7 @@
                 </p>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 

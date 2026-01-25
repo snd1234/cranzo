@@ -77,7 +77,7 @@
                             <div
                                 class="w-full sm:w-[270px] h-[200px] bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                                 <figure>
-                                    <img src="{{asset('storage/' . $news->image) }}" alt="Event Image"
+                                    <img src="{{asset('storage/' . $news->image)}}" alt="Event Image"
                                         class="w-full h-full object-cover">
                                 </figure>
 
@@ -90,7 +90,6 @@
                                     <i class="fa-regular fa-calendar-days"></i>
                                     <span>{{ \Carbon\Carbon::parse($news->created_at)->format('jS F Y') }}</span>
                                 </div>
-
                                 <!-- Title -->
                                 <h3 class="mb-2">{{ strlen($news->title) > 66 ? substr($news->title, 0, 66) . '...' : $news->title }}</h3>
 
@@ -99,9 +98,8 @@
                                     {{ \Illuminate\Support\Str::words($news->short_description, 30, '...') }}
                                 </p>
                                
-
                                 <!-- Learn More Link -->
-                                <a href="{{ url('/blog/' . $news->slug) }}" class="flex items-center gap-2 inline-block  ">
+                                <a href="{{ url('/news/' . $news->slug) }}" class="flex items-center gap-2 inline-block  ">
                                     Learn More
                                     <i class="fa-solid fa-arrow-right"></i>
                                 </a>
@@ -335,7 +333,7 @@
 @endsection
 <!-- 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<!-- <script src="{{asset('front/js/jquery.min.js')}}"></script> -->
+<script src="{{asset('front/js/jquery.min.js')}}"></script>
 <script>
     $(document).ready(function() {
         $('#newsletterForm').on('submit', function(e) {

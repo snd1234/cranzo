@@ -17,7 +17,7 @@
                         Add Product
                     </div>
                     <div>
-                        <a href="{{ url('admin/products') }}" class="btn btn-sm btn-secondary">Back to List</a>
+                        <a href="{{ url('admin/product') }}" class="btn btn-sm btn-secondary">Back to List</a>
                     </div>
                 </div>
 
@@ -101,7 +101,7 @@
                                     <textarea name="content" id="contentEditor" class="form-control" rows="10" >{{ old('content') }}</textarea>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ url('admin/products') }}" class="btn btn-secondary me-2">Cancel</a>
+                                    <a href="{{ url('admin/product') }}" class="btn btn-secondary me-2">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Add Product</button>
                                 </div>
                             </div>
@@ -181,4 +181,47 @@
             });
         }
     });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        function slugifyLive(str) {
+            return str
+                .toLowerCase()
+                .replace(/\s+/g, '-')        // space → -
+                .replace(/[^a-z-]/g, '')    // allow only a-z and -
+                .replace(/-+/g, '-');       // multiple - → single
+        }
+
+        function slugifyFinal(str) {
+            return slugifyLive(str)
+                .replace(/^-+|-+$/g, '');  // trim - only on blur
+        }
+
+        const nameInput = document.getElementById('name');
+        const slugInput = document.getElementById('slug');
+
+        // Auto-generate slug from name
+        if (nameInput && slugInput && !slugInput.value) {
+            nameInput.addEventListener('input', function () {
+                if (!slugInput.dataset.touched) {
+                    slugInput.value = slugifyLive(this.value);
+                }
+            });
+        }
+
+        // Allow normal typing (including "-")
+        if (slugInput) {
+            slugInput.addEventListener('input', function () {
+                this.dataset.touched = '1';
+                this.value = slugifyLive(this.value);
+            });
+
+            // Clean up ONLY when user leaves field
+            slugInput.addEventListener('blur', function () {
+                this.value = slugifyFinal(this.value);
+            });
+        }
+
+    });
+
 </script>

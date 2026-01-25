@@ -23,8 +23,12 @@ Route::get('/our-solution-detail', [HomeController::class, 'ourSolutionDetail'])
 Route::get('/common-detail-page', [HomeController::class, 'commonDetailPage'])->name('commonDetailPage');
 
 Route::get('/blog/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
+Route::get('/news/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
+Route::get('/event/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
 
 Route::post('/ajax/subscribe-newsletter', [AjaxController::class, 'subscribeNewsletter'])->name('ajax.subscribeNewsletter');
+Route::post('/ajax/contact-us', [AjaxController::class, 'contactUs'])->name('ajax.contactUs');
+Route::post('/ajax/product-enquiry', [AjaxController::class, 'productEnquiry'])->name('ajax.productEnquiry');
 
 Route::get('/product-detail/{slug}', [HomeController::class, 'productDetail'])->name('productDetail');
 

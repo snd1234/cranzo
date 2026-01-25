@@ -42,11 +42,14 @@ class HomeController extends BaseController
     }
     public function events()
     {
-        return view('events');
+        
+        $events = DB::table('blogs')->where('status', 1)->where('type', 4)->get();
+        return view('events',compact('events'));
     }
     public function newsRoom()
     {
-        return view('news_room');
+        $latestnews = DB::table('blogs')->where('status', 1)->where('type', 2)->get();
+        return view('news_room',compact('latestnews'));
     }
     public function contactUs()
     {
@@ -57,8 +60,6 @@ class HomeController extends BaseController
     {
         $products = Products::with('productImages')
         ->where('status', 1)
-
-       //  ->where('id', 4)
         ->orderBy('title')
         ->get();
         return view('products',compact('products'));
@@ -73,7 +74,11 @@ class HomeController extends BaseController
         $product_images = DB::table('product_image')->where('product_id', $product->id)->get();
        
         $subcategories =  ProductSubCategory::with(['products'])->where('status', 1)->orderBy('name')->get();
-        return view('product_detail', compact('product','product_images','subcategories'));
+        $countries = DB::table('countries')->select('iso3', 'name')->where('status', 1)->orderBy('name', 'asc')->get();
+        $countries = $countries->mapWithKeys(function ($item) {
+            return [$item->iso3 => $item->name];
+        });
+        return view('product_detail', compact('product','product_images','subcategories', 'countries'));
     }
 
     public function ourSolutionDetail()

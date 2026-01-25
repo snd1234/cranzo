@@ -237,13 +237,16 @@ class ProductController extends Controller
 
             $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|alpha_dash|max:255|unique:product,slug,'.$id,
+                'slug' => 'required|string|regex:/^[a-z-]+$/|max:255|unique:products,slug,' . $id,
             ]);
 
-            DB::table('product')->where('id', $id)->update([
-                'name' => $request->name,
+            DB::table('products')->where('id', $id)->update([
+                'title' => $request->name,
                 'slug' => $request->slug,
-                'description' => $request->description,
+                'category_id' => $request->category_id,
+                'sub_category_id' => $request->sub_category_id,
+                'short_description' => $request->short_description,
+                'description' => $request->content,
                 'status' => $request->status,
                 'updated_by' => auth()->id(),
                 'updated_at' => now(),

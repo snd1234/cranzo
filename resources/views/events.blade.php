@@ -24,42 +24,18 @@
 
             <div class="grid md:grid-cols-3 gap-10">
                 <!-- Event Card 1 -->
+                  <?php foreach($events as $event){ ?>
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6" class="rounded-lg mb-4" />
-                    <h4 class="mb-2">Genomics Innovation Summit 2025</h4>
-                    <p class="date mb-3">📅 March 18, 2025 </p>
+                    <img src="{{asset('storage/' . $event->image)}}" class="rounded-lg mb-4" />
+                    <h4 class="mb-2">{{ strlen($event->title) > 66 ? substr($event->title, 0, 66) . '...' : $event->title }}</h4>
+                    <p class="date mb-3">📅 {{ \Carbon\Carbon::parse($event->created_at)->format('jS F Y') }} </p>
                     <p class="text-gray-700 mb-4">
-                        A regional gathering of genomic scientists and healthcare pioneers
-                        discussing advancements in NGS, PCR, and diagnostics workflows.
+                        {{ \Illuminate\Support\Str::words($event->short_description, 30, '...') }}
                     </p>
-                    <a href="#" class="hover:underline font-medium">Learn More →</a>
+                    <a href="{{ url('/event/' . $event->slug) }}" class="hover:underline font-medium">Learn More →</a>
                 </div>
+                <?php } ?>
 
-
-                <!-- Event Card 2 -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51" class="rounded-lg mb-4" />
-                    <h4 class="mb-2">Clinical Diagnostics Expo</h4>
-                    <p class="date mb-3">📅 April 12, 2025 </p>
-                    <p class="text-gray-700  mb-4">
-                        Showcasing cutting-edge diagnostic tools, automation platforms, and
-                        laboratory equipment from leading global manufacturers.
-                    </p>
-                    <a href="#" class="hover:underline font-medium">Learn More →</a>
-                </div>
-
-
-                <!-- Event Card 3 -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c" class="rounded-lg mb-4" />
-                    <h4 class="mb-2">PCR Masterclass Workshop</h4>
-                    <p class="date mb-3">📅 May 3, 2025 </p>
-                    <p class="text-gray-700 mb-4">
-                        Hands-on technical training covering qPCR optimization, troubleshooting,
-                        and workflow best practices.
-                    </p>
-                    <a href="#" class="hover:underline font-medium">Learn More →</a>
-                </div>
             </div>
         </div>
     </section>
