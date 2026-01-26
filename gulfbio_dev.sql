@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2026 at 10:51 AM
+-- Generation Time: Jan 26, 2026 at 07:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,7 @@ CREATE TABLE `admins` (
 
 INSERT INTO `admins` (`id`, `name`, `email`, `password`, `mobile_number`, `Address`, `role`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Super Admin', 'admin@example.com', '$2y$12$3AEMaGc2tpC0UYp6n263G./fNegwNE8tFm43PV9aXZC.LNRsgaF7C', NULL, NULL, 1, 1, '2025-11-05 02:29:00', '2025-11-06 09:07:50'),
-(2, 'asdadad', 'admin222@example.com', '$2y$12$h67MRKrIe50Rn4AByJ5Lsum6G22zfGIFtVyqdo6zFjHSkcxxZJ.fS', NULL, NULL, 1, 1, '2025-11-06 09:22:44', '2025-11-06 09:22:44');
+(2, 'asdadad', 'admin222@example.com', '$2y$12$h67MRKrIe50Rn4AByJ5Lsum6G22zfGIFtVyqdo6zFjHSkcxxZJ.fS', NULL, NULL, 1, 0, '2025-11-06 09:22:44', '2026-01-26 00:04:57');
 
 -- --------------------------------------------------------
 
@@ -539,6 +539,38 @@ INSERT INTO `page_category` (`id`, `name`, `slug`, `description`, `created_at`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `partners`
+--
+
+CREATE TABLE `partners` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  `website_url` varchar(255) DEFAULT NULL,
+  `short_description` text DEFAULT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `updated_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `partners`
+--
+
+INSERT INTO `partners` (`id`, `name`, `logo`, `website_url`, `short_description`, `sort_order`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(1, 'Thermo Fisher Scientific', 'uploads/partners/XCKOWGtk4KBqUwe6AM2HHVgZ6LSRt4zuwiPvc6F9.png', NULL, NULL, 0, 1, NULL, NULL, '2026-01-26 00:03:07', '2026-01-26 00:13:59'),
+(2, 'Hamilton', 'uploads/partners/7jUQjmDe4Pg0u9vLBGKkDbuzTovwlIi0wdVXQli6.png', NULL, NULL, 0, 1, NULL, NULL, '2026-01-26 00:07:02', '2026-01-26 00:07:02'),
+(3, 'Genetic Signature', 'uploads/partners/WLxzqyOlbvrYFEKc5UPh6Fh7hXk5SZUC4oQ36WUp.png', NULL, NULL, 0, 1, NULL, NULL, '2026-01-26 00:07:30', '2026-01-26 00:07:30'),
+(4, 'Ikonisys', 'uploads/partners/dubmrX2WJh9oCZheTMbfVSlePvooj1m6LQUkJcY5.png', NULL, NULL, 0, 1, NULL, NULL, '2026-01-26 00:08:07', '2026-01-26 00:08:07'),
+(5, 'Seracare', 'uploads/partners/3yK0VXmaspWVTIGPyot00yOFCpcQq6iGSRsiIJxk.png', NULL, NULL, 0, 1, NULL, NULL, '2026-01-26 00:09:06', '2026-01-26 00:09:06'),
+(6, 'Lexogen', 'uploads/partners/091A8UVM9o4C9Rno15pMWWn4BzKxRJWIZ0h1rYKk.png', 'https://www.lexogen.com/products/', NULL, 0, 1, 1, 1, '2026-01-26 00:23:28', '2026-01-26 00:23:28');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_reset_tokens`
 --
 
@@ -578,7 +610,35 @@ INSERT INTO `products` (`id`, `category_id`, `sub_category_id`, `title`, `slug`,
 (1, 6, 6, 'KingFisher Duo Prime', 'kingfisher-duo-primes', 'The Thermo Scientific KingFisher Duo Prime is the most versatile compact benchtop sample preparation instrument in the lab for 6 or 12 samples per run', '<p><strong>KingFisher Duo Prime</strong></p><p>The Thermo Scientific KingFisher Duo Prime is the most versatile compact benchtop sample preparation instrument in the lab for 6 or 12 samples per run. It offers consistent extraction and purification of DNA, RNA, proteins, and cells, and includes an ultraviolet lamp for decontamination. The KingFisher Duo Prime is an affordable choice for academic or small labs.</p><h4>Features</h4><p>In addition to the common features of all KingFisher Purification Systems, the Duo Prime offers:</p><h4>Automated purification</h4><p>6–12 samples per run</p><h4>Choose from two plate formats</h4><p>Wide 20 μL–5 mL volume range</p><h4>Download protocols from our library</h4><p>Or easily customize protocols using ThermoScientific BindIt Software</p><h4>Easy to install and run</h4><p>Ready to run in 10 minutes or less</p><h4>Simple workflow</h4><p>Just follow the on-screen instructions</p><h4>Ultraviolet lamp</h4><p>Decontamination is standard</p><h4>Applications</h4><p>The KingFisher Duo Prime can gently and efficiently isolate and purify nucleic acids, proteins, and cells from a range of sample types for a wide variety of downstream applications. For a selection of application kits, reagents, and protocols that run on the KingFisher Duo Prime, reach out to us.</p><h4>Protocols and software</h4><p>Thermo Scientific BindIt software is included with KingFisher Duo Prime and Flex instruments. The software makes it easy to create, download, run, modify, and store protocols for your KingFisher applications.</p><p>Protocols are available for nucleic acid and protein purification procedures with reagent kits. The software allows you to define and edit steps, parameters, plates, and reagents for every part of your protocol—bind, wash, and elute.</p>', NULL, 1, '2026-01-04 05:04:25', '2026-01-25 00:09:37', 1, 1),
 (2, 6, 7, 'Gulf Bio Analytical provide huge ranges of LC columns to customer', 'gulf-bio-analytical', 'Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement', '<p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price. Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><h4>Gulf Bio Analytical provide huge</h4><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p>', NULL, 1, '2026-01-17 04:10:42', '2026-01-25 00:09:47', 1, 1),
 (3, 7, 9, 'Gas Chromatography Test', 'gas-chromatography-test', 'The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC', '<p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price. Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><h4>Gulf Bio Analytical provide huge</h4><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p>', NULL, 1, '2026-01-18 03:27:48', '2026-01-25 00:09:11', 1, 1),
-(4, 7, 10, 'Gas Chromatography', 'gas-chromatography-new', 'The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC', '<p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price. Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><h4>Gulf Bio Analytical provide huge</h4><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p>', NULL, 1, '2026-01-18 03:29:07', '2026-01-25 00:09:08', 1, 1);
+(4, 7, 10, 'Gas Chromatography', 'gas-chromatography-new', 'The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC', '<p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price. Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><h4>Gulf Bio Analytical provide huge</h4><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p>', NULL, 1, '2026-01-18 03:29:07', '2026-01-25 21:47:37', 1, 1),
+(5, 6, 6, 'Gulf Bio Analytical provide', 'gulf-bio-analytical-provide-ssss', 'sadds', '<p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price. Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><h4>Gulf Bio Analytical provide huge</h4><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p><p>Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price.</p>', NULL, 1, '2026-01-25 21:26:27', '2026-01-25 21:50:12', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_catalogs`
+--
+
+CREATE TABLE `product_catalogs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `catalog_title` varchar(255) NOT NULL,
+  `catalog_file` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `updated_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_catalogs`
+--
+
+INSERT INTO `product_catalogs` (`id`, `product_id`, `catalog_title`, `catalog_file`, `description`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(5, 5, 'Analytical (english)', 'uploads/product_catalogs/lbpKJdfuRXYChxyRCjvaFhiIew1vfV0Ipg2FZM0l.pdf', NULL, 1, NULL, NULL, '2026-01-25 21:26:27', '2026-01-25 21:26:27'),
+(6, 5, 'Analytical (Hindi)', 'uploads/product_catalogs/9ct2JarYNSRV3cFjL8Dq0Vvi0feekk1h0FrimQxi.pdf', NULL, 1, NULL, NULL, '2026-01-25 21:26:27', '2026-01-25 21:26:27');
 
 -- --------------------------------------------------------
 
@@ -593,6 +653,7 @@ CREATE TABLE `product_category` (
   `slug` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1 COMMENT '1- Active, 0 - Inactive',
+  `image_path` varchar(200) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_by` bigint(20) UNSIGNED NOT NULL,
@@ -603,11 +664,12 @@ CREATE TABLE `product_category` (
 -- Dumping data for table `product_category`
 --
 
-INSERT INTO `product_category` (`id`, `main_category_id`, `name`, `slug`, `description`, `status`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
-(6, NULL, 'Instruments', NULL, 'Instruments', 1, '2026-01-21 08:13:20', '2026-01-21 08:18:35', 1, 1),
-(7, NULL, 'Consumables', NULL, 'Consumables', 1, '2026-01-21 08:18:51', '2026-01-21 08:18:51', 1, 1),
-(8, NULL, 'Informatics', NULL, 'Informatics', 1, '2026-01-21 08:19:00', '2026-01-21 08:19:00', 1, 1),
-(9, NULL, 'Our Services', NULL, 'Our Services', 1, '2026-01-21 08:19:10', '2026-01-21 08:19:10', 1, 1);
+INSERT INTO `product_category` (`id`, `main_category_id`, `name`, `slug`, `description`, `status`, `image_path`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+(6, NULL, 'Instruments', 'instruments', 'Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement .', 1, 'uploads/category_images/eu82axGO1DhXTioGsCLr6WD7OajRBhAzwvb00oK1.jpg', '2026-01-21 08:13:20', '2026-01-25 22:44:35', 1, 1),
+(7, NULL, 'Consumables', 'consumables', 'Consumables Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement . This custom columns will be of Any Column Any Type Any Phase, but 100% best in quality good in price', 1, 'uploads/category_images/TSfFCR68YhcyvXnzLKrJEI9ldEjdCar2n1HOK0K6.jpg', '2026-01-21 08:18:51', '2026-01-25 22:44:50', 1, 1),
+(8, NULL, 'Informatics', 'informatics', 'Informatics The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement', 1, 'uploads/category_images/zy7NtoKhHIk1CAjH7cznEYH1P71aDMQbFWQSt6oG.jpg', '2026-01-21 08:19:00', '2026-01-25 22:45:02', 1, 1),
+(9, NULL, 'Our Services', 'our-services', 'Our Services The LC columns starting from Basic C-18 to complex chiral columns .Not only for daily running columns but also special application columns like bio inert and SEC . If your application is critical need some special columns which you need to custom designed we can help you to get custom column of your requirement.', 1, 'uploads/category_images/pOWliaBNcI3Ckiiy8d6nZfTH0K6JlI0dMP3WKiqs.jpg', '2026-01-21 08:19:10', '2026-01-25 22:45:16', 1, 1),
+(10, NULL, 'adsdaddd sddsdsds', 'adsdaddd-sddsdsds', 'Gulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns startin\r\nGulf Bio Analytical provide huge ranges of LC columns to customer . The LC columns startin', 0, NULL, '2026-01-25 22:36:34', '2026-01-25 22:44:14', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -631,7 +693,11 @@ CREATE TABLE `product_image` (
 INSERT INTO `product_image` (`id`, `product_id`, `image_path`, `created_at`, `status`, `updated_at`) VALUES
 (1, 4, 'uploads/product_images/GM411uBUAp5a1Kvjf9wltRoUmZQKGbj0z79rh432.jpg', '2026-01-18 08:59:07', 1, '2026-01-18 08:59:07'),
 (2, 4, 'uploads/product_images/QdNKf9OZwezXGPCMp4UNCeQUtRIKBp7ImbzhHHKz.jpg', '2026-01-18 08:59:08', 1, '2026-01-18 08:59:08'),
-(3, 4, 'uploads/product_images/wEoR2CnL2kBN4vjwaVDVgdMPnXPQDSmJmqwY0BlV.jpg', '2026-01-18 08:59:08', 1, '2026-01-18 08:59:08');
+(3, 4, 'uploads/product_images/wEoR2CnL2kBN4vjwaVDVgdMPnXPQDSmJmqwY0BlV.jpg', '2026-01-18 08:59:08', 1, '2026-01-18 08:59:08'),
+(4, 5, 'uploads/product_images/glSdhejRRHsswwfWZKhpY6F0MzsyD45eVW2zGvAw.jpg', '2026-01-26 02:56:27', 1, '2026-01-26 02:56:27'),
+(5, 5, 'uploads/product_images/vQrsY3g8Doz1SCcJDTMG06ZsYPtqBsYC6syo7s8T.jpg', '2026-01-26 02:56:27', 1, '2026-01-26 02:56:27'),
+(7, 4, 'uploads/product_images/UXAAJVn5S5A32kBBnSCFkEvtsq02ScFUvAq8LjMa.jpg', '2026-01-26 03:17:37', 1, '2026-01-26 03:17:37'),
+(8, 5, 'uploads/product_images/kQ7MqQ5Mcuf1sarFn5HXsR5lbuLz07rWpm7vVtLQ.jpg', '2026-01-26 03:20:12', 1, '2026-01-26 03:20:12');
 
 -- --------------------------------------------------------
 
@@ -686,7 +752,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('55qK1zuNQaZLAvscsJrnwxip99XZUdiLLTOv7Fp5', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidU43THNyYjdaaUoxNFZSQTlZd29YTGxYT3ExQzVoVUNSYTBnalVWNCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MjoibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1769334632);
+('8ufyqbyidsPIBgIqJH4bACZDCjyOjq89rzOhuwej', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiS0VGcldaYzZFNlBmVUZOekNiSGw0djhoU09JdDdnc3A3VlN2TllmdyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9kdWN0LWRldGFpbC9raW5nZmlzaGVyLWR1by1wcmltZXMiO3M6NToicm91dGUiO3M6MTM6InByb2R1Y3REZXRhaWwiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjM6InVybCI7YTowOnt9czo1MjoibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1769408221);
 
 -- --------------------------------------------------------
 
@@ -831,6 +897,12 @@ ALTER TABLE `page_category`
   ADD UNIQUE KEY `slug` (`slug`);
 
 --
+-- Indexes for table `partners`
+--
+ALTER TABLE `partners`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
@@ -842,6 +914,13 @@ ALTER TABLE `password_reset_tokens`
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `product_catalogs`
+--
+ALTER TABLE `product_catalogs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id_index` (`product_id`);
 
 --
 -- Indexes for table `product_category`
@@ -956,22 +1035,34 @@ ALTER TABLE `page_category`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `partners`
+--
+ALTER TABLE `partners`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `product_catalogs`
+--
+ALTER TABLE `product_catalogs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `product_category`
 --
 ALTER TABLE `product_category`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `product_sub_category`

@@ -10,8 +10,14 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+    ->withMiddleware(function ($middleware) {
+        $middleware->redirectGuestsTo(function ($request) {
+            if ($request->is('admin/*')) {
+                return route('admin.login.form');
+            }
+
+            return route('login'); // frontend (if you ever use it)
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
