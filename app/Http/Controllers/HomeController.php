@@ -26,20 +26,9 @@ class HomeController extends BaseController
         $countries = $countries->mapWithKeys(function ($item) {
             return [$item->iso3 => $item->name];
         });
-
-        $featuredProducts = Products::with('productCategory')
-            ->whereIn('id', function ($query) {
-            $query->select(DB::raw('MAX(id)'))
-                  ->from('products')
-                  ->where('status', 1)
-                  ->groupBy('category_id');
-            })
-            ->where('status', 1)
-            ->orderBy('title')
-            ->get();
-
+        $categories = DB::table('product_category')->where('status', 1)->get()->take(3);
         // echo "<pre>";print_r($featuredProducts);die;
-        return view('index',compact('blogs','latestnews','webinar','events','countries','featuredProducts'));
+        return view('index',compact('blogs','latestnews','webinar','events','countries','categories'));
     }
 
 
@@ -84,18 +73,29 @@ class HomeController extends BaseController
             abort(404);
         }
         $product_images = DB::table('product_image')->where('product_id', $product->id)->get();
+        $product_catalogs = DB::table('product_catalogs')->where('product_id', $product->id)->get();
        
         $subcategories =  ProductSubCategory::with(['products'])->where('status', 1)->orderBy('name')->get();
         $countries = DB::table('countries')->select('iso3', 'name')->where('status', 1)->orderBy('name', 'asc')->get();
         $countries = $countries->mapWithKeys(function ($item) {
             return [$item->iso3 => $item->name];
         });
-        return view('product_detail', compact('product','product_images','subcategories', 'countries'));
+        return view('product_detail', compact('product','product_images','subcategories', 'countries', 'product_catalogs'));
     }
 
-    public function ourSolutionDetail()
+    public function ourSolutionDetail($slug)
     {
-        return view('our_solution_detail');
+        $category = ProductCategory::where('slug', $slug)->firstOrFail();
+        if (!$category) {
+            abort(404);
+        }
+        $products = Products::with('productImages')
+        ->where('category_id', $category->id)
+        ->where('status', 1)
+        ->orderBy('id', 'desc')
+        ->get();
+        $subcategories =  ProductSubCategory::with(['products'])->where('status', 1)->orderBy('name')->get();
+        return view('our_solution_detail', compact('category','products', 'subcategories'));
     }
 
     public function commonDetailPage()
@@ -109,8 +109,8 @@ class HomeController extends BaseController
         if (!$blog) {
             abort(404);
         }
-        //echo "<pre>";print_r($blog);die;
-        return view('blog_detail', compact('blog'));
+        $subcategories =  ProductSubCategory::with(['products'])->where('status', 1)->orderBy('name')->get();
+        return view('blog_detail', compact('blog', 'subcategories'));
     }
 
 }

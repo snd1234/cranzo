@@ -19,7 +19,7 @@
     <!-- Upcoming Events -->
     <section class="event-card py-12 bg-gray-100">
         <div class="max-w-7xl mx-auto">
-            <h3 class="text-3xl font-bold text-center mb-8">Upcoming Events</h3>
+            <h3 class="text-3xl font-bold text-center mb-8">Events</h3>
 
 
             <div class="grid md:grid-cols-3 gap-10">
@@ -42,13 +42,12 @@
 
 
     <!-- Past Events Section -->
-    <section class="py-12 bg-white">
+    <!-- <section class="py-12 bg-white">
         <div class="max-w-7xl mx-auto">
             <h3 class="text-3xl font-bold text-center mb-8">Past Events Highlights</h3>
 
 
             <div class="grid md:grid-cols-2 gap-10">
-                <!-- Past Event 1 -->
                 <div
                     class="event-card bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" class="rounded-lg mb-4" />
@@ -59,8 +58,6 @@
                     </p>
                 </div>
 
-
-                <!-- Past Event 2 -->
                 <div
                     class="event-card bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf" class="rounded-lg mb-4" />
@@ -72,7 +69,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     
 @endsection

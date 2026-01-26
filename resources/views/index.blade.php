@@ -217,24 +217,22 @@
             <span class="bg-white uppercase">Our solutions</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             <!-- <?php foreach($featuredProducts as $featuredProduct){ ?>
+            <?php foreach($categories as $category){ ?>
             <div class="card p-8 bg-gray-100 rounded-lg shadow hover:shadow-lg transition duration-300">
                 <div class="h-60 w-full bg-white mb-3 rounded-lg overflow-hidden">
                     <figure>
-                        <img src="{{ asset('front/images/one.jpg') }}" class="w-full object-cover">
+                        <img src="{{ asset('storage/' . $category->image_path) }}" class="w-full object-cover">
                     </figure>
                 </div>
 
-                <h3 class="mb-2">{{ $featuredProduct->productCategory->name }}</h3>
-                <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore.</p>
-                <a href="{{ url('/our-solution-detail') }}" class="flex items-center gap-4 mt-4 inline-block  ">Learn
-                    More
+                <h3 class="mb-2">{{ $category->name }}</h3>
+                <p class="text-gray-600">{{ strlen($category->description) > 90 ? substr($category->description, 0, 90) . '...' : $category->description }}</p>
+                <a href="{{ url('/our-solutions/' . $category->slug ) }}" class="flex items-center gap-4 mt-4 inline-block  ">Learn More
                     <i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <?php } ?> -->
-            
-            <div class="card p-8 bg-gray-100 rounded-lg shadow hover:shadow-lg transition duration-300">
+            <?php } ?> 
+
+            <!-- <div class="card p-8 bg-gray-100 rounded-lg shadow hover:shadow-lg transition duration-300">
                 <div class="h-60 w-full bg-white mb-3 rounded-lg overflow-hidden">
                     <figure>
                         <img src="{{ asset('front/images/one.jpg') }}" class="w-full object-cover">
@@ -273,7 +271,7 @@
                 <a href="{{ url('/our-solution-detail') }} " class="flex items-center gap-4 mt-4 inline-block  ">Learn
                     More
                     <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
+            </div> -->
 
         </div>
 

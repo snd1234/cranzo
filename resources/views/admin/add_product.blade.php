@@ -100,6 +100,27 @@
                                     <label class="form-label">Content <span class="text-danger">*</span></label>
                                     <textarea name="content" id="contentEditor" class="form-control" rows="10" >{{ old('content') }}</textarea>
                                 </div>
+                                <div class="col-12"><h5>Catalogs : </h5> </div>
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Catalog Name </label>
+                                            <input type="text" name="catalog[catalog_names][]" id="catalogName" class="form-control" value="{{ old('catalog_names.0', $product->catalog_name ?? '') }}">
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Upload Catalog</label>
+                                            <div class="d-flex align-items-center">
+                                                <input type="file" name="catalog[catalog_files][]" id="catalogFile" class="form-control me-2" accept="application/pdf">
+                                                <button type="button" id="addMoreCatalog" class="btn btn-sm btn-primary">+</button>
+                                            </div>
+                                            <small class="text-muted">Only PDF files are allowed.</small>
+                                        </div>
+                                    </div>
+                                    <div id="additionalCatalogs" class="mt-3"></div>
+                                </div>
+
+                               
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ url('admin/product') }}" class="btn btn-secondary me-2">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Add Product</button>
@@ -129,7 +150,7 @@
 @endsection
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
+<script src="{{asset('admin/js/jquery.min.js')}}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     // CKEditor init
@@ -224,4 +245,41 @@
 
     });
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addMoreCatalogButton = document.getElementById('addMoreCatalog');
+        const additionalCatalogsContainer = document.getElementById('additionalCatalogs');
+
+        if (addMoreCatalogButton && additionalCatalogsContainer) {
+            addMoreCatalogButton.addEventListener('click', function () {
+                const catalogRow = document.createElement('div');
+                catalogRow.classList.add('row', 'mt-2');
+
+                catalogRow.innerHTML = `
+                    <div class="col-md-6">
+                        <label class="form-label">Catalog Name</label>
+                        <input type="text" name="catalog[catalog_names][]" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Upload Catalog</label>
+                        <div class="d-flex align-items-center">
+                            <input type="file" name="catalog[catalog_files][]" class="form-control me-2" accept="application/pdf">
+                            <button type="button" class="btn btn-sm btn-danger removeCatalog">-</button>
+                        </div>
+                    </div>
+                `;
+
+                additionalCatalogsContainer.appendChild(catalogRow);
+
+                // Add event listener to remove button
+                catalogRow.querySelector('.removeCatalog').addEventListener('click', function () {
+                    catalogRow.remove();
+                });
+            });
+        }
+    });
+
+   
 </script>

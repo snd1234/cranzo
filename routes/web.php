@@ -19,7 +19,7 @@ Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs
 
 Route::get('/products', [HomeController::class, 'products'])->name('products');
 // Route::get('/product-detail', [HomeController::class, 'productDetail'])->name('productDetail');
-Route::get('/our-solution-detail', [HomeController::class, 'ourSolutionDetail'])->name('ourSolutionDetail');
+Route::get('/our-solutions/{slug}', [HomeController::class, 'ourSolutionDetail'])->name('ourSolutionDetail');
 Route::get('/common-detail-page', [HomeController::class, 'commonDetailPage'])->name('commonDetailPage');
 
 Route::get('/blog/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
@@ -90,6 +90,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/edit-product/{id}', [ProductController::class, 'editProduct'])->name('product.edit')->middleware('auth:admin');
     Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('product.update')->middleware('auth:admin');
     Route::get('/view-product/{id}', [ProductController::class, 'viewProduct'])->name('product.view')->middleware('auth:admin');
+
+    Route::delete('/delete-catalog', [ProductController::class, 'deleteCatalog'])->name('product.deleteCatalog')->middleware('auth:admin');
+
+    Route::delete('/delete-image', [ProductController::class, 'deleteImage'])->name('product.deleteImage')->middleware('auth:admin');
+
 
     Route::get('/blogs', [AdminController::class, 'blogIndex'])->name('blog.index')
     ->middleware('auth:admin');

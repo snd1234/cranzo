@@ -52,13 +52,20 @@
                                         @endforeach
                                     </select>
                                 </div> -->
-                                <!-- <div class="mb-3">
+                                <div class="mb-3">
                                     <label class="form-label">Slug <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug') }}" required aria-required="true">
                                     </div>
                                     <small class="text-muted">URL friendly identifier (lowercase, hyphens).</small>
-                                </div> -->
+                                </div>
+                               
+                                <div class="mb-3">
+                                    <label class="form-label">Category Image</label>
+                                    <input type="file" name="image" id="image" class="form-control" accept="image/*" multiple>
+                                    <div id="imagePreviewContainer" class="mt-2 d-flex gap-2 flex-wrap"></div>
+                                    <small class="text-muted">Upload an image for the category (optional).</small>
+                                </div>
                                
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
@@ -109,64 +116,82 @@
 <!-- CKEditor 5 CDN -->
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // CKEditor init
-    var editorEl = document.querySelector('#contentEditor');
-    if (editorEl) {
-        ClassicEditor.create(editorEl, {
-            // toolbar config as needed
-        }).catch(error => { console.error(error); });
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var productImagesInput = document.getElementById('image');
+        var imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
-   
-});
+        if (productImagesInput) {
+            productImagesInput.addEventListener('change', function (e) {
+                imagePreviewContainer.innerHTML = ''; // Clear previous previews
+                var files = e.target.files;
 
- // Slug generation
-    function slugify(str) {
-        return str.toString().toLowerCase()
-            .replace(/\s+/g, '-')           // Replace spaces with -
-            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-            .replace(/^-+/, '')             // Trim - from start
-            .replace(/-+$/, '');            // Trim - from end
-    }
-    var titleInput = document.getElementById('title');
-    var slugInput = document.getElementById('slug');
-    var genBtn = document.getElementById('generateSlug');
+                if (files.length > 3) {
+                    alert('You can upload a maximum of 3 images.');
+                    productImagesInput.value = ''; // Reset input
+                    return;
+                }
 
-    if (titleInput && !slugInput.value) {
-        titleInput.addEventListener('input', function () {
-            // optionally auto-update slug while typing if slug is empty
-            if (!slugInput.dataset.touched) {
-                slugInput.value = slugify(titleInput.value);
-            }
-        });
-    }
-    if (slugInput) {
-        slugInput.addEventListener('input', function () {
-            slugInput.dataset.touched = '1';
-        });
-    }
-    if (genBtn) {
-        genBtn.addEventListener('click', function () {
-            if (titleInput) slugInput.value = slugify(titleInput.value || slugInput.value);
-        });
-    }
+                Array.from(files).forEach(function (file) {
+                    if (!file.type.startsWith('image/')) {
+                        alert('Only image files are allowed.');
+                        productImagesInput.value = ''; // Reset input
+                        return;
+                    }
 
-    // Featured image preview
-    var featuredInput = document.getElementById('featuredImage');
-    var featuredPreview = document.getElementById('featuredPreview');
-    if (featuredInput) {
-        featuredInput.addEventListener('change', function (e) {
-            var f = e.target.files[0];
-            if (!f) { featuredPreview.classList.add('d-none'); featuredPreview.src = ''; return; }
-            if (!f.type.startsWith('image/')) { alert('Select an image file.'); featuredInput.value = ''; return; }
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-                featuredPreview.src = ev.target.result;
-                featuredPreview.classList.remove('d-none');
-            };
-            reader.readAsDataURL(f);
-        });
-    }
+                    var reader = new FileReader();
+                    reader.onload = function (ev) {
+                        var img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.alt = 'Preview';
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.objectFit = 'cover';
+                        img.classList.add('rounded', 'border');
+                        imagePreviewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        function slugifyLive(str) {
+            return str
+                .toLowerCase()
+                .replace(/\s+/g, '-')        // space → -
+                .replace(/[^a-z-]/g, '')    // allow only a-z and -
+                .replace(/-+/g, '-');       // multiple - → single
+        }
+
+        function slugifyFinal(str) {
+            return slugifyLive(str)
+                .replace(/^-+|-+$/g, '');  // trim - only on blur
+        }
+
+        const nameInput = document.getElementById('name');
+        const slugInput = document.getElementById('slug');
+
+        // Auto-generate slug from name
+        if (nameInput && slugInput && !slugInput.value) {
+            nameInput.addEventListener('input', function () {
+                if (!slugInput.dataset.touched) {
+                    slugInput.value = slugifyLive(this.value);
+                }
+            });
+        }
+
+        // Allow normal typing (including "-")
+        if (slugInput) {
+            slugInput.addEventListener('input', function () {
+                this.dataset.touched = '1';
+                this.value = slugifyLive(this.value);
+            });
+
+            // Clean up ONLY when user leaves field
+            slugInput.addEventListener('blur', function () {
+                this.value = slugifyFinal(this.value);
+            });
+        }
+
+    });
 </script>

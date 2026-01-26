@@ -150,8 +150,7 @@
                     <div class="mb-5">
                         <img src="{{asset('front/images/IGB-Logo.png')}}" class="w-full object-cover" />
                     </div>
-                    <p >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec vestibulum
-                        magna, et dapibus lacus. Duis nec vestibulum magna, et dapibus lacus.</p>
+                    <p >Integrated Gulf Biosystems (IGB) was founded with a mission to bridge the technological gap between global scientific innovation and regional laboratory capabilities.</p>
                 </div>
                 <div>
                     <h3 class="mb-5 text-white uppercase">Our Products</h3>

@@ -78,7 +78,10 @@
                                     <input type="file" name="images[]" id="productImages" class="form-control" accept="image/*" multiple>
                                     <div id="imagePreviewContainer" class="mt-2 d-flex gap-2 flex-wrap">
                                         @foreach($product_images as $image)
-                                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover;" class="rounded border">
+                                            <div class="position-relative">
+                                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover;" class="rounded border"  data-id="{{ $image->id }}">
+                                                <button type="button" class="btn-close position-absolute top-0 end-0 removeImage btn-outline-danger" data-id="{{ $image->id }}" aria-label="Close" style="border: 2px solid red; color: red;"></button>
+                                            </div>
                                         @endforeach
                                     </div>
                                     <small class="text-muted">You can upload up to 3 images.</small>
@@ -100,6 +103,38 @@
                                     <label class="form-label">Content <span class="text-danger">*</span></label>
                                     <textarea name="content" id="contentEditor" class="form-control" rows="10">{{ old('content', $product->description) }}</textarea>
                                 </div>
+                                <div class="col-12"><h5>Catalogs : </h5> </div>
+                                @if(isset($product_catalogs) && count($product_catalogs))
+                                    @foreach($product_catalogs as $cataData)
+                                        <div class="mt-2 d-flex align-items-center">
+                                            <span class="me-2">{{ $cataData->catalog_title }}</span>
+                                            <a href="{{ asset('storage/' . $cataData->catalog_file) }}" target="_blank" class="btn btn-link">View</a>
+                                            <button type="button" class="btn btn-sm btn-danger ms-2 removeCatalog" data-id="{{ $cataData->id }}">Remove</button>
+                                        </div>
+                                    @endforeach
+                                @endif
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Catalog Name </label>
+                                            <input type="text" name="catalog[catalog_names][]" id="catalogName" class="form-control" value="{{ old('catalog_names.0', $product->catalog_name ?? '') }}" >
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Upload Catalog</label>
+                                            <div class="d-flex align-items-center">
+                                                <input type="file" name="catalog[catalog_files][]" id="catalogFile" class="form-control me-2" accept="application/pdf">
+                                                <button type="button" id="addMoreCatalog" class="btn btn-sm btn-primary">+</button>
+                                            </div>
+                                            <small class="text-muted">Only PDF files are allowed.</small>
+                                        </div>
+                                    </div>
+                                    <div id="additionalCatalogs" class="mt-3"></div>
+                                </div>
+
+                               
+
+                                
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ url('admin/product') }}" class="btn btn-secondary me-2">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Update Product</button>
@@ -129,7 +164,7 @@
 @endsection
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
+<script src="{{asset('admin/js/jquery.min.js')}}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // CKEditor init
@@ -218,4 +253,115 @@
         }
 
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addMoreCatalogButton = document.getElementById('addMoreCatalog');
+        const additionalCatalogsContainer = document.getElementById('additionalCatalogs');
+
+        if (addMoreCatalogButton && additionalCatalogsContainer) {
+            addMoreCatalogButton.addEventListener('click', function () {
+                const catalogRow = document.createElement('div');
+                catalogRow.classList.add('row', 'mt-2');
+
+                catalogRow.innerHTML = `
+                    <div class="col-md-6">
+                        <label class="form-label">Catalog Name</label>
+                        <input type="text" name="catalog[catalog_names][]" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Upload Catalog</label>
+                        <div class="d-flex align-items-center">
+                            <input type="file" name="catalog[catalog_files][]" class="form-control me-2" accept="application/pdf">
+                            <button type="button" class="btn btn-sm btn-danger removeCatalog">-</button>
+                        </div>
+                    </div>
+                `;
+
+                additionalCatalogsContainer.appendChild(catalogRow);
+
+                // Add event listener to remove button
+                catalogRow.querySelector('.removeCatalog').addEventListener('click', function () {
+                    catalogRow.remove();
+                });
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const removeButtons = document.querySelectorAll('.removeCatalog');
+
+        removeButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const catalogId = this.getAttribute('data-id');
+                const catalogRow = this.closest('div.mt-2');
+
+                if (catalogId) {
+                    // Send AJAX request to delete catalog
+                    $.ajax({
+                        url: '{{ url("admin/delete-catalog") }}',
+                        type: 'DELETE',
+                        data: {catalogId: catalogId},
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // Remove the catalog row from the DOM
+                                if (catalogRow) {
+                                    catalogRow.remove();
+                                }
+                                alert(response.message);
+                            } else {
+                                alert('Failed to delete catalog.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            alert('An error occurred while deleting the catalog.');
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+        
+    document.addEventListener('DOMContentLoaded', function () {
+        removeImageButtons = document.querySelectorAll('.removeImage');;
+        removeImageButtons.forEach(function(button) { 
+            button.addEventListener('click', function() {
+                const imageId = this.getAttribute('data-id');
+                const imageContainer = this.parentElement;
+
+                if (imageId) {
+                    // Send AJAX request to delete image
+                    $.ajax({
+                        url: '{{ url("admin/delete-image") }}',
+                        type: 'DELETE',
+                        data: {imageId: imageId},
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // Remove the image container from the DOM
+                                if (imageContainer) {
+                                    imageContainer.remove();
+                                }
+                                alert(response.message);
+                            } else {
+                                alert('Failed to delete image.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            alert('An error occurred while deleting the image.');
+                        }
+                    });
+                }
+            });
+        });
+    }); 
+
 </script>

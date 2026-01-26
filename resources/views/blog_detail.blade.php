@@ -61,35 +61,22 @@
                         <span class="bg-white uppercase">Browse by</span>
                     </div>
                     <div class="accordion">
-                        <div class="acc-item">
-                            <div class="acc-title">GBA Solutions</div>
-                            <div class="acc-content">
-                                <div class="flex flex-col space-y-3">
-                                    <a href="#" class="flex items-center gap-2"><i
-                                            class="fa-solid fa-angle-right"></i>GBA Solutions</a>
-                                    <a href="#" class="flex items-center gap-2"><i
-                                            class="fa-solid fa-angle-right"></i>GFood Safety Solutions</a>
-                                    <a href="#" class="flex items-center gap-2"><i
-                                            class="fa-solid fa-angle-right"></i>Clinical Research</a>
+                        @if($subcategories->isNotEmpty())
+                            @foreach($subcategories as $sub)
+                             @if($sub->products->isNotEmpty())
+                            <div class="acc-item">
+                                <div class="acc-title">{{ $sub->name }}</div>
+                                    <div class="acc-content">
+                                        <div class="flex flex-col space-y-3">
+                                            @foreach($sub->products as $product)
+                                            <a href="{{ url('product-detail/' . $product->slug) }}" class="flex items-center gap-2"><i class="fa-solid fa-angle-right"></i> {{ $product->title }}</a>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="acc-item">
-                            <div class="acc-title">GBA Solutions</div>
-                            <div class="acc-content">
-                                <div class="flex flex-col space-y-3">
-                                    <a href="#" class="flex items-center gap-2"><i
-                                            class="fa-solid fa-angle-right"></i>GBA Solutions</a>
-                                    <a href="#" class="flex items-center gap-2"><i
-                                            class="fa-solid fa-angle-right"></i>GFood Safety Solutions</a>
-                                    <a href="#" class="flex items-center gap-2"><i
-                                            class="fa-solid fa-angle-right"></i>Clinical Research</a>
-                                </div>
-                            </div>
-                        </div>
-
-
-
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
 
                 </div>

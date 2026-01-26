@@ -99,34 +99,27 @@
                         </div>
                     </form>
                 </div>
-
+                <?php //dd($product_catalogs);
+                // 
+                if ($product_catalogs && count($product_catalogs) > 0) { 
+                    ?>
                 <div class="my-10">
                     <h4 class="mb-3 text-center">Our Resources</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <?php foreach($product_catalogs as $catalog) {
+                        ?>
                         <div class="resource-box">
                             <div class="mb-2"><i class="fa-solid fa-download"></i></div>
-                            <p class="title">Catalog (English)</p>
-                            <p class="link">Data Connectivity Catalog</p>
+                            <p class="title">{{ $catalog->catalog_title }}</p>
+                            <a href="{{ asset('storage/' . $catalog->catalog_file) }}" download class="text-blue-500 hover:underline">
+                                Download Catalog
+                            </a>
                         </div>
-                        <div class="resource-box">
-                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
-                            <p class="title">Catalog (English)</p>
-                            <p class="link">Data Connectivity Catalog</p>
-                        </div>
-                        <div class="resource-box">
-                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
-                            <p class="title">Catalog (English)</p>
-                            <p class="link">Data Connectivity Catalog</p>
-                        </div>
-                        <div class="resource-box">
-                            <div class="mb-2"><i class="fa-solid fa-download"></i></div>
-                            <p class="title">Catalog (English)</p>
-                            <p class="link">Data Connectivity Catalog</p>
-                        </div>
+                        <?php }  ?>
+                        
                     </div>
-
-
                 </div>
+                <?php }  ?>
 
             </div>
 
