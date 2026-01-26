@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Blog;
+use App\Models\Partner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-class AdminController extends Controller
+
+class AdminController extends BaseController
 {
     
     public function showLoginForm()
@@ -187,6 +189,84 @@ class AdminController extends Controller
         $blog->status = $request->status;
         $blog->save();
         return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
+    }
+
+
+    // partners methods
+    public function partnersIndex()
+    {
+        $partners = \App\Models\Partner::all();
+        return view('admin.partners', compact('partners'));
+    }
+
+    public function showAddPartnerForm()
+    {
+        return view('admin.add_partner');
+    }
+
+    public function storePartner(Request $request)
+    {
+        if($request->isMethod('post')){
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'logo' => 'nullable|image|max:2048',
+                'status' => 'required|boolean',
+                 'website' => 'nullable|url',
+            ]);
+
+            $partner = new \App\Models\Partner();
+            $partner->name = $request->name;
+            if ($request->hasFile('logo')) {
+                $path = $request->file('logo')->store('uploads/partners', 'public');
+                $partner->logo = $path;
+            }
+            $partner->status = $request->status;
+            $partner->website_url = $request->website;
+            $partner->created_by = Auth::guard('admin')->id();
+            $partner->updated_by = Auth::guard('admin')->id();
+            $partner->save();
+            return redirect()->route('admin.partners')->with('success', 'Partner added successfully.');
+        }
+    }
+
+    public function editPartner($id)
+    {
+        $partner = \App\Models\Partner::findOrFail($id);
+        return view('admin.edit_partner', compact('partner'));
+    }
+
+    public function updatePartner(Request $request, $id)
+    {
+        $partner = \App\Models\Partner::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'logo' => 'nullable|image|max:2048',
+            'status' => 'required|boolean',
+            'website' => 'nullable|url',
+        ]);
+
+        $partner->name = $request->name;
+        if ($request->hasFile('logo')) {
+            if ($partner->logo) {
+                Storage::disk('public')->delete($partner->logo);
+            }
+            $path = $request->file('logo')->store('uploads/partners', 'public');
+            $partner->logo = $path;
+        }
+        $partner->status = $request->status;
+        $partner->website_url = $request->website;
+        $partner->updated_by = Auth::guard('admin')->id();
+        $partner->save();
+        return redirect()->route('admin.partners')->with('success', 'Partner updated successfully.');
+    }
+
+     public function deletePartner($id)
+    {
+        $partner = \App\Models\Partner::findOrFail($id);
+        $partner->status = 0;
+        $partner->save();
+        return redirect()->route('admin.partners')->with('success', 'Partner marked inactive successfully.');
     }
 
 }

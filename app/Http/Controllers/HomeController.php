@@ -39,7 +39,8 @@ class HomeController extends BaseController
    
     public function ourPartners()
     {
-        return view('our_partners');
+        $partners = DB::table('partners')->where('status', 1)->get()->toArray();
+        return view('our_partners', compact('partners'));
     }
     public function events()
     {

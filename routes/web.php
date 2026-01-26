@@ -103,4 +103,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/edit-blog/{id}', [AdminController::class, 'editBlog'])->name('blog.edit')->middleware('auth:admin');
     Route::put('/update-blog/{id}', [AdminController::class, 'updateBlog'])->name('blog.update')->middleware('auth:admin');
 
+    // partners
+    Route::get('/partners', [AdminController::class, 'partnersIndex'])->name('partners')
+    ->middleware('auth:admin');
+
+    Route::get('/add-partner', [AdminController::class, 'showAddPartnerForm'])->name('partners.showAddForm')->middleware('auth:admin');
+    Route::post('/save-partner', [AdminController::class, 'storePartner'])->name('partners.store')->middleware('auth:admin');
+
+    Route::get('/edit-partner/{id}', [AdminController::class, 'editPartner'])->name('partners.edit')->middleware('auth:admin');
+    Route::put('/update-partner/{id}', [AdminController::class, 'updatePartner'])->name('partners.update')->middleware('auth:admin');
+    Route::delete('/delete-partner/{id}', [AdminController::class, 'deletePartner'])->name('partners.delete')->middleware('auth:admin');
+
+
 });

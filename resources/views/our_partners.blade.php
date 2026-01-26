@@ -21,62 +21,21 @@
         <div class="max-w-7xl mx-auto">
             <h3 class="mb-8 text-center">Official Distribution Partners</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Thermo Fisher Scientific</h4>
+                <?php foreach($partners as $partner): ?>
+                <div class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
+                    @if(!empty($partner->website_url))
+                        <a href="{{ $partner->website_url }}" target="_blank" class="block">
+                    @endif
+                            <div class="h-20 mb-6 flex items-center justify-center">
+                                <img src="{{ asset('storage/' . $partner->logo) }}" class="mx-auto " />
+                            </div>
+                            <h4>{{ $partner->name }}</h4>
+                    @if(!empty($partner->website_url))
+                        </a>
+                    @endif
                 </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Agilent Technologies</h4>
-                </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Qiagen</h4>
-                </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Bio‑Rad Laboratories</h4>
-                </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Illumina</h4>
-                </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Roche Diagnostics</h4>
-                </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Promega</h4>
-                </div>
-                <div
-                    class="partner-card bg-white p-6 text-center rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                    <div class="h-20 mb-6 flex items-center justify-center">
-                        <img src="{{ asset('front/images/partner.jpg') }}" class="mx-auto " />
-                    </div>
-                    <h4>Eppendorf</h4>
-                </div>
+                <?php endforeach; ?>
+                
             </div>
         </div>
     </section>
