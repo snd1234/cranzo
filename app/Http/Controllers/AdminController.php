@@ -146,6 +146,8 @@ class AdminController extends BaseController
             $blog->type = $request->type;
             $blog->short_description = $request->short_description;
             $blog->content = $request->content;
+            $blog->meta_title = $request->meta_title ?? '';
+            $blog->meta_description = $request->meta_description ?? '';
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('uploads/blogs', 'public');
                 $blog->image = $path;
@@ -179,6 +181,9 @@ class AdminController extends BaseController
         $blog->type = $request->type;
         $blog->short_description = $request->short_description;
         $blog->content = $request->content;
+        $blog->meta_title = $request->meta_title ?? '';
+        $blog->meta_description = $request->meta_description ?? '';
+        
         if ($request->hasFile('image')) {
             if ($blog->image) {
                 Storage::disk('public')->delete($blog->image);
