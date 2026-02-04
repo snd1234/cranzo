@@ -43,7 +43,7 @@
                     <div class="card p-8 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
                         <div class="h-[180px] w-full bg-gray-200 mb-3 rounded-lg overflow-hidden">
                             <figure>
-                                <img src="{{asset('storage/' . $event->image) }}" class="w-full object-cover">
+                                <img src="{{ asset(config('uploads.path') . $event->image) }}" class="w-full object-cover">
                             </figure>
                         </div>
 
@@ -77,7 +77,7 @@
                             <div
                                 class="w-full sm:w-[270px] h-[200px] bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                                 <figure>
-                                    <img src="{{asset('storage/' . $news->image)}}" alt="Event Image"
+                                    <img src="{{ asset(config('uploads.path') .  $news->image)}}" alt="Event Image"
                                         class="w-full h-full object-cover">
                                 </figure>
 
@@ -124,7 +124,7 @@
                 <div class="card p-8 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
                     <div class="h-40 w-full bg-gray-200 mb-3 rounded-lg overflow-hidden">
                         <figure>
-                            <img src="{{ asset('storage/' . $web->image) }}" class="w-full object-cover">
+                            <img src="{{ asset(config('uploads.path') .  $web->image) }}" class="w-full object-cover">
                         </figure>
 
                     </div>
@@ -155,7 +155,7 @@
                 <div class="card p-8 bg-white rounded-lg shadow hover:shadow-lg transition duration-300">
                     <div class="h-60 w-full bg-gray-200 mb-3 rounded-lg overflow-hidden">
                         <figure>
-                            <img src="{{ asset('storage/' . $blog->image) }}" class="w-full object-cover">
+                            <img src="{{ asset(config('uploads.path') .  $blog->image) }}" class="w-full object-cover">
                         </figure>
                     </div>
                     <div class="date text-gray-600 flex items-center gap-2 mb-4">
@@ -221,7 +221,7 @@
             <div class="card p-8 bg-gray-100 rounded-lg shadow hover:shadow-lg transition duration-300">
                 <div class="h-60 w-full bg-white mb-3 rounded-lg overflow-hidden">
                     <figure>
-                        <img src="{{ asset('storage/' . $category->image_path) }}" class="w-full object-cover">
+                        <img src="{{ asset(config('uploads.path') .  $category->image_path) }}" class="w-full object-cover">
                     </figure>
                 </div>
 

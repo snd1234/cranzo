@@ -111,7 +111,7 @@
                         <div class="resource-box">
                             <div class="mb-2"><i class="fa-solid fa-download"></i></div>
                             <p class="title">{{ $catalog->catalog_title }}</p>
-                            <a href="{{ asset('storage/' . $catalog->catalog_file) }}" download class="text-blue-500 hover:underline">
+                            <a href="{{ asset(config('uploads.path')  . $catalog->catalog_file) }}" download class="text-blue-500 hover:underline">
                                 Download Catalog
                             </a>
                         </div>
@@ -134,7 +134,7 @@
                         <div class="swiper-wrapper">
                             @foreach($product_images as $image)
                                 <div class="swiper-slide">
-                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="product image">
+                                    <img src="{{ asset(config('uploads.path')  . $image->image_path) }}" alt="product image">
                                 </div>
                             @endforeach                           
                         </div>
