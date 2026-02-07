@@ -62,10 +62,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/add-page', [PageController::class, 'showAddForm'])->name('pagemgmt.showAddForm')->middleware('auth:admin');
     Route::post('/save-page-data', [PageController::class, 'store'])->name('pagemgmt.store')->middleware('auth:admin');
     Route::get('/edit-page/{id}', [PageController::class, 'edit'])->name('pagemgmt.edit')->middleware('auth:admin');
-    Route::put('/page-management/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
-    Route::get('/page-management/{id}', [PageController::class, 'show'])->name('pagemgmt.show')->middleware('auth:admin');
-    Route::delete('/page-management/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
-
+    Route::put('/update-page-data/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
+    Route::delete('/delete-page/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
+    // Route::put('/page-management/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
+    // Route::get('/page-management/{id}', [PageController::class, 'show'])->name('pagemgmt.show')->middleware('auth:admin');
+    // Route::delete('/page-management/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
+ // CKEditor image upload
+    Route::post('/ckeditor/upload', [PageController::class, 'uploadEditorImage'])->name('ckeditor.upload');
    // Route for product category and subcategory management
     
     Route::get('/product-category', [ProductController::class, 'categoryIndex'])->name('productcategory.index')

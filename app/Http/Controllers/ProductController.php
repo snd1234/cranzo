@@ -1,71 +1,38 @@
 <?php
-
-
-
 namespace App\Http\Controllers;
-
 use App\Models\MainCategory;
-
 use App\Models\ProductCategory;
-
 use App\Models\ProductSubCategory;
-
 use App\Models\Products;
-
+use App\Models\SeoContent;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\Support\Facades\DB;
 
-
-
 class ProductController extends Controller
-
 {
 
     //
 
     public function categoryIndex()
-
     {
-
-       
-
         $categories = DB::table('product_category')->get();
-
         return view('admin.product_categories', compact('categories'));
-
     }
 
-
-
     public function showAddCategoryForm()
-
     {
-
-        // Logic to show form to add new product category
-
         $mainCategory = DB::table('main_category')->get();
-
         return view('admin.add_product_category', compact('mainCategory'));
-
     }
 
     public function storeCategory(Request $request)
-
     {
-
         if($request->isMethod('post')){
-
             $request->validate([
-
                 'name' => 'required|string|max:255',
-
                 'slug' => 'required|string|alpha_dash|max:255|unique:product_category,slug',
-
             ]);
 
 
@@ -379,97 +346,61 @@ class ProductController extends Controller
     }
 
     public function storeProduct(Request $request)
-
     {
-
         if ($request->isMethod('post')) {
-
             $request->validate([
-
                 'name' => 'required|string|max:255',
-
                 'slug' => 'required|string|alpha_dash|max:255|unique:products,slug',
-
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate each image
-
             ]);
 
-
+            // Save SEO
+            $seoContent = SeoContent::addOrUpdateSeoContent([
+                'page_slug' => $request->slug,
+                'meta_title' => $request->meta_title ?? '',
+                'meta_description' => $request->meta_description ?? '',
+                'meta_keywords' => $request->meta_keywords ?? '',
+            ]);
 
             // Insert product data into the products table
-
             $productId = DB::table('products')->insertGetId([
-
                 'title' => $request->name,
-
                 'slug' => $request->slug,
-
                 'category_id' => $request->category_id,
-
                 'sub_category_id' => $request->sub_category_id,
-
                 'short_description' => $request->short_description,
-
                 'description' => $request->content,
-
                 'status' => $request->status,
                 'meta_title' => $request->meta_title ?? '',
                 'meta_description' => $request->meta_description ?? '',
-
+                'seo_id' => $seoContent->id ?? null,
                 'created_by' => auth()->id(),
-
                 'updated_by' => auth()->id(),
-
                 'created_at' => now(),
-
                 'updated_at' => now(),
 
             ]);
-
-
-
             // Handle image uploads and store in product_image table
-
             if ($request->hasFile('images')) {
 
                 foreach ($request->file('images') as $image) {
-
                     $path = $image->store('uploads/product_images', 'public'); // Store image in 'storage/app/public/product_images'
-
                     DB::table('product_image')->insert([
-
                         'product_id' => $productId,
-
                         'image_path' => $path,
-
                         'created_at' => now(),
-
                         'status' => 1,
-
                         'updated_at' => now(),
-
                     ]);
 
                 }
 
             }
-
-
-
             $catalogNames = $request->catalog['catalog_names'] ?? [];
-
             $catalogFiles = $request->file('catalog.catalog_files') ?? [];
-
             if(!empty($catalogNames) && !empty($catalogFiles)){
-
                 $this->saveProductCatalogs($catalogNames, $catalogFiles, $productId);
-
             }
-
-            
-
-
-
             return redirect('/admin/product')->with('success', 'Product added successfully.');
 
         }
@@ -479,9 +410,7 @@ class ProductController extends Controller
    
 
     public function editProduct($id)
-
     {
-
         $categories = DB::table('product_category')->get();
 
         $subCategories = DB::table('product_sub_category')->get();
@@ -491,112 +420,76 @@ class ProductController extends Controller
         $product_images = DB::table('product_image')->where('product_id', $id)->get();
 
         $product_catalogs = DB::table('product_catalogs')->where('product_id', $id)->get();
-
-        //echo "<pre>";print_r($product_catalogs);die;
-
         if (!$product) {
-
             return redirect('/admin/product')->with('error', 'Product not found.');
 
         }
-
-
-
-        return view('admin.edit_product', compact('product', 'product_images','categories','subCategories','product_catalogs'));
+        $seoContent = SeoContent::find($product->seo_id);
+        return view('admin.edit_product', compact('product', 'product_images','categories','subCategories','product_catalogs','seoContent'));
 
     }
 
     public function updateProduct(Request $request, $id)
-
     {
 
         if($request->isMethod('put')){
 
-             //echo "<pre>";print_r($request->all());die;
-
-
-
+            $product = DB::table('products')->where('id', $id)->first();
+            if (!$product) {
+                return redirect('/admin/product')->with('error', 'Product not found.');
+            }
             $request->validate([
-
                 'name' => 'required|string|max:255',
-
                 'slug' => 'required|string|regex:/^[a-z-]+$/|max:255|unique:products,slug,' . $id,
-
             ]);
 
-
+            // Update SEO
+            $seoContent = SeoContent::addOrUpdateSeoContent([
+                'id' => $product->seo_id,
+                'page_slug' => $request->slug,
+                'meta_title' => $request->meta_title ?? '',
+                'meta_description' => $request->meta_description ?? '',
+                'meta_keywords' => $request->meta_keywords ?? '',
+            ]);
 
             DB::table('products')->where('id', $id)->update([
-
                 'title' => $request->name,
-
                 'slug' => $request->slug,
-
                 'category_id' => $request->category_id,
-
                 'sub_category_id' => $request->sub_category_id,
-
                 'short_description' => $request->short_description,
-
                 'description' => $request->content,
-
                 'status' => $request->status,
                 'meta_title' => $request->meta_title ?? '',
                 'meta_description' => $request->meta_description ?? '',
-
+                'seo_id' => $seoContent->id ?? null,
                 'updated_by' => auth()->id(),
-
                 'updated_at' => now(),
-
             ]);
-
-            
 
             if ($request->hasFile('images')) {
 
                 foreach ($request->file('images') as $image) {
-
                     $path = $image->store('uploads/product_images', 'public'); // Store image in 'storage/app/public/product_images'
-
                     DB::table('product_image')->insert([
-
                         'product_id' => $id,
-
                         'image_path' => $path,
-
                         'created_at' => now(),
-
                         'status' => 1,
-
                         'updated_at' => now(),
-
                     ]);
-
                 }
-
             }
-
-
-
             $catalogNames = $request->catalog['catalog_names'] ?? [];
-
             $catalogFiles = $request->file('catalog.catalog_files') ?? [];
-
             if(!empty($catalogNames) && !empty($catalogFiles)){
-
                 $this->saveProductCatalogs($catalogNames, $catalogFiles, $id);
-
             }
-
             return redirect('/admin/product')->with('success', 'Product updated successfully.');
-
-       
 
         }
 
     }
-
-
 
     public function saveProductCatalogs($catalogNames, $catalogFiles, $productId)
 

@@ -77,17 +77,15 @@
                             <div class="col-lg-9">
 
                                 <div class="mb-3">
-
                                     <label class="form-label">Title <span class="text-danger">*</span></label>
-
                                     <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required aria-required="true">
-
                                 </div>
-
-                                
-
+                                {{-- Slug --}}
                                 <div class="mb-3">
-
+                                    <label class="form-label">Slug <span class="text-danger">*</span></label>
+                                    <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug') }}" required><small class="text-muted"> URL friendly (lowercase, hyphen separated) </small>
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label">Page Category <span class="text-danger">*</span></label>
 
                                     <select name="type" class="form-select" required aria-required="true">
@@ -154,16 +152,19 @@
 
                                 </div>
 
+                                <h5 class="mb-3">SEO Details</h5>
                                 <div class="mb-3">
                                     <label class="form-label">Meta Title</label>
-                                    <input type="text" id="meta_title" name="meta_title" class="form-control" value="{{ old('meta_title') }}">
+                                    <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title') }}">
                                 </div>
-
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Keywords</label>
+                                    <input type="text" name="meta_keywords" class="form-control" value="{{ old('meta_keywords') }}">
+                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Meta Description</label>
-                                    <textarea id="meta_description" name="meta_description" class="form-control" rows="3">{{ old('meta_description') }}</textarea>
+                                    <textarea name="meta_description" class="form-control" rows="3">{{ old('meta_description') }}</textarea>
                                 </div>
-                                
 
                                 <div class="d-flex justify-content-end">
 
@@ -284,6 +285,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }
+
+
+     // Slug generator
+    function slugify(text) {
+        return text.toString().toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+
+    titleInput.addEventListener('input', function () {
+        if (!slugInput.dataset.touched) {
+            slugInput.value = slugify(this.value);
+        }
+    });
+
+    slugInput.addEventListener('input', function () {
+        slugInput.dataset.touched = true;
+    });
+
 
 });
 

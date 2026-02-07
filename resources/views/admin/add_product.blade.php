@@ -201,7 +201,7 @@
                                     <textarea name="content" id="contentEditor" class="form-control" rows="10" >{{ old('content') }}</textarea>
 
                                 </div>
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label">Meta Title</label>
                                     <input type="text" id="meta_title" name="meta_title" class="form-control" value="{{ old('meta_title') }}">
                                 </div>
@@ -209,7 +209,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Meta Description</label>
                                     <textarea id="meta_description" name="meta_description" class="form-control" rows="3">{{ old('meta_description') }}</textarea>
-                                </div>
+                                </div> -->
 
                                 <div class="col-12"><h5>Catalogs : </h5> </div>
 
@@ -248,11 +248,19 @@
                                     <div id="additionalCatalogs" class="mt-3"></div>
 
                                 </div>
-
-
-
-                               
-
+                                <h5 class="mb-3">SEO Details</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Title</label>
+                                    <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Keywords</label>
+                                    <input type="text" name="meta_keywords" class="form-control" value="{{ old('meta_keywords') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Description</label>
+                                    <textarea name="meta_description" class="form-control" rows="3">{{ old('meta_description') }}</textarea>
+                                </div>
                                 <div class="d-flex justify-content-end">
 
                                     <a href="{{ url('admin/product') }}" class="btn btn-secondary me-2">Cancel</a>

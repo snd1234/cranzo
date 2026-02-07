@@ -18,12 +18,12 @@ class Blog extends Model
         'start_date'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($blog) {
-            $blog->slug = Str::slug($blog->title);
-        });
-    }
+    //     static::creating(function ($blog) {
+    //         $blog->slug = Str::slug($blog->title);
+    //     });
+    // }
 }

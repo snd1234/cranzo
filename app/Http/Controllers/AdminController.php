@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Blog;
 use App\Models\Partner;
+use App\Models\SeoContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -120,7 +121,7 @@ class AdminController extends BaseController
 
     public function blogIndex()
     {
-        $blogs = \App\Models\Blog::all();
+        $blogs = \App\Models\Blog::orderBy('updated_at', 'desc')->get();
         return view('admin.blogs', compact('blogs'));
     }   
     public function showAddBlogForm()
@@ -134,6 +135,7 @@ class AdminController extends BaseController
         
             $request->validate([
                 'title' => 'required|string|max:255',
+                'slug' => 'required|string|max:255|unique:blogs,slug',
                 'type' => 'required|in:1,2,3,4',
                 'short_description' => 'required|string|max:500',
                 'content' => 'required|string',
@@ -141,13 +143,23 @@ class AdminController extends BaseController
                 'status' => 'required|boolean',
             ]);
 
+            // Save SEO
+            $seoContent = SeoContent::addOrUpdateSeoContent([
+                'page_slug' => $request->slug ?? null,
+                'meta_title' => $request->title,
+                'meta_description' => $request->meta_description ?? '',
+                'meta_keywords' => $request->meta_keywords ?? '',
+            ]);
+
             $blog = new \App\Models\Blog();
             $blog->title = $request->title;
             $blog->type = $request->type;
+            $blog->slug = $request->slug ?? null;
             $blog->short_description = $request->short_description;
             $blog->content = $request->content;
             $blog->meta_title = $request->meta_title ?? '';
             $blog->meta_description = $request->meta_description ?? '';
+            $blog->seo_id = $seoContent->id ?? null;
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('uploads/blogs', 'public');
                 $blog->image = $path;
@@ -162,7 +174,9 @@ class AdminController extends BaseController
     public function editBlog($id)
     {
         $blog = Blog::findOrFail($id);
-        return view('admin.edit_blogs', compact('blog'));
+        $seoContent = SeoContent::find($blog->seo_id);
+        // echo "<pre>"; print_r($seoContent); echo "</pre>"; die;
+        return view('admin.edit_blogs', compact('blog','seoContent'));
     }
     public function updateBlog(Request $request, $id)
     {
@@ -170,6 +184,7 @@ class AdminController extends BaseController
 
         $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
             'type' => 'required|in:1,2,3,4',
             'short_description' => 'required|string|max:500',
             'content' => 'required|string',
@@ -177,10 +192,21 @@ class AdminController extends BaseController
             'status' => 'required|boolean',
         ]);
 
+         //echo "<pre>"; print_r($request->all()); echo "</pre>"; die;
+        // Update SEO
+        $seoContent = SeoContent::addOrUpdateSeoContent([
+            'id' => $blog->seo_id,
+            'page_slug' => $request->slug, // Keep existing slug if not changed
+            'meta_title' => $request->title,
+            'meta_description' => $request->meta_description ?? '',
+            'meta_keywords' => $request->meta_keywords ?? '',
+        ]);
         $blog->title = $request->title;
+        $blog->slug = $request->slug ?? null;
         $blog->type = $request->type;
         $blog->short_description = $request->short_description;
         $blog->content = $request->content;
+        $blog->seo_id = $seoContent->id ?? null;
         $blog->meta_title = $request->meta_title ?? '';
         $blog->meta_description = $request->meta_description ?? '';
         
@@ -225,6 +251,8 @@ class AdminController extends BaseController
                 $path = $request->file('logo')->store('uploads/partners', 'public');
                 $partner->logo = $path;
             }
+           
+            $partner->short_description = $request->description ?? '';  
             $partner->status = $request->status;
             $partner->website_url = $request->website;
             $partner->created_by = Auth::guard('admin')->id();
@@ -259,6 +287,7 @@ class AdminController extends BaseController
             $path = $request->file('logo')->store('uploads/partners', 'public');
             $partner->logo = $path;
         }
+        $partner->short_description = $request->description ?? '';  
         $partner->status = $request->status;
         $partner->website_url = $request->website;
         $partner->updated_by = Auth::guard('admin')->id();

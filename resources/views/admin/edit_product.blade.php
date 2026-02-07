@@ -207,14 +207,7 @@
                                     <textarea name="content" id="contentEditor" class="form-control" rows="10">{{ old('content', $product->description) }}</textarea>
 
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Meta Title</label>
-                                    <input type="text" id="meta_title" name="meta_title" class="form-control" value="{{ old('meta_title', $product->meta_title) }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Meta Description</label>
-                                    <textarea name="meta_description" id="meta_description" class="form-control" rows="3">{{ old('meta_description', $product->meta_description) }}</textarea>
-                                </div>
+                                
 
                                 <div class="col-12"><h5>Catalogs : </h5> </div>
 
@@ -271,14 +264,19 @@
                                     <div id="additionalCatalogs" class="mt-3"></div>
 
                                 </div>
-
-
-
-                               
-
-
-
-                                
+                                <h5 class="mb-3">SEO Details</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Title</label>
+                                    <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title', $seoContent->meta_title ?? '') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Keywords</label>
+                                    <input type="text" name="meta_keywords" class="form-control" value="{{ old('meta_keywords', $seoContent->meta_keywords ?? '') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Description</label>
+                                    <textarea name="meta_description" class="form-control" rows="3">{{ old('meta_description', $seoContent->meta_description ?? '') }}</textarea>
+                                </div>
 
                                 <div class="d-flex justify-content-end">
 
