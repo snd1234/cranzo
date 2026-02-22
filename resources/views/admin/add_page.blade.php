@@ -6,13 +6,12 @@
     <main>
         <div class="container-fluid px-4">
             <h1 class="mt-4">Add Page</h1>
-
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item">
-                    <a href="{{ url('admin') }}">Dashboard</a>
+                    <a href="{{ url('admin/dashboard') }}">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ url('admin/pages') }}">Pages</a>
+                    <a href="{{ url('admin/page-management') }}">Pages</a>
                 </li>
                 <li class="breadcrumb-item active">Add</li>
             </ol>
@@ -23,13 +22,12 @@
                         <i class="fas fa-file-alt me-1"></i>
                         Add Page
                     </span>
-                    <a href="{{ url('admin/pages') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ url('admin/page-management') }}" class="btn btn-sm btn-secondary">
                         Back to List
                     </a>
                 </div>
 
                 <div class="card-body">
-
                     {{-- Validation Errors --}}
                     @if ($errors->any())
                         <div class="alert alert-danger">

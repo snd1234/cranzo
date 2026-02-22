@@ -9,10 +9,10 @@
 
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item">
-                    <a href="{{ url('admin') }}">Dashboard</a>
+                    <a href="{{ url('admin/dashboard') }}">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ url('admin/pages') }}">Pages</a>
+                    <a href="{{ url('admin/page-management') }}">Pages</a>
                 </li>
                 <li class="breadcrumb-item active">Edit</li>
             </ol>
@@ -23,7 +23,7 @@
                         <i class="fas fa-file-alt me-1"></i>
                         Edit Page
                     </span>
-                    <a href="{{ url('admin/pages') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ url('admin/page-management') }}" class="btn btn-sm btn-secondary">
                         Back to List
                     </a>
                 </div>
@@ -66,12 +66,7 @@
                                     <label class="form-label">
                                         Slug <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text"
-                                           name="slug"
-                                           id="slug"
-                                           class="form-control"
-                                           value="{{ old('slug', $page->slug) }}"
-                                           required>
+                                    <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug', $page->slug) }}" required {{ $page->slug === 'about-us' ? 'readonly' : '' }}>
                                     <small class="text-muted">
                                         URL friendly (lowercase, hyphen separated)
                                     </small>
@@ -82,10 +77,7 @@
                                     <label class="form-label">
                                         Short Description <span class="text-danger">*</span>
                                     </label>
-                                    <textarea name="description"
-                                              class="form-control"
-                                              rows="3"
-                                              required>{{ old('description', $page->description) }}</textarea>
+                                    <textarea name="description" class="form-control" rows="3" required>{{ old('description', $page->description) }}</textarea>
                                 </div>
 
                                 {{-- Content --}}
@@ -170,6 +162,14 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/^-+/, '')
             .replace(/-+$/, '');
     }
+
+    const slugInput = document.getElementById('slug');
+
+    slugInput.addEventListener('input', function () {
+        if (slugInput.value === 'about-us') {
+            slugInput.value = 'about-us'; // Prevent changes to 'about-us'
+        }
+    });
 
     const titleInput = document.getElementById('title');
     const slugInput = document.getElementById('slug');

@@ -34,7 +34,9 @@ class HomeController extends BaseController
 
     public function aboutUs()
     {
-        return view('about_us');
+        $aboutUs = DB::table('pages')->where('status', 1)->where('slug', 'about-us')->get()->first();
+        //echo "<pre>";print_r($aboutUs);die;
+        return view('about_us', compact('aboutUs'));
     }
    
     public function ourPartners()
