@@ -59,8 +59,11 @@ class AdminController extends BaseController
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:admins',
-            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|email|unique:admins,email',
+            'password' => 'required|confirmed|min:8',
+            'role' => 'required|in:1,2,3',
+            'status' => 'required|in:0,1',
+            'mobile_number' => 'nullable|string|max:15',
         ]);
 
         Admin::create([
@@ -85,7 +88,7 @@ class AdminController extends BaseController
             'email' => 'required|string|email|max:255|unique:admins,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'mobile_number' => 'nullable|string|max:15',
-            'address' => 'nullable|string|max:255',
+            //'address' => 'nullable|string|max:255',
             
         ]);
 
@@ -106,6 +109,7 @@ class AdminController extends BaseController
     public function viewUser($id)
     {
         $user = Admin::findOrFail($id);
+        //echo "<pre>"; print_r($user); exit;
         return view('admin.view_user', compact('user'));
     }
 
