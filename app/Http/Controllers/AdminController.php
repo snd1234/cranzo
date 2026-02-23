@@ -123,188 +123,108 @@ class AdminController extends BaseController
     }
     
 
-    public function blogIndex()
-    {
-        $blogs = \App\Models\Blog::orderBy('updated_at', 'desc')->get();
-        return view('admin.blogs', compact('blogs'));
-    }   
-    public function showAddBlogForm()
-    {
-        return view('admin.add_blogs');
-    }
-    public function storeBlog(Request $request)
-    {
-        if($request->isMethod('post')){
-            //echo "<pre>";print_r($request->all());die;
+    // public function blogIndex()
+    // {
+    //     $blogs = \App\Models\Blog::orderBy('updated_at', 'desc')->get();
+    //     return view('admin.blogs', compact('blogs'));
+    // }   
+    // public function showAddBlogForm()
+    // {
+    //     return view('admin.add_blogs');
+    // }
+    // public function storeBlog(Request $request)
+    // {
+    //     if($request->isMethod('post')){
+    //         //echo "<pre>";print_r($request->all());die;
         
-            $request->validate([
-                'title' => 'required|string|max:255',
-                'slug' => 'required|string|max:255|unique:blogs,slug',
-                'type' => 'required|in:1,2,3,4',
-                'short_description' => 'required|string|max:500',
-                'content' => 'required|string',
-                'image' => 'nullable|image|max:2048',
-                'status' => 'required|boolean',
-            ]);
+    //         $request->validate([
+    //             'title' => 'required|string|max:255',
+    //             'slug' => 'required|string|max:255|unique:blogs,slug',
+    //             'type' => 'required|in:1,2,3,4',
+    //             'short_description' => 'required|string|max:500',
+    //             'content' => 'required|string',
+    //             'image' => 'nullable|image|max:2048',
+    //             'status' => 'required|boolean',
+    //         ]);
 
-            // Save SEO
-            $seoContent = SeoContent::addOrUpdateSeoContent([
-                'page_slug' => $request->slug ?? null,
-                'meta_title' => $request->title,
-                'meta_description' => $request->meta_description ?? '',
-                'meta_keywords' => $request->meta_keywords ?? '',
-            ]);
+    //         // Save SEO
+    //         $seoContent = SeoContent::addOrUpdateSeoContent([
+    //             'page_slug' => $request->slug ?? null,
+    //             'meta_title' => $request->title,
+    //             'meta_description' => $request->meta_description ?? '',
+    //             'meta_keywords' => $request->meta_keywords ?? '',
+    //         ]);
 
-            $blog = new \App\Models\Blog();
-            $blog->title = $request->title;
-            $blog->type = $request->type;
-            $blog->slug = $request->slug ?? null;
-            $blog->short_description = $request->short_description;
-            $blog->content = $request->content;
-            $blog->meta_title = $request->meta_title ?? '';
-            $blog->meta_description = $request->meta_description ?? '';
-            $blog->seo_id = $seoContent->id ?? null;
-            if ($request->hasFile('image')) {
-                $path = $request->file('image')->store('uploads/blogs', 'public');
-                $blog->image = $path;
-            }
-            $blog->status = $request->status;
-            $blog->save();
-            return redirect()->route('admin.blog.index')->with('success', 'Blog added successfully.');
-        }
+    //         $blog = new \App\Models\Blog();
+    //         $blog->title = $request->title;
+    //         $blog->type = $request->type;
+    //         $blog->slug = $request->slug ?? null;
+    //         $blog->short_description = $request->short_description;
+    //         $blog->content = $request->content;
+    //         $blog->meta_title = $request->meta_title ?? '';
+    //         $blog->meta_description = $request->meta_description ?? '';
+    //         $blog->seo_id = $seoContent->id ?? null;
+    //         if ($request->hasFile('image')) {
+    //             $path = $request->file('image')->store('uploads/blogs', 'public');
+    //             $blog->image = $path;
+    //         }
+    //         $blog->status = $request->status;
+    //         $blog->save();
+    //         return redirect()->route('admin.blog.index')->with('success', 'Blog added successfully.');
+    //     }
         
-    }
+    // }
     
-    public function editBlog($id)
-    {
-        $blog = Blog::findOrFail($id);
-        $seoContent = SeoContent::find($blog->seo_id);
-        // echo "<pre>"; print_r($seoContent); echo "</pre>"; die;
-        return view('admin.edit_blogs', compact('blog','seoContent'));
-    }
-    public function updateBlog(Request $request, $id)
-    {
-        $blog = Blog::findOrFail($id);
+    // public function editBlog($id)
+    // {
+    //     $blog = Blog::findOrFail($id);
+    //     $seoContent = SeoContent::find($blog->seo_id);
+    //     // echo "<pre>"; print_r($seoContent); echo "</pre>"; die;
+    //     return view('admin.edit_blogs', compact('blog','seoContent'));
+    // }
+    // public function updateBlog(Request $request, $id)
+    // {
+    //     $blog = Blog::findOrFail($id);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
-            'type' => 'required|in:1,2,3,4',
-            'short_description' => 'required|string|max:500',
-            'content' => 'required|string',
-            'image' => 'nullable|image|max:2048',
-            'status' => 'required|boolean',
-        ]);
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
+    //         'type' => 'required|in:1,2,3,4',
+    //         'short_description' => 'required|string|max:500',
+    //         'content' => 'required|string',
+    //         'image' => 'nullable|image|max:2048',
+    //         'status' => 'required|boolean',
+    //     ]);
 
-         //echo "<pre>"; print_r($request->all()); echo "</pre>"; die;
-        // Update SEO
-        $seoContent = SeoContent::addOrUpdateSeoContent([
-            'id' => $blog->seo_id,
-            'page_slug' => $request->slug, // Keep existing slug if not changed
-            'meta_title' => $request->title,
-            'meta_description' => $request->meta_description ?? '',
-            'meta_keywords' => $request->meta_keywords ?? '',
-        ]);
-        $blog->title = $request->title;
-        $blog->slug = $request->slug ?? null;
-        $blog->type = $request->type;
-        $blog->short_description = $request->short_description;
-        $blog->content = $request->content;
-        $blog->seo_id = $seoContent->id ?? null;
-        $blog->meta_title = $request->meta_title ?? '';
-        $blog->meta_description = $request->meta_description ?? '';
+    //      //echo "<pre>"; print_r($request->all()); echo "</pre>"; die;
+    //     // Update SEO
+    //     $seoContent = SeoContent::addOrUpdateSeoContent([
+    //         'id' => $blog->seo_id,
+    //         'page_slug' => $request->slug, // Keep existing slug if not changed
+    //         'meta_title' => $request->title,
+    //         'meta_description' => $request->meta_description ?? '',
+    //         'meta_keywords' => $request->meta_keywords ?? '',
+    //     ]);
+    //     $blog->title = $request->title;
+    //     $blog->slug = $request->slug ?? null;
+    //     $blog->type = $request->type;
+    //     $blog->short_description = $request->short_description;
+    //     $blog->content = $request->content;
+    //     $blog->seo_id = $seoContent->id ?? null;
+    //     $blog->meta_title = $request->meta_title ?? '';
+    //     $blog->meta_description = $request->meta_description ?? '';
         
-        if ($request->hasFile('image')) {
-            if ($blog->image) {
-                Storage::disk('public')->delete($blog->image);
-            }
-            $path = $request->file('image')->store('uploads/blogs', 'public');
-            $blog->image = $path;
-        }
-        $blog->status = $request->status;
-        $blog->save();
-        return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
-    }
+    //     if ($request->hasFile('image')) {
+    //         if ($blog->image) {
+    //             Storage::disk('public')->delete($blog->image);
+    //         }
+    //         $path = $request->file('image')->store('uploads/blogs', 'public');
+    //         $blog->image = $path;
+    //     }
+    //     $blog->status = $request->status;
+    //     $blog->save();
+    //     return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
+    // }
 
-
-    // partners methods
-    public function partnersIndex()
-    {
-        $partners = \App\Models\Partner::all();
-        return view('admin.partners', compact('partners'));
-    }
-
-    public function showAddPartnerForm()
-    {
-        return view('admin.add_partner');
-    }
-
-    public function storePartner(Request $request)
-    {
-        if($request->isMethod('post')){
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'logo' => 'nullable|image|max:2048',
-                'status' => 'required|boolean',
-                 'website' => 'nullable|url',
-            ]);
-
-            $partner = new \App\Models\Partner();
-            $partner->name = $request->name;
-            if ($request->hasFile('logo')) {
-                $path = $request->file('logo')->store('uploads/partners', 'public');
-                $partner->logo = $path;
-            }
-           
-            $partner->short_description = $request->description ?? '';  
-            $partner->status = $request->status;
-            $partner->website_url = $request->website;
-            $partner->created_by = Auth::guard('admin')->id();
-            $partner->updated_by = Auth::guard('admin')->id();
-            $partner->save();
-            return redirect()->route('admin.partners')->with('success', 'Partner added successfully.');
-        }
-    }
-
-    public function editPartner($id)
-    {
-        $partner = \App\Models\Partner::findOrFail($id);
-        return view('admin.edit_partner', compact('partner'));
-    }
-
-    public function updatePartner(Request $request, $id)
-    {
-        $partner = \App\Models\Partner::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'logo' => 'nullable|image|max:2048',
-            'status' => 'required|boolean',
-            'website' => 'nullable|url',
-        ]);
-
-        $partner->name = $request->name;
-        if ($request->hasFile('logo')) {
-            if ($partner->logo) {
-                Storage::disk('public')->delete($partner->logo);
-            }
-            $path = $request->file('logo')->store('uploads/partners', 'public');
-            $partner->logo = $path;
-        }
-        $partner->short_description = $request->description ?? '';  
-        $partner->status = $request->status;
-        $partner->website_url = $request->website;
-        $partner->updated_by = Auth::guard('admin')->id();
-        $partner->save();
-        return redirect()->route('admin.partners')->with('success', 'Partner updated successfully.');
-    }
-
-     public function deletePartner($id)
-    {
-        $partner = \App\Models\Partner::findOrFail($id);
-        $partner->status = 0;
-        $partner->save();
-        return redirect()->route('admin.partners')->with('success', 'Partner marked inactive successfully.');
-    }
 
 }
