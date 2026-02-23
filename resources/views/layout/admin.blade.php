@@ -53,7 +53,18 @@
                                 <a class="nav-link" href="{{ route('admin.users') }}">User List</a>
                             </nav>
                         </div>
-                        
+                       
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
+                            Category
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="#">Category</a>
+                                <a class="nav-link" href="#">Sub Category</a>
+                            </nav>
+                        </div>
                         <!-- <a class="nav-link collapsed" href="{{ url('/admin/page-management') }}" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
                             <div class="sb-nav-link-icon"><i class="fas fa-newspaper"></i></div>
                             Articles Management

@@ -18,17 +18,8 @@ class HomeController extends BaseController
     //
     public function index()
     {
-        $blogs = DB::table('blogs')->where('status', 1)->where('type', 1)->get()->take(3);
-        $latestnews = DB::table('blogs')->where('status', 1)->where('type', 2)->get()->take(5);
-        $webinar = DB::table('blogs')->where('status', 1)->where('type', 3)->get()->take(3);
-        $events = DB::table('blogs')->where('status', 1)->where('type', 4)->get()->take(3);
-        $countries = DB::table('countries')->select('iso3', 'name')->where('status', 1)->orderBy('name', 'asc')->get();
-        $countries = $countries->mapWithKeys(function ($item) {
-            return [$item->iso3 => $item->name];
-        });
-        $categories = DB::table('product_category')->where('status', 1)->get()->take(3);
-        // echo "<pre>";print_r($featuredProducts);die;
-        return view('index',compact('blogs','latestnews','webinar','events','countries','categories'));
+        
+        return view('welcome');
     }
 
 

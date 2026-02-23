@@ -11,26 +11,10 @@ use App\Http\Controllers\AjaxController;
 Route::get('/', function () {
     return app(\App\Http\Controllers\HomeController::class)->index();
 });
-Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
-Route::get('/our-partners', [HomeController::class, 'ourPartners'])->name('ourPartners');
-Route::get('/events', [HomeController::class, 'events'])->name('events');
-Route::get('/news-room', [HomeController::class, 'newsRoom'])->name('newsRoom');
-Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 
-Route::get('/products', [HomeController::class, 'products'])->name('products');
-// Route::get('/product-detail', [HomeController::class, 'productDetail'])->name('productDetail');
-Route::get('/our-solutions/{slug}', [HomeController::class, 'ourSolutionDetail'])->name('ourSolutionDetail');
-Route::get('/common-detail-page', [HomeController::class, 'commonDetailPage'])->name('commonDetailPage');
 
-Route::get('/blog/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
-Route::get('/news/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
-Route::get('/event/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
-
-Route::post('/ajax/subscribe-newsletter', [AjaxController::class, 'subscribeNewsletter'])->name('ajax.subscribeNewsletter');
-Route::post('/ajax/contact-us', [AjaxController::class, 'contactUs'])->name('ajax.contactUs');
-Route::post('/ajax/product-enquiry', [AjaxController::class, 'productEnquiry'])->name('ajax.productEnquiry');
-
-Route::get('/product-detail/{slug}', [HomeController::class, 'productDetail'])->name('productDetail');
+// Route::get('/products', [HomeController::class, 'products'])->name('products');
+// Route::get('/product-detail/{slug}', [HomeController::class, 'productDetail'])->name('productDetail');
 
 // frontend authentication routes
 // Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
