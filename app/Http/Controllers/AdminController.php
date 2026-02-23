@@ -24,7 +24,7 @@ class AdminController extends BaseController
     {
         $credentials = $request->only('email', 'password');
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->intended('admin/dashboard');
+            return redirect()->intended('system-auth/dashboard');
         }
         return back()->withErrors(['email' => 'Invalid credentials.']);
     }
@@ -32,7 +32,7 @@ class AdminController extends BaseController
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
-        return redirect('/admin/login');
+        return redirect('/system-auth/login');
     }
 
     public function dashboard()

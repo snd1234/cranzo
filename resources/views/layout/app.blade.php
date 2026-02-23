@@ -233,7 +233,7 @@
         </div>
         <div class="copyright-socials border-t border-gray-700 py-4 px-12 ">
             <p class="flex items-center justify-center"><i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
-                Integrated Gulf Biosystems, <?php echo date('Y'); ?>. All Rights Reserved</p>
+                cranzo.in, <?php echo date('Y'); ?>. All Rights Reserved</p>
         </div>
    </footer>
 

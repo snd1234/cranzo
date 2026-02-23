@@ -7,8 +7,8 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">Edit User</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ url('admin/users') }}">Users</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('system-auth/dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('system-auth/users') }}">Users</a></li>
                 <li class="breadcrumb-item active">Edit</li>
             </ol>
 
@@ -19,8 +19,8 @@
                         Edit User
                     </div>
                     <div>
-                        <a href="{{ url('admin/users') }}" class="btn btn-sm btn-secondary">Back to List</a>
-                        <a href="{{ url('admin/view-user/'.$user->id) }}" class="btn btn-sm btn-info ms-1">View</a>
+                        <a href="{{ url('system-auth/users') }}" class="btn btn-sm btn-secondary">Back to List</a>
+                        <a href="{{ url('system-auth/view-user/'.$user->id) }}" class="btn btn-sm btn-info ms-1">View</a>
                     </div>
                 </div>
 
@@ -35,7 +35,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ url('admin/update-user/'.$user->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ url('system-auth/update-user/'.$user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -107,7 +107,7 @@
                                 </div> -->
 
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ url('admin/users') }}" class="btn btn-secondary me-2">Cancel</a>
+                                    <a href="{{ url('system-auth/users') }}" class="btn btn-secondary me-2">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
                                 </div>
                             </div>

@@ -27,7 +27,7 @@ Route::get('/', function () {
 Route::get('/home', [AuthController::class, 'home'])->name('home')->middleware('auth');
 
 // admin routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('system-auth')->group(function () {
     Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login.form');
     Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
     Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
@@ -55,7 +55,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/ckeditor/upload', [PageController::class, 'uploadEditorImage'])->name('ckeditor.upload');
    // Route for product category and subcategory management
     
-    Route::get('/product-category', [ProductController::class, 'categoryIndex'])->name('productcategory.index')
+    Route::get('/category', [ProductController::class, 'categoryIndex'])->name('productcategory.index')
     ->middleware('auth:admin');
     Route::get('/add-product-category', [ProductController::class, 'showAddCategoryForm'])->name('productcategory.showAddForm')->middleware('auth:admin');
     Route::post('/save-product-category', [ProductController::class, 'storeCategory'])->name('productcategory.store')->middleware('auth:admin');

@@ -5,14 +5,14 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">Add User</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ url('admin/users') }}">Users</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('system-auth/dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('system-auth/users') }}">Users</a></li>
                 <li class="breadcrumb-item active">Add</li>
             </ol>
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div><i class="fas fa-user-plus me-1"></i>Add User</div>
-                    <div><a href="{{ url('admin/users') }}" class="btn btn-sm btn-secondary">Back to List</a></div>
+                    <div><a href="{{ url('system-auth/users') }}" class="btn btn-sm btn-secondary">Back to List</a></div>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -24,7 +24,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ url('admin/users') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ url('system-auth/users') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row g-3">
                             <div class="col-md-9">
@@ -86,7 +86,7 @@
                                     </div>
                                 </div> -->
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ url('admin/users') }}" class="btn btn-secondary me-2">Cancel</a>
+                                    <a href="{{ url('system-auth/users') }}" class="btn btn-secondary me-2">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Create User</button>
                                 </div>
                             </div>

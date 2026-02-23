@@ -23,7 +23,7 @@
                                     @if(session('status'))
                                         <div class="alert alert-info">{{ session('status') }}</div>
                                     @endif
-                                    <form method="POST" action="{{ url('admin/login') }}">
+                                    <form method="POST" action="{{ url('system-auth/login') }}">
                                         @csrf
                                         <div class="form-floating mb-3">
                                             <input

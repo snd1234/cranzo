@@ -7,7 +7,7 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">Users</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('system-auth/dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item active">Users</li>
             </ol>
             <div class="card mb-4">
@@ -16,7 +16,7 @@
                         <i class="fas fa-users me-1"></i>
                         User List
                     </div>
-                    <a href="{{ url('admin/add-user') }}" class="btn btn-sm btn-primary">Add User</a>
+                    <a href="{{ url('system-auth/add-user') }}" class="btn btn-sm btn-primary">Add User</a>
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple" class="table table-bordered table-striped">
@@ -57,9 +57,9 @@
                                     </td>
                                     <td>{{ optional($user->created_at)->format('Y-m-d') }}</td>
                                     <td>
-                                        <a href="{{ url('admin/view-user/'.$user->id) }}" class="btn btn-sm btn-info ms-1">View</a>
-                                        <a href="{{ url('admin/edit-user/'.$user->id) }}" class="btn btn-sm btn-warning ms-1">Edit</a>
-                                        <form action="{{ url('admin/delete-user/'.$user->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Delete this user?')">
+                                        <a href="{{ url('system-auth/view-user/'.$user->id) }}" class="btn btn-sm btn-info ms-1">View</a>
+                                        <a href="{{ url('system-auth/edit-user/'.$user->id) }}" class="btn btn-sm btn-warning ms-1">Edit</a>
+                                        <form action="{{ url('system-auth/delete-user/'.$user->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Delete this user?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger ms-1">Delete</button>
