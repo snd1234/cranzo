@@ -64,13 +64,11 @@
 
                             @forelse($categories as $category)
 
-                           
-
                                 <tr>
 
                                     <td>{{ $loop->iteration }}</td>
 
-                                    <td>{{ $category->name }}</td>
+                                    <td>{{ $category->category_name }}</td>
 
                                     <td>
 
@@ -90,9 +88,9 @@
 
                                     <td>
 
-                                        <!-- <a href="{{ url('admin/view-category/'.$category->id) }}" class="btn btn-sm btn-info ms-1">View</a> -->
-
                                         <a href="{{ url('admin/edit-product-category/'.$category->id) }}" class="btn btn-sm btn-warning ms-1">Edit</a>
+
+                                        <a href="{{ url('admin/delete-product-category/'.$category->id) }}" class="btn btn-sm btn-danger ms-1" onclick="return confirm('Are you sure?')">Delete</a>
 
                                     </td>
 
@@ -102,7 +100,7 @@
 
                                 <tr>
 
-                                    <td colspan="6" class="text-center">No categories found.</td>
+                                    <td colspan="5" class="text-center">No categories found.</td>
 
                                 </tr>
 
@@ -111,12 +109,6 @@
                         </tbody>
 
                     </table>
-
-
-
-                    {{-- If you use pagination (non-DataTables), render links here --}}
-
-                    {{-- {{ $categories->links() }} --}}
 
                 </div>
 
@@ -136,8 +128,6 @@
 
                 <div class="text-muted">Copyright &copy; Integrated Gulf Biosystems {{ date('Y') }}</div>
 
-                
-
             </div>
 
         </div>
@@ -147,4 +137,3 @@
 </div>
 
 @endsection
-

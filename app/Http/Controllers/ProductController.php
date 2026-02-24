@@ -18,6 +18,7 @@ class ProductController extends Controller
     public function categoryIndex()
     {
         $categories = DB::table('product_category')->get();
+        //echo "<pre>";print_r($categories);die;
         return view('admin.product_categories', compact('categories'));
     }
 
