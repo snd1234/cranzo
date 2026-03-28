@@ -48,20 +48,13 @@ Route::prefix('system-auth')->group(function () {
     Route::get('/edit-page/{id}', [PageController::class, 'edit'])->name('pagemgmt.edit')->middleware('auth:admin');
     Route::put('/update-page-data/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
     Route::delete('/delete-page/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
-    // Route::put('/page-management/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
-    // Route::get('/page-management/{id}', [PageController::class, 'show'])->name('pagemgmt.show')->middleware('auth:admin');
-    // Route::delete('/page-management/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
- // CKEditor image upload
-    Route::post('/ckeditor/upload', [PageController::class, 'uploadEditorImage'])->name('ckeditor.upload');
-   // Route for product category and subcategory management
     
-    Route::get('/category', [ProductController::class, 'categoryIndex'])->name('productcategory.index')
+    
+    Route::get('/category', [AdminController::class, 'categoryList'])->name('category.index')
     ->middleware('auth:admin');
-    Route::get('/add-product-category', [ProductController::class, 'showAddCategoryForm'])->name('productcategory.showAddForm')->middleware('auth:admin');
-    Route::post('/save-product-category', [ProductController::class, 'storeCategory'])->name('productcategory.store')->middleware('auth:admin');
-    Route::get('/edit-product-category/{id}', [ProductController::class, 'editCategory'])->name('productcategory.edit')->middleware('auth:admin');
-    Route::put('/update-product-category/{id}', [ProductController::class, 'updateCategory'])->name('productcategory.update')->middleware('auth:admin');
-   
+    Route::match(['get', 'post'], '/add-category', [AdminController::class, 'addCategory'])->name('category.store')->middleware('auth:admin');
+    Route::match(['get', 'put'], '/update-category/{id}', [AdminController::class, 'updateCategory'])->name('category.update')->middleware('auth:admin');
+    Route::match(['get', 'delete'], '/delete-category/{id}', [AdminController::class, 'deleteCategory'])->name('category.delete')->middleware('auth:admin');
 
     Route::get('/product-sub-category', [ProductController::class, 'subCategoryIndex'])->name('productsubcategory.index')
     ->middleware('auth:admin');

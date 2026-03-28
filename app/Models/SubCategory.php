@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class ProductCategory extends Model
+class SubCategory extends Model
 {
     use HasFactory;
 
@@ -24,7 +25,7 @@ class ProductCategory extends Model
      *
      * @var string
      */
-    protected $table = 'product_category';
+    protected $table = 'sub_category';
 
     /**
      * Primary key.
@@ -53,14 +54,11 @@ class ProductCategory extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        //'slug',
-        'description',
+        'category_id',
+        'title',
         'status',
         'created_at',
-        'updated_at',
         'created_by',
-        'updated_by',
     ];
 
     /**
@@ -72,11 +70,20 @@ class ProductCategory extends Model
         'id' => 'integer',
     ];
 
-    public function subcategories()
+    /**
+     * Relationship with ProductCategory.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function Category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+    public function products()
     {
         return $this->hasMany(
-            ProductSubCategory::class,
-            'category_id'
+            Products::class,
+            'sub_category_id'
         )->where('status', 1);
     }
 }

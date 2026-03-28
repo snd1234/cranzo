@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
-use App\Models\Blog;
+use App\Models\{Admin, Category, SubCategory};
 use App\Models\Partner;
-use App\Models\SeoContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 
 class AdminController extends BaseController
 {
-    
     public function showLoginForm()
     {
         return view('admin.login');
@@ -123,108 +121,68 @@ class AdminController extends BaseController
     }
     
 
-    // public function blogIndex()
-    // {
-    //     $blogs = \App\Models\Blog::orderBy('updated_at', 'desc')->get();
-    //     return view('admin.blogs', compact('blogs'));
-    // }   
-    // public function showAddBlogForm()
-    // {
-    //     return view('admin.add_blogs');
-    // }
-    // public function storeBlog(Request $request)
-    // {
-    //     if($request->isMethod('post')){
-    //         //echo "<pre>";print_r($request->all());die;
-        
-    //         $request->validate([
-    //             'title' => 'required|string|max:255',
-    //             'slug' => 'required|string|max:255|unique:blogs,slug',
-    //             'type' => 'required|in:1,2,3,4',
-    //             'short_description' => 'required|string|max:500',
-    //             'content' => 'required|string',
-    //             'image' => 'nullable|image|max:2048',
-    //             'status' => 'required|boolean',
-    //         ]);
+    public function categoryList()
+    {
+        $categories = Category::orderBy('id', 'desc')->get()->toArray();
+        return view('admin.category', compact('categories'));
+    }
 
-    //         // Save SEO
-    //         $seoContent = SeoContent::addOrUpdateSeoContent([
-    //             'page_slug' => $request->slug ?? null,
-    //             'meta_title' => $request->title,
-    //             'meta_description' => $request->meta_description ?? '',
-    //             'meta_keywords' => $request->meta_keywords ?? '',
-    //         ]);
+    public function addCategory(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'name'  => 'required|string|max:255|unique:category,name',
+                'status' => 'required|in:0,1',
+            ]);
+            $category = Category::create([
+                'name' => $validated['name'],
+                'status' => $validated['status'],
+                'created_by' => Auth::guard('admin')->id(),
+                'created_at' => now(),
+                'updated_by' => Auth::guard('admin')->id(),
+                'updated_at' => now(),
+            ]);
+            if(!$category){
+                return back()->withErrors(['error' => 'Failed to add category. Please try again.']);
+            }
+            return redirect()->route('category.index')->with('success', 'Category added successfully.');
+        }
+        return view('admin.add_category');
+    }
 
-    //         $blog = new \App\Models\Blog();
-    //         $blog->title = $request->title;
-    //         $blog->type = $request->type;
-    //         $blog->slug = $request->slug ?? null;
-    //         $blog->short_description = $request->short_description;
-    //         $blog->content = $request->content;
-    //         $blog->meta_title = $request->meta_title ?? '';
-    //         $blog->meta_description = $request->meta_description ?? '';
-    //         $blog->seo_id = $seoContent->id ?? null;
-    //         if ($request->hasFile('image')) {
-    //             $path = $request->file('image')->store('uploads/blogs', 'public');
-    //             $blog->image = $path;
-    //         }
-    //         $blog->status = $request->status;
-    //         $blog->save();
-    //         return redirect()->route('admin.blog.index')->with('success', 'Blog added successfully.');
-    //     }
-        
-    // }
+    function updateCategory(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+        if ($request->isMethod('put')) {
+            $validated = $request->validate([
+                'name'  => 'required|string|max:255|unique:category,name,' . $category->id,
+                'status' => 'required|in:0,1',
+            ]);
+            $category->name = $validated['name'];
+            $category->status = $validated['status'];
+            $category->updated_by = Auth::guard('admin')->id();
+            $category->updated_at = now();
+            if(!$category->save()){
+                return back()->withErrors(['error' => 'Failed to update category. Please try again.']);
+            }
+            return redirect()->route('category.index')->with('success', 'Category updated successfully.');
+        }
+        return view('admin.update_category', compact('category'));
+    }
+
+    public function deleteCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        // mark category inactive instead of deleting
+        $category->status = 0;
+        $category->updated_by = Auth::guard('admin')->id();
+        $category->updated_at = now();
+        if(!$category->save()){
+            return back()->withErrors(['error' => 'Failed to delete category. Please try again.']);
+        }
+        return redirect()->route('category.index')->with('success', 'Category marked inactive successfully.');
+    }
     
-    // public function editBlog($id)
-    // {
-    //     $blog = Blog::findOrFail($id);
-    //     $seoContent = SeoContent::find($blog->seo_id);
-    //     // echo "<pre>"; print_r($seoContent); echo "</pre>"; die;
-    //     return view('admin.edit_blogs', compact('blog','seoContent'));
-    // }
-    // public function updateBlog(Request $request, $id)
-    // {
-    //     $blog = Blog::findOrFail($id);
-
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
-    //         'type' => 'required|in:1,2,3,4',
-    //         'short_description' => 'required|string|max:500',
-    //         'content' => 'required|string',
-    //         'image' => 'nullable|image|max:2048',
-    //         'status' => 'required|boolean',
-    //     ]);
-
-    //      //echo "<pre>"; print_r($request->all()); echo "</pre>"; die;
-    //     // Update SEO
-    //     $seoContent = SeoContent::addOrUpdateSeoContent([
-    //         'id' => $blog->seo_id,
-    //         'page_slug' => $request->slug, // Keep existing slug if not changed
-    //         'meta_title' => $request->title,
-    //         'meta_description' => $request->meta_description ?? '',
-    //         'meta_keywords' => $request->meta_keywords ?? '',
-    //     ]);
-    //     $blog->title = $request->title;
-    //     $blog->slug = $request->slug ?? null;
-    //     $blog->type = $request->type;
-    //     $blog->short_description = $request->short_description;
-    //     $blog->content = $request->content;
-    //     $blog->seo_id = $seoContent->id ?? null;
-    //     $blog->meta_title = $request->meta_title ?? '';
-    //     $blog->meta_description = $request->meta_description ?? '';
-        
-    //     if ($request->hasFile('image')) {
-    //         if ($blog->image) {
-    //             Storage::disk('public')->delete($blog->image);
-    //         }
-    //         $path = $request->file('image')->store('uploads/blogs', 'public');
-    //         $blog->image = $path;
-    //     }
-    //     $blog->status = $request->status;
-    //     $blog->save();
-    //     return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
-    // }
 
 
 }
