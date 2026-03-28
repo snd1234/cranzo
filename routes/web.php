@@ -41,58 +41,12 @@ Route::prefix('system-auth')->group(function () {
     Route::get('/view-user/{id}', [AdminController::class, 'viewUser'])->name('viewuser.form')->middleware('auth:admin');
     Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('deleteuser.submit')->middleware('auth:admin');
   
-    // Page management routes
-    Route::get('/page-management', [PageController::class, 'index'])->name('pagemgmt.index')->middleware('auth:admin');
-    Route::get('/add-page', [PageController::class, 'showAddForm'])->name('pagemgmt.showAddForm')->middleware('auth:admin');
-    Route::post('/save-page-data', [PageController::class, 'store'])->name('pagemgmt.store')->middleware('auth:admin');
-    Route::get('/edit-page/{id}', [PageController::class, 'edit'])->name('pagemgmt.edit')->middleware('auth:admin');
-    Route::put('/update-page-data/{id}', [PageController::class, 'update'])->name('pagemgmt.update')->middleware('auth:admin');
-    Route::delete('/delete-page/{id}', [PageController::class, 'destroy'])->name('pagemgmt.destroy')->middleware('auth:admin');
-    
+   
     
     Route::get('/category', [AdminController::class, 'categoryList'])->name('category.index')
     ->middleware('auth:admin');
     Route::match(['get', 'post'], '/add-category', [AdminController::class, 'addCategory'])->name('category.store')->middleware('auth:admin');
     Route::match(['get', 'put'], '/update-category/{id}', [AdminController::class, 'updateCategory'])->name('category.update')->middleware('auth:admin');
     Route::match(['get', 'delete'], '/delete-category/{id}', [AdminController::class, 'deleteCategory'])->name('category.delete')->middleware('auth:admin');
-
-    Route::get('/product-sub-category', [ProductController::class, 'subCategoryIndex'])->name('productsubcategory.index')
-    ->middleware('auth:admin');
-    Route::get('/add-product-sub-category', [ProductController::class, 'showAddSubCategoryForm'])->name('productsubcategory.showAddForm')->middleware('auth:admin');
-    Route::post('/save-product-sub-category', [ProductController::class, 'storeSubCategory'])->name('productsubcategory.store')->middleware('auth:admin');
-    Route::get('/edit-product-sub-category/{id}', [ProductController::class, 'editSubCategory'])->name('productsubcategory.edit')->middleware('auth:admin');
-    Route::put('/update-product-sub-category/{id}', [ProductController::class, 'updateSubCategory'])->name('productsubcategory.update')->middleware('auth:admin');
-   
-    Route::get('/product', [ProductController::class, 'productIndex'])->name('product.index')
-    ->middleware('auth:admin');
-    Route::get('/add-product', [ProductController::class, 'showAddProductForm'])->name('product.showAddForm')->middleware('auth:admin');
-    Route::post('/save-product', [ProductController::class, 'storeProduct'])->name('product.store')->middleware('auth:admin');
-    Route::get('/edit-product/{id}', [ProductController::class, 'editProduct'])->name('product.edit')->middleware('auth:admin');
-    Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('product.update')->middleware('auth:admin');
-    Route::get('/view-product/{id}', [ProductController::class, 'viewProduct'])->name('product.view')->middleware('auth:admin');
-
-    Route::delete('/delete-catalog', [ProductController::class, 'deleteCatalog'])->name('product.deleteCatalog')->middleware('auth:admin');
-
-    Route::delete('/delete-image', [ProductController::class, 'deleteImage'])->name('product.deleteImage')->middleware('auth:admin');
-
-
-    Route::get('/blogs', [AdminController::class, 'blogIndex'])->name('blog.index')
-    ->middleware('auth:admin');
-    Route::get('/add-blog', [AdminController::class, 'showAddBlogForm'])->name('blog.showAddForm')->middleware('auth:admin');
-    Route::post('/save-blog', [AdminController::class, 'storeBlog'])->name('blog.store')->middleware('auth:admin');
-    Route::get('/edit-blog/{id}', [AdminController::class, 'editBlog'])->name('blog.edit')->middleware('auth:admin');
-    Route::put('/update-blog/{id}', [AdminController::class, 'updateBlog'])->name('blog.update')->middleware('auth:admin');
-
-    // partners
-    Route::get('/partners', [AdminController::class, 'partnersIndex'])->name('partners')
-    ->middleware('auth:admin');
-
-    Route::get('/add-partner', [AdminController::class, 'showAddPartnerForm'])->name('partners.showAddForm')->middleware('auth:admin');
-    Route::post('/save-partner', [AdminController::class, 'storePartner'])->name('partners.store')->middleware('auth:admin');
-
-    Route::get('/edit-partner/{id}', [AdminController::class, 'editPartner'])->name('partners.edit')->middleware('auth:admin');
-    Route::put('/update-partner/{id}', [AdminController::class, 'updatePartner'])->name('partners.update')->middleware('auth:admin');
-    Route::delete('/delete-partner/{id}', [AdminController::class, 'deletePartner'])->name('partners.delete')->middleware('auth:admin');
-
 
 });
