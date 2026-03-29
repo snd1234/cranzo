@@ -42,11 +42,24 @@ Route::prefix('system-auth')->group(function () {
     Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('deleteuser.submit')->middleware('auth:admin');
   
    
-    
+    // Category routes
     Route::get('/category', [AdminController::class, 'categoryList'])->name('category.index')
     ->middleware('auth:admin');
     Route::match(['get', 'post'], '/add-category', [AdminController::class, 'addCategory'])->name('category.store')->middleware('auth:admin');
     Route::match(['get', 'put'], '/update-category/{id}', [AdminController::class, 'updateCategory'])->name('category.update')->middleware('auth:admin');
     Route::match(['get', 'delete'], '/delete-category/{id}', [AdminController::class, 'deleteCategory'])->name('category.delete')->middleware('auth:admin');
+
+    // SubCategory routes
+    Route::get('/sub-category', [AdminController::class, 'subcategoryList'])->name('sub-category.index')->middleware('auth:admin');
+    Route::match(['get', 'post'], '/add-sub-category', [AdminController::class, 'addSubCategory'])->name('sub-category.store')->middleware('auth:admin');
+    Route::match(['get', 'put'], '/update-sub-category/{id}', [AdminController::class, 'updateSubCategory'])->name('sub-category.update')->middleware('auth:admin');
+    Route::match(['get', 'delete'], '/delete-sub-category/{id}', [AdminController::class, 'deleteSubCategory'])->name('sub-category.delete')->middleware('auth:admin');
+
+    // Product routes
+    
+    Route::get('/products', [AdminController::class, 'productList'])->name('product.index')->middleware('auth:admin');
+    Route::match(['get', 'post'], '/add-product', [AdminController::class, 'addProduct'])->name('product.store')->middleware('auth:admin');
+    Route::match(['get', 'put'], '/update-product/{id}', [AdminController::class, 'updateProduct'])->name('product.update')->middleware('auth:admin');
+    Route::match(['get', 'delete'], '/delete-product/{id}', [AdminController::class, 'deleteProduct'])->name('product.delete')->middleware('auth:admin');
 
 });

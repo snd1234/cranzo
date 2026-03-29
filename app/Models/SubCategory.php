@@ -55,10 +55,12 @@ class SubCategory extends Model
      */
     protected $fillable = [
         'category_id',
-        'title',
+        'name',
         'status',
         'created_at',
         'created_by',
+        'updated_at',
+        'updated_by',
     ];
 
     /**

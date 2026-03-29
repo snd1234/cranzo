@@ -1,7 +1,5 @@
 @extends('layout.admin')
-
-@section('content')
-<div id="layoutSidenav_content">
+    @section('content')
     <main>
         <div class="container-fluid px-4">
             <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
@@ -12,7 +10,7 @@
                         <li class="breadcrumb-item active">Categories</li>
                     </ol>
                 </div>
-                <a href="{{ url('system-auth/add-category') }}" class="btn btn-primary">
+                <a href="{{url('system-auth/add-category') }}" class="btn btn-primary">
                     <i class="fas fa-plus me-2"></i>Add Category
                 </a>
             </div>
@@ -22,6 +20,12 @@
                 </div>
 
                 <div class="card-body p-4">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <div class="table-responsive">
                         <table id="datatablesSimple" class="table table-hover mb-0">
                             <thead class="table-light">
@@ -69,13 +73,4 @@
             </div>
         </div>
     </main>
-    
-    <footer class="py-4 bg-light mt-auto">
-        <div class="container-fluid px-4">
-            <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-muted">Copyright &copy; Integrated Gulf Biosystems {{ date('Y') }}</div>
-            </div>
-        </div>
-    </footer>
-</div>
 @endsection

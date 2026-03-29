@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Products extends Model
+class Product extends Model
 {
     use HasFactory;
 
@@ -24,7 +24,7 @@ class Products extends Model
      *
      * @var string
      */
-    protected $table = 'products';
+    protected $table = 'product';
 
     /**
      * Primary key.
@@ -55,11 +55,19 @@ class Products extends Model
     protected $fillable = [
         'category_id',
         'sub_category_id',
-        'title',
-        'slug',
-        'short_description',
+        'product_title',
         'description',
-        'image',
+        'product_highlights',
+        'sku_id',
+        'actual_price',
+        'discounted_price',
+        'discount_rate',
+        'length',
+        'width',
+        'height',
+        'm_unit',
+        'featured_item',
+        'cod_available',
         'status',
         'created_at',
         'updated_at',
@@ -81,14 +89,14 @@ class Products extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function productCategory()
+    public function Category()
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-     public function productSubCategory()
+     public function SubCategory()
     {
-        return $this->belongsTo(ProductSubCategory::class, 'sub_category_id', 'id');
+        return $this->belongsTo(SubCategory::class, 'sub_category_id', 'id');
     }
 
     public function productImages()

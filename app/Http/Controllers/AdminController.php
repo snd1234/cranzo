@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Admin, Category, SubCategory};
-use App\Models\Partner;
+use App\Models\{Admin, Category, SubCategory, Product};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -183,6 +182,120 @@ class AdminController extends BaseController
         return redirect()->route('category.index')->with('success', 'Category marked inactive successfully.');
     }
     
+
+    /**
+     * Sub-category management functions
+     * creted by: Sandeep Patel
+     * created at: 2026-03-29
+     */
+    public function subcategoryList()
+    {
+        $subcategories = SubCategory::with('Category')->orderBy('id', 'desc')->get()->toArray();
+        return view('admin.sub_category', compact('subcategories'));
+    }
+
+    public function addSubCategory(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:category,id',
+                'name'  => 'required|string|max:255|unique:sub_category,name',
+                'status' => 'required|in:0,1',
+            ]);
+            $subcategory = SubCategory::create([
+                'category_id' => $validated['category_id'],
+                'name' => $validated['name'],
+                'status' => $validated['status'],
+                'created_by' => Auth::guard('admin')->id(),
+                'created_at' => now(),
+                'updated_by' => Auth::guard('admin')->id(),
+                'updated_at' => now(),
+            ]);
+            if(!$subcategory){
+                return back()->withErrors(['error' => 'Failed to add sub-category. Please try again.']);
+            }
+            return redirect()->route('sub-category.index')->with('success', 'Sub-category added successfully.');
+        }
+        $categories = Category::where('status', 1)->get();
+        return view('admin.add_sub_category', compact('categories'));
+    }
+
+    public function updateSubCategory(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $subCategory = SubCategory::findOrFail($id);
+        if ($request->isMethod('put')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:category,id',
+                'name'  => 'required|string|max:255|unique:sub_category,name,' . $subCategory->id,
+                'status' => 'required|in:0,1',
+            ]);
+            $subCategory->category_id = $validated['category_id'];
+            $subCategory->name = $validated['name'];
+            $subCategory->status = $validated['status'];
+            $subCategory->updated_by = Auth::guard('admin')->id();
+            $subCategory->updated_at = now();
+            if(!$subCategory->save()){
+                return back()->withErrors(['error' => 'Failed to update sub-category. Please try again.']);
+            }
+            return redirect()->route('sub-category.index')->with('success', 'Sub-category updated successfully.');
+        }
+        $categories = Category::where('status', 1)->get();
+        return view('admin.update_sub_category', compact('subCategory', 'categories'));
+    }
+
+    public function deleteSubCategory($id)
+    {
+        $id = decrypt($id);
+        $subCategory = SubCategory::findOrFail($id);
+        // mark sub-category inactive instead of deleting
+        $subCategory->status = 0;
+        $subCategory->updated_by = Auth::guard('admin')->id();
+        $subCategory->updated_at = now();
+        if(!$subCategory->save()){
+            return back()->withErrors(['error' => 'Failed to delete sub-category. Please try again.']);
+        }
+        return redirect()->route('sub-category.index')->with('success', 'Sub-category marked inactive successfully.');
+    }
+
+    /*
+        * Product management functions
+        * created by: Sandeep Patel
+        * created at: 2026-03-29
+        */
+
+    public function productList()
+    {
+        $products = Product::with('Category:id,name')->with('SubCategory:id,name')->orderBy('id', 'DESC')->get()->toArray();
+        $subcategories = SubCategory::with('Category')->orderBy('id', 'desc')->get()->toArray();
+        return view('admin.product', compact('products', 'subcategories'));
+    
+        // to be implemented
+    }
+    
+    public function addProduct(Request $request)
+    {
+        
+         if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:category,id',
+                'product_title'  => 'required|string|max:255|unique:sub_category,name',
+                'status' => 'required|in:0,1',
+            ]);
+        }
+        $categories = Category::where('status', 1)->get();
+        $subcategories = SubCategory::where('status', 1)->get();
+        return view('admin.add_product', compact('categories', 'subcategories'));
+           
+    }
+    public function updateProduct(Request $request, $id)
+    {
+        // to be implemented
+    }
+    public function deleteProduct($id)
+    {
+        // to be implemented
+    }
 
 
 }

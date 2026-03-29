@@ -1,8 +1,5 @@
 @extends('layout.admin')
-
-@section('content')
-
-<div id="layoutSidenav_content">
+    @section('content')
     <main>
         <div class="container-fluid px-4">
             <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
@@ -63,15 +60,6 @@
             </div>
         </div>
     </main>
-
-    <footer class="py-4 bg-light mt-auto">
-        <div class="container-fluid px-4">
-            <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-muted">Copyright &copy; Integrated Gulf Biosystems {{ date('Y') }}</div>
-            </div>
-        </div>
-    </footer>
-</div>
 
 @endsection
 
