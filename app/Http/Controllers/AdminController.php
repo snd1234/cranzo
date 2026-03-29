@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends BaseController
 {
@@ -226,5 +226,64 @@ class AdminController extends BaseController
     //     return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
     // }
 
+    public function addColor(Request $request)
+    {
+        $request->validate([
+            'color_title' => 'required|string|max:255',
+            'color_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            //'color_code' => ['required', 'string', 'size:7'], // #xxxxxx
+            'color_status' => 'required|in:1,0',
+        ]);
 
+        DB::table('colors')->insert([
+            'color_title' => $request->color_title,
+            'color_code' => $request->color_code,
+            'color_status' => $request->color_status
+        ]);
+
+        return redirect()->route('colors')->with('success', 'Color added successfully.');
+    }
+
+    public function colors()
+    {
+        $colors = DB::table('colors')->get();
+        return view('admin.colors', compact('colors'));
+    }
+
+    public function showAddColorForm()
+    {
+        return view('admin.add_color'); // adjust path if needed
+    }
+
+    public function editColor($id)
+    {
+        $color = DB::table('colors')->where('color_id', $id)->first();
+        if (!$color) {
+            return redirect('/admin/colors')->with('error', 'Color not found.');
+        }
+        return view('admin.edit_color', compact('color'));
+    }
+
+    public function updateColor(Request $request, $id)
+    {
+        $request->validate([
+            'color_title' => 'required|string|max:255',
+            'color_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'color_status' => 'required|in:1,0',
+        ]);
+
+        DB::table('colors')->where('color_id', $id)->update([
+            'color_title' => $request->color_title,
+            'color_code' => $request->color_code,
+            'color_status' => $request->color_status
+        ]);
+
+        return redirect()->route('colors')->with('success', 'Color updated successfully.');
+    }
+
+    public function deleteColor($id)
+    {
+        DB::table('colors')->where('color_id', $id)->delete();
+        return redirect()->route('colors')->with('success', 'Color deleted successfully.');
+    }
 }

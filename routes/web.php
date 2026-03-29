@@ -40,7 +40,14 @@ Route::prefix('system-auth')->group(function () {
     Route::put('/update-user/{id}', [AdminController::class, 'updateUser'])->name('updateuser.submit')->middleware('auth:admin');
     Route::get('/view-user/{id}', [AdminController::class, 'viewUser'])->name('viewuser.form')->middleware('auth:admin');
     Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('deleteuser.submit')->middleware('auth:admin');
-  
+    
+    Route::get('/colors', [AdminController::class, 'colors'])->name('colors')->middleware('auth:admin');
+    Route::get('/add-color', [AdminController::class, 'showAddColorForm'])->name('addColor.form')->middleware('auth:admin');
+    Route::post('/add-color', [AdminController::class, 'addColor'])->name('addColor.submit')->middleware('auth:admin');
+    Route::get('/edit-color/{id}', [AdminController::class, 'editColor'])->name('editColor.form')->middleware('auth:admin');
+    Route::put('/update-color/{id}', [AdminController::class, 'updateColor'])->name('updateColor.submit')->middleware('auth:admin');
+    Route::delete('/delete-color/{id}', [AdminController::class, 'deleteColor'])->name('deleteColor.submit')->middleware('auth:admin');
+    
     // Page management routes
     Route::get('/page-management', [PageController::class, 'index'])->name('pagemgmt.index')->middleware('auth:admin');
     Route::get('/add-page', [PageController::class, 'showAddForm'])->name('pagemgmt.showAddForm')->middleware('auth:admin');

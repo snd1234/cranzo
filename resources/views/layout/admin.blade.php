@@ -65,7 +65,10 @@
                                 <a class="nav-link" href="{{ url('/system-auth/sub-category') }}">Sub Category</a>
                             </nav>
                         </div>
-                        
+                        <a class="nav-link" href="{{ url('system-auth/colors') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-palette"></i></div>
+                            Colors
+                        </a>
 
                     </div>
                 </div>
