@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * App\Models\ContentCategory
  *
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Products extends Model
+class SubCategory extends Model
 {
     use HasFactory;
 
@@ -24,7 +25,7 @@ class Products extends Model
      *
      * @var string
      */
-    protected $table = 'products';
+    protected $table = 'sub_category';
 
     /**
      * Primary key.
@@ -54,16 +55,11 @@ class Products extends Model
      */
     protected $fillable = [
         'category_id',
-        'sub_category_id',
-        'title',
-        'slug',
-        'short_description',
-        'description',
-        'image',
+        'name',
         'status',
         'created_at',
-        'updated_at',
         'created_by',
+        'updated_at',
         'updated_by',
     ];
 
@@ -81,19 +77,15 @@ class Products extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function productCategory()
+    public function Category()
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
-
-     public function productSubCategory()
+    public function products()
     {
-        return $this->belongsTo(ProductSubCategory::class, 'sub_category_id', 'id');
+        return $this->hasMany(
+            Products::class,
+            'sub_category_id'
+        )->where('status', 1);
     }
-
-    public function productImages()
-    {
-        return $this->hasMany(ProductImage::class, 'product_id', 'id');
-    }
-
 }

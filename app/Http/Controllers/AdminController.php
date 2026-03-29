@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
-use App\Models\Blog;
-use App\Models\Partner;
-use App\Models\SeoContent;
+use App\Models\{Admin, Category, SubCategory, Product};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends BaseController
 {
-    
     public function showLoginForm()
     {
         return view('admin.login');
@@ -123,108 +119,182 @@ class AdminController extends BaseController
     }
     
 
-    // public function blogIndex()
-    // {
-    //     $blogs = \App\Models\Blog::orderBy('updated_at', 'desc')->get();
-    //     return view('admin.blogs', compact('blogs'));
-    // }   
-    // public function showAddBlogForm()
-    // {
-    //     return view('admin.add_blogs');
-    // }
-    // public function storeBlog(Request $request)
-    // {
-    //     if($request->isMethod('post')){
-    //         //echo "<pre>";print_r($request->all());die;
-        
-    //         $request->validate([
-    //             'title' => 'required|string|max:255',
-    //             'slug' => 'required|string|max:255|unique:blogs,slug',
-    //             'type' => 'required|in:1,2,3,4',
-    //             'short_description' => 'required|string|max:500',
-    //             'content' => 'required|string',
-    //             'image' => 'nullable|image|max:2048',
-    //             'status' => 'required|boolean',
-    //         ]);
+    public function categoryList()
+    {
+        $categories = Category::orderBy('id', 'desc')->get()->toArray();
+        return view('admin.category', compact('categories'));
+    }
 
-    //         // Save SEO
-    //         $seoContent = SeoContent::addOrUpdateSeoContent([
-    //             'page_slug' => $request->slug ?? null,
-    //             'meta_title' => $request->title,
-    //             'meta_description' => $request->meta_description ?? '',
-    //             'meta_keywords' => $request->meta_keywords ?? '',
-    //         ]);
+    public function addCategory(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'name'  => 'required|string|max:255|unique:category,name',
+                'status' => 'required|in:0,1',
+            ]);
+            $category = Category::create([
+                'name' => $validated['name'],
+                'status' => $validated['status'],
+                'created_by' => Auth::guard('admin')->id(),
+                'created_at' => now(),
+                'updated_by' => Auth::guard('admin')->id(),
+                'updated_at' => now(),
+            ]);
+            if(!$category){
+                return back()->withErrors(['error' => 'Failed to add category. Please try again.']);
+            }
+            return redirect()->route('category.index')->with('success', 'Category added successfully.');
+        }
+        return view('admin.add_category');
+    }
 
-    //         $blog = new \App\Models\Blog();
-    //         $blog->title = $request->title;
-    //         $blog->type = $request->type;
-    //         $blog->slug = $request->slug ?? null;
-    //         $blog->short_description = $request->short_description;
-    //         $blog->content = $request->content;
-    //         $blog->meta_title = $request->meta_title ?? '';
-    //         $blog->meta_description = $request->meta_description ?? '';
-    //         $blog->seo_id = $seoContent->id ?? null;
-    //         if ($request->hasFile('image')) {
-    //             $path = $request->file('image')->store('uploads/blogs', 'public');
-    //             $blog->image = $path;
-    //         }
-    //         $blog->status = $request->status;
-    //         $blog->save();
-    //         return redirect()->route('admin.blog.index')->with('success', 'Blog added successfully.');
-    //     }
-        
-    // }
+    function updateCategory(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+        if ($request->isMethod('put')) {
+            $validated = $request->validate([
+                'name'  => 'required|string|max:255|unique:category,name,' . $category->id,
+                'status' => 'required|in:0,1',
+            ]);
+            $category->name = $validated['name'];
+            $category->status = $validated['status'];
+            $category->updated_by = Auth::guard('admin')->id();
+            $category->updated_at = now();
+            if(!$category->save()){
+                return back()->withErrors(['error' => 'Failed to update category. Please try again.']);
+            }
+            return redirect()->route('category.index')->with('success', 'Category updated successfully.');
+        }
+        return view('admin.update_category', compact('category'));
+    }
+
+    public function deleteCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        // mark category inactive instead of deleting
+        $category->status = 0;
+        $category->updated_by = Auth::guard('admin')->id();
+        $category->updated_at = now();
+        if(!$category->save()){
+            return back()->withErrors(['error' => 'Failed to delete category. Please try again.']);
+        }
+        return redirect()->route('category.index')->with('success', 'Category marked inactive successfully.');
+    }
     
-    // public function editBlog($id)
-    // {
-    //     $blog = Blog::findOrFail($id);
-    //     $seoContent = SeoContent::find($blog->seo_id);
-    //     // echo "<pre>"; print_r($seoContent); echo "</pre>"; die;
-    //     return view('admin.edit_blogs', compact('blog','seoContent'));
-    // }
-    // public function updateBlog(Request $request, $id)
-    // {
-    //     $blog = Blog::findOrFail($id);
 
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
-    //         'type' => 'required|in:1,2,3,4',
-    //         'short_description' => 'required|string|max:500',
-    //         'content' => 'required|string',
-    //         'image' => 'nullable|image|max:2048',
-    //         'status' => 'required|boolean',
-    //     ]);
+    /**
+     * Sub-category management functions
+     * creted by: Sandeep Patel
+     * created at: 2026-03-29
+     */
+    public function subcategoryList()
+    {
+        $subcategories = SubCategory::with('Category')->orderBy('id', 'desc')->get()->toArray();
+        return view('admin.sub_category', compact('subcategories'));
+    }
 
-    //      //echo "<pre>"; print_r($request->all()); echo "</pre>"; die;
-    //     // Update SEO
-    //     $seoContent = SeoContent::addOrUpdateSeoContent([
-    //         'id' => $blog->seo_id,
-    //         'page_slug' => $request->slug, // Keep existing slug if not changed
-    //         'meta_title' => $request->title,
-    //         'meta_description' => $request->meta_description ?? '',
-    //         'meta_keywords' => $request->meta_keywords ?? '',
-    //     ]);
-    //     $blog->title = $request->title;
-    //     $blog->slug = $request->slug ?? null;
-    //     $blog->type = $request->type;
-    //     $blog->short_description = $request->short_description;
-    //     $blog->content = $request->content;
-    //     $blog->seo_id = $seoContent->id ?? null;
-    //     $blog->meta_title = $request->meta_title ?? '';
-    //     $blog->meta_description = $request->meta_description ?? '';
+    public function addSubCategory(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:category,id',
+                'name'  => 'required|string|max:255|unique:sub_category,name',
+                'status' => 'required|in:0,1',
+            ]);
+            $subcategory = SubCategory::create([
+                'category_id' => $validated['category_id'],
+                'name' => $validated['name'],
+                'status' => $validated['status'],
+                'created_by' => Auth::guard('admin')->id(),
+                'created_at' => now(),
+                'updated_by' => Auth::guard('admin')->id(),
+                'updated_at' => now(),
+            ]);
+            if(!$subcategory){
+                return back()->withErrors(['error' => 'Failed to add sub-category. Please try again.']);
+            }
+            return redirect()->route('sub-category.index')->with('success', 'Sub-category added successfully.');
+        }
+        $categories = Category::where('status', 1)->get();
+        return view('admin.add_sub_category', compact('categories'));
+    }
+
+    public function updateSubCategory(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $subCategory = SubCategory::findOrFail($id);
+        if ($request->isMethod('put')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:category,id',
+                'name'  => 'required|string|max:255|unique:sub_category,name,' . $subCategory->id,
+                'status' => 'required|in:0,1',
+            ]);
+            $subCategory->category_id = $validated['category_id'];
+            $subCategory->name = $validated['name'];
+            $subCategory->status = $validated['status'];
+            $subCategory->updated_by = Auth::guard('admin')->id();
+            $subCategory->updated_at = now();
+            if(!$subCategory->save()){
+                return back()->withErrors(['error' => 'Failed to update sub-category. Please try again.']);
+            }
+            return redirect()->route('sub-category.index')->with('success', 'Sub-category updated successfully.');
+        }
+        $categories = Category::where('status', 1)->get();
+        return view('admin.update_sub_category', compact('subCategory', 'categories'));
+    }
+
+    public function deleteSubCategory($id)
+    {
+        $id = decrypt($id);
+        $subCategory = SubCategory::findOrFail($id);
+        // mark sub-category inactive instead of deleting
+        $subCategory->status = 0;
+        $subCategory->updated_by = Auth::guard('admin')->id();
+        $subCategory->updated_at = now();
+        if(!$subCategory->save()){
+            return back()->withErrors(['error' => 'Failed to delete sub-category. Please try again.']);
+        }
+        return redirect()->route('sub-category.index')->with('success', 'Sub-category marked inactive successfully.');
+    }
+
+    /*
+        * Product management functions
+        * created by: Sandeep Patel
+        * created at: 2026-03-29
+        */
+
+    public function productList()
+    {
+        $products = Product::with('Category:id,name')->with('SubCategory:id,name')->orderBy('id', 'DESC')->get()->toArray();
+        $subcategories = SubCategory::with('Category')->orderBy('id', 'desc')->get()->toArray();
+        return view('admin.product', compact('products', 'subcategories'));
+    
+        // to be implemented
+    }
+    
+    public function addProduct(Request $request)
+    {
         
-    //     if ($request->hasFile('image')) {
-    //         if ($blog->image) {
-    //             Storage::disk('public')->delete($blog->image);
-    //         }
-    //         $path = $request->file('image')->store('uploads/blogs', 'public');
-    //         $blog->image = $path;
-    //     }
-    //     $blog->status = $request->status;
-    //     $blog->save();
-    //     return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully.');
-    // }
+         if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:category,id',
+                'product_title'  => 'required|string|max:255|unique:sub_category,name',
+                'status' => 'required|in:0,1',
+            ]);
+        }
+        $categories = Category::where('status', 1)->get();
+        $subcategories = SubCategory::where('status', 1)->get();
+        return view('admin.add_product', compact('categories', 'subcategories'));
+           
+    }
+    public function updateProduct(Request $request, $id)
+    {
+        // to be implemented
+    }
+    public function deleteProduct($id)
+    {
+        // to be implemented
+    }
 
     public function addColor(Request $request)
     {
@@ -257,6 +327,7 @@ class AdminController extends BaseController
 
     public function editColor($id)
     {
+        $id = decrypt($id);
         $color = DB::table('colors')->where('color_id', $id)->first();
         if (!$color) {
             return redirect('/admin/colors')->with('error', 'Color not found.');
@@ -266,6 +337,7 @@ class AdminController extends BaseController
 
     public function updateColor(Request $request, $id)
     {
+        $id = decrypt($id);
         $request->validate([
             'color_title' => 'required|string|max:255',
             'color_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
@@ -281,9 +353,4 @@ class AdminController extends BaseController
         return redirect()->route('colors')->with('success', 'Color updated successfully.');
     }
 
-    public function deleteColor($id)
-    {
-        DB::table('colors')->where('color_id', $id)->delete();
-        return redirect()->route('colors')->with('success', 'Color deleted successfully.');
-    }
 }
