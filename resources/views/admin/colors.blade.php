@@ -38,9 +38,9 @@
                                 <td><span style="display:inline-block; width:30px; height:30px; background-color:{{ $color->color_code }}; border:1px solid #ccc;"></span></td>
                                 <td>
                                     @if($color->color_status == 1)
-                                        Active
+                                        <span class="badge bg-success">Active</span>
                                     @else
-                                        Inactive
+                                        <span class="badge bg-danger">Inactive</span>
                                     @endif
                                 </td>
                                 

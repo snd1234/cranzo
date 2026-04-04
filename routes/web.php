@@ -67,4 +67,8 @@ Route::prefix('system-auth')->group(function () {
     Route::match(['get', 'put'], '/update-product/{id}', [AdminController::class, 'updateProduct'])->name('product.update')->middleware('auth:admin');
     Route::match(['get', 'delete'], '/delete-product/{id}', [AdminController::class, 'deleteProduct'])->name('product.delete')->middleware('auth:admin');
 
+    // Order routes
+    Route::get('/orders', [AdminController::class, 'orderList'])->name('order.index')->middleware('auth:admin');
+    Route::get('/view-order/{id}', [AdminController::class, 'viewOrder'])->name('order.view')->middleware('auth:admin');
+
 });

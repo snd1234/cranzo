@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Admin, Category, SubCategory, Product};
+use App\Models\{Admin, Category, SubCategory, Product, Orders, OrderDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -353,4 +353,19 @@ class AdminController extends BaseController
         return redirect()->route('colors')->with('success', 'Color updated successfully.');
     }
 
+    public function orderList()
+    {
+        $orders = Orders::with('user:id,first_name,middle_name,last_name,email,mobile_number')->orderBy('id', 'desc')->get()->toArray();
+        // echo "<pre>"; print_r($orders); die;
+        return view('admin.orders', compact('orders'));
+    }
+
+    public function viewOrder($id)
+    {
+        $id = decrypt($id);//echo $id;
+        $orderData = Orders::with('user:id,first_name,middle_name,last_name,email,mobile_number', 'orderDetail')
+                    ->findOrFail($id);
+        //echo "<pre>"; print_r($orderData); die;
+        return view('admin.view_order', compact('orderData'));
+    }
 }

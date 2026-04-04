@@ -81,7 +81,16 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-palette"></i></div>
                             Colors
                         </a>
-
+                        <a class="nav-link collapsed @if(request()->is('system-auth/orders*')) active @endif" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="@if(request()->is('system-auth/orders*')) true @else false @endif" aria-controls="collapseOrders">
+                            <div class="sb-nav-link-icon"><i class="fa fa-shopping-cart"></i></div>
+                            Order Management
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse @if(request()->is('system-auth/orders*')) show @endif" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link @if(request()->is('system-auth/orders')) active @endif" href="{{ url('/system-auth/orders') }}">Order List</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </nav>
