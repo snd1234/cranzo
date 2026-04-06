@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Admin, Category, SubCategory, Product, Orders, OrderDetail};
+use App\Models\{Admin, Category, SubCategory, Product, Orders, OrderDetail, Addresss};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -363,8 +363,8 @@ class AdminController extends BaseController
     public function viewOrder($id)
     {
         $id = decrypt($id);//echo $id;
-        $orderData = Orders::with('user:id,first_name,middle_name,last_name,email,mobile_number', 'orderDetail')
-                    ->findOrFail($id);
+        $orderData = Orders::with('user:id,first_name,middle_name,last_name,email,mobile_number', 'orderDetail', 'Address.state')
+                ->findOrFail($id);
         //echo "<pre>"; print_r($orderData); die;
         return view('admin.view_order', compact('orderData'));
     }

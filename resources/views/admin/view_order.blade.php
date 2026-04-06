@@ -36,7 +36,7 @@
                                     <th>Mobile Number</th>
                                     <td>{{ $orderData->user->mobile_number }}</td>
                                     <th>Address</th>
-                                    <td>{{ $orderData->address }}, {{ $orderData->city }}, {{ $orderData->locality }} - {{ $orderData->pincode }}</td>
+                                    <td>{{ $orderData->address->address }}, {{ $orderData->address->locality }}, {{ $orderData->address->city }}, {{ $orderData->address->state->state_name }} - {{ $orderData->address->pincode }}</td>
                                 </tr>
                                 <tr>
                                     <th colspan="2">Address Type</th>
