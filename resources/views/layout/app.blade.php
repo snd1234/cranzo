@@ -1,257 +1,138 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-    <title>Laboratory — Tailwind Demo</title>
-    <!-- <script src="assets/js/tailwind.3.4.17.js"></script> -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cranzo | Car and Bike Accessories</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- <script src="assets/js/lucide-icon.js"></script> -->
-    <link rel="stylesheet" href="{{asset('front/css/swiper-bundle.min.css')}}">
-    <link rel="stylesheet" href="{{asset('front/css/fonts.css')}}">
-    <link rel="stylesheet" href="{{asset('front/css/style.css')}}">
-
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+<body class="bg-stone-100 text-stone-900">
+    @php
+        $carMenu = $headerCategories->first(fn ($category) => stripos($category->name, 'car access') !== false);
+        $bikeMenu = $headerCategories->first(fn ($category) => stripos($category->name, 'bike access') !== false);
+        $navCategories = $headerCategories->reject(fn ($category) => in_array($category->id, array_filter([$carMenu->id ?? null, $bikeMenu->id ?? null]), true))->take(4);
+    @endphp
+    <div class="bg-blue-700 text-white text-xs sm:text-sm">
+        <p class="max-w-7xl mx-auto px-4 py-2 text-center">Genuine Cranzo products • Car and bike accessories • Cash on delivery available</p>
+    </div>
 
-<body class="bg-gray-100">
-    <!-- Header -->
-    <!-- Header -->
-    <header class="header shadow-md sticky top-0 z-20">
-        <?php  
-        //echo "<pre>";print_r($headerCategories);die;
-        ?>
-        <div class="max-w-full mx-auto px-6 flex justify-between items-center">
-            <div class="flex items-center space-x-6">
-                <div class="company-logo">
-                    <a href="{{ url('/') }}"><img src="{{asset('front/images/IGB-Logo_white.png')}}" alt="IGB Logo"></a>
-                </div>
+    <header class="bg-white sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3 lg:gap-6">
+            <a href="{{ url('/') }}" class="shrink-0 flex items-center gap-2">
+                <img src="{{ asset('front/images/cranzo-logo.jpg') }}" alt="" class="h-16 w-16 rounded-full object-cover">
+                <span class="text-3xl font-extrabold tracking-tight text-slate-900 lowercase">cranzo</span>
+            </a>
+            <div class="hidden md:flex flex-1 justify-center px-8 lg:px-16">
+                <form action="{{ url('/products') }}" method="get" class="relative w-full max-w-xl">
+                    <input type="search" name="q" value="{{ request('q') }}" placeholder="Search product, category or brand..." class="w-full rounded-md border border-slate-300 px-4 py-2.5 pr-12 text-slate-800">
+                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600" type="submit" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
             </div>
-            <div class="flex flex-col items-end">
-                <div class="header-right-top flex items-end gap-10 pt-5">
-                    <div class="contact-info flex items-center space-x-6">
-                        <a href="#" class="flex items-center space-x-2 group">
-                            <i class="fa-solid fa-phone"></i>
-                            <span>+91 9876543210</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-2 group">
-                            <i class="fa-regular fa-envelope"></i>
-                            <span>info@yourmail.com</span>
-                        </a>
-                    </div>
-                    <div class="social-icons flex items-center justify-end space-x-5">
-
-                        <a href="#" class="icon-hover">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon-hover">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                        <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-x-twitter"></i>
-                        </a>
-                        <a href="#" class="icon-hover">
-                            <i class="fa-brands fa-linkedin-in"></i>
-                        </a>
-        
-                        <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-youtube"></i>
-                        </a>
-        
-                        <!-- Mobile menu button -->
-                        <button onclick="toggleMenu()" class="lg:hidden focus:outline-none">
-                            <i data-lucide="menu" class="w-6 h-6"></i>
-                        </button>
-                    </div>
-                </div>
-                <nav class="hidden lg:block">
-                    <ul class="menu-items flex items-center space-x-10 text-sm text-gray-600">
-                        <li><a href="{{ url('/about-us') }}" class="uppercase flex items-center">About us</a></li>
-                        <li class="submenu-trigger">
-
-                            <a href="{{ url('/products') }}" class="uppercase flex items-center gap-2">Products <span class="arrow"><i data-lucide="chevron-down"></i></span></a>
-                            <div class="submenu bg-white">
-                                <div class="grid grid-cols-3 gap-10">
-                                   @foreach($headerCategories as $category)
-                                    @if($category->subcategories->contains(fn($sub) => $sub->products->isNotEmpty()))
-                                        <div class="space-y-3">
-                                            <h6 class="mb-4">
-                                                {{ $category->name }}
-                                            </h6>
-                                            @if($category->subcategories->isNotEmpty())
-                                                <ul class="p-0 m-0 space-y-3">
-                                                    @foreach($category->subcategories as $sub)
-                                                        @if($sub->products->isNotEmpty())
-                                                        <li class="sub-submenu-trigger">
-                                                            <a href="#" class="flex items-center gap-4">
-                                                                <!-- <i class="fa-solid fa-plus"></i> -->
-                                                                <span>{{ $sub->name }}</span>
-                                                            </a>
-                                                            <div class="sub-submenu">
-                                                                <span class="angle-left"></span>
-
-                                                                @foreach($sub->products as $product)
-                                                                    <a href="{{ url('product-detail/' . $product->slug) }}">
-                                                                        {{ $product->title }}
-                                                                    </a>
-                                                                @endforeach
-                                                            </div>
-                                                        </li>
-                                                        @endif
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-                                        </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            </div>
-                            
-                        </li>
-                        <li><a href="{{ url('/our-partners') }}" class="uppercase flex items-center">Our partners</a></li>
-                        <li><a href="{{ url('/events') }}" class="uppercase flex items-center">Events</a></li>
-                        <li><a href="{{ url('/news-room') }}" class="uppercase flex items-center">Newsroom</a></li>
-                        <li><a href="{{ url('/contact-us') }}" class="uppercase flex items-center">Contact Us</a></li>
-                    </ul>
-                </nav>
-               
+            <div class="ml-auto flex items-center gap-4 sm:gap-6 text-slate-700">
+                <a href="{{ url('/about-us') }}" class="hidden sm:flex flex-col items-center text-xs leading-tight">
+                    <i class="fa-regular fa-user text-lg"></i>
+                    <span>My Account</span>
+                </a>
+                <a href="{{ url('/products') }}" class="hidden sm:flex flex-col items-center text-xs leading-tight">
+                    <i class="fa-regular fa-heart text-lg"></i>
+                    <span>Wishlist</span>
+                </a>
+                <a href="{{ url('/cart') }}" class="relative flex flex-col items-center text-xs leading-tight" aria-label="Cart">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span class="hidden sm:inline">Cart</span>
+                    <span class="absolute -top-2 -right-3 bg-blue-700 text-white text-[10px] font-semibold rounded-full min-w-5 h-5 px-1 inline-flex items-center justify-center">{{ $cartCount }}</span>
+                </a>
+                <button type="button" class="lg:hidden" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" aria-label="Open menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
-        <!-- Mobile Nav -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <ul class="menu-items flex flex-col p-4 space-y-3 text-sm text-gray-700">
-                <li><a href="#" class="">Products</a></li>
-                <li><a href="#" class="">Applications</a></li>
-                <li><a href="#" class="">Solutions</a></li>
-                <li><a href="#" class="">Service & Support</a></li>
-                <li><a href="#" class="">About</a></li>
-                <li><a href="#" class="">News</a></li>
-                <li><a href="#" class="">Contact</a></li>
+        <form action="{{ url('/products') }}" method="get" class="md:hidden px-4 pb-3 relative">
+            <input type="search" name="q" value="{{ request('q') }}" placeholder="Search product, category or brand..." class="w-full rounded-md border border-slate-300 px-4 py-2.5 pr-12">
+            <button class="absolute right-7 top-1/2 -translate-y-1/2 text-slate-600" type="submit" aria-label="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+        <nav class="hidden lg:block border-t border-slate-200">
+            <ul class="max-w-7xl mx-auto px-4 flex items-center gap-8 text-sm text-slate-700">
+                @if($carMenu)
+                    <li class="relative group py-3">
+                        <a href="{{ url('/our-solutions/' . $carMenu->id) }}" class="inline-flex items-center gap-1">Car Accessories <i class="fa-solid fa-chevron-down text-[10px]"></i></a>
+                        <div class="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg border border-slate-100 rounded-md min-w-56 py-2 z-40">
+                            @forelse($carMenu->subcategories as $subcategory)
+                                <a class="block px-4 py-2 hover:bg-slate-50" href="{{ url('/products?subcategory=' . $subcategory->id) }}">{{ $subcategory->name }}</a>
+                            @empty
+                                <a class="block px-4 py-2 hover:bg-slate-50" href="{{ url('/our-solutions/' . $carMenu->id) }}">View all</a>
+                            @endforelse
+                        </div>
+                    </li>
+                @endif
+                @if($bikeMenu)
+                    <li class="relative group py-3">
+                        <a href="{{ url('/our-solutions/' . $bikeMenu->id) }}" class="inline-flex items-center gap-1">Bike Accessories <i class="fa-solid fa-chevron-down text-[10px]"></i></a>
+                        <div class="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg border border-slate-100 rounded-md min-w-56 py-2 z-40">
+                            @forelse($bikeMenu->subcategories as $subcategory)
+                                <a class="block px-4 py-2 hover:bg-slate-50" href="{{ url('/products?subcategory=' . $subcategory->id) }}">{{ $subcategory->name }}</a>
+                            @empty
+                                <a class="block px-4 py-2 hover:bg-slate-50" href="{{ url('/our-solutions/' . $bikeMenu->id) }}">View all</a>
+                            @endforelse
+                        </div>
+                    </li>
+                @endif
+                @foreach($navCategories as $category)
+                    <li class="py-3"><a href="{{ url('/our-solutions/' . $category->id) }}">{{ $category->name }}</a></li>
+                @endforeach
             </ul>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 px-4 py-4 space-y-3 text-sm max-h-[70vh] overflow-y-auto">
+            <a class="block" href="{{ url('/products') }}">All products</a>
+            <a class="block" href="{{ url('/cart') }}">Cart ({{ $cartCount }})</a>
+            <a class="block" href="{{ url('/about-us') }}">My Account</a>
+            <a class="block" href="{{ url('/contact-us') }}">Contact</a>
+            @if($carMenu)
+                <a class="block font-semibold" href="{{ url('/our-solutions/' . $carMenu->id) }}">Car Accessories</a>
+                @foreach($carMenu->subcategories as $subcategory)
+                    <a class="block pl-3 text-slate-600" href="{{ url('/products?subcategory=' . $subcategory->id) }}">{{ $subcategory->name }}</a>
+                @endforeach
+            @endif
+            @if($bikeMenu)
+                <a class="block font-semibold" href="{{ url('/our-solutions/' . $bikeMenu->id) }}">Bike Accessories</a>
+                @foreach($bikeMenu->subcategories as $subcategory)
+                    <a class="block pl-3 text-slate-600" href="{{ url('/products?subcategory=' . $subcategory->id) }}">{{ $subcategory->name }}</a>
+                @endforeach
+            @endif
         </div>
     </header>
 
     @yield('content')
-   
-    <!--footer -->
 
-    <footer>
-        <div class="footer p-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                <div>
-                    <div class="mb-5">
-                        <img src="{{asset('front/images/IGB-Logo.png')}}" class="w-full object-cover" />
-                    </div>
-                    <p >Integrated Gulf Biosystems (IGB) was founded with a mission to bridge the technological gap between global scientific innovation and regional laboratory capabilities.</p>
+    <footer class="bg-stone-950 text-stone-300 mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
+            <div>
+                <img src="{{ asset('front/images/cranzo-logo.jpg') }}" alt="Cranzo" class="h-16 w-16 rounded-full mb-4">
+                <p>Cranzo supplies car covers, floor mats, seat covers, bike covers, and everyday automotive accessories.</p>
+            </div>
+            <div>
+                <h2 class="text-white uppercase text-sm mb-4">Shop</h2>
+                <div class="grid gap-2">
+                    @foreach($headerCategories->take(8) as $category)
+                        <a href="{{ url('/our-solutions/' . $category->id) }}" class="hover:text-white">{{ $category->name }}</a>
+                    @endforeach
                 </div>
-                <div>
-                    <h3 class="mb-5 text-white uppercase">Our Products</h3>
-                    <div class="grid grid-cols-1 gap-1">
-                        <?php foreach($latestProducts as $prod){ ?>
-                        <a href="{{ url('product-detail/' . $prod->slug) }}" class="inline-block text-white transition duration-300">
-                            {{ $prod->title }}
-                        </a>
-                        <?php } ?>
-                    </div>
+            </div>
+            <div>
+                <h2 class="text-white uppercase text-sm mb-4">Latest products</h2>
+                <div class="grid gap-2">
+                    @foreach($latestProducts as $product)
+                        <a href="{{ url('/product-detail/' . $product->id) }}" class="hover:text-white">{{ $product->product_title }}</a>
+                    @endforeach
                 </div>
-                <div>
-                    <h3 class="mb-5 text-white uppercase">Customer Service</h3>
-                    <div class="grid grid-cols-1 gap-1">
-                        <a href="{{ url('/about-us') }}" class="inline-block text-white transition duration-300">
-                            About IGB 
-                        </a>
-
-                        <a href="{{ url('/contact-us') }}" class="inline-block text-white transition duration-300">
-                            Contact Us
-                        </a>
-                        <a href="{{ url('/events') }}" class="inline-block text-white transition duration-300">
-                            Events Calendar
-                        </a>
-                        <a href="{{ url('/news-room') }}" class="inline-block text-white transition duration-300">
-                            News Room
-                        </a>
-                        <a href="{{ url('/our-partners') }}" class="inline-block text-white transition duration-300">
-                            Global Partners
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="mb-5 text-white uppercase">Contact Info</h3>
-                    <ul class="space-y-2 mb-6">
-                        <li class="flex flex-col gap-1">
-                            <h6 class="text-white uppercase">Address :</h6>
-                            <p>123 Street Name, City, England</p>
-                        </li>
-
-                        <li class="flex flex-col gap-1">
-                            <h6 class="text-white uppercase">Phone :</h6>
-                            <a href="tel:(123)456-7890" class=" hover:underline">(123) 456-7890</a>
-                        </li>
-
-                        <li class="flex flex-col gap-1">
-                            <h6 class="text-white uppercase">Email :</h6>
-                            <a href="mailto:mail@example.com" class=" hover:underline">
-                                mail@example.com
-                            </a>
-                        </li>
-
-                        <li class="flex flex-col gap-1">
-                            <h6 class="text-white uppercase">Working Days/Hours :</h6>
-                            <p>Mon - Sun / 9:00 AM - 8:00 PM</p>
-                        </li>
-                    </ul>
-                    <div class="social-icons flex space-x-6">
-                        <a href="#" class="icon-hover">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="icon-hover">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                        <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-x-twitter"></i>
-                        </a>
-                        <a href="#" class="icon-hover">
-                            <i class="fa-brands fa-linkedin-in"></i>
-                        </a>
-        
-                        <a href="#" class="icon-hover">
-                        <i class="fa-brands fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-
-
             </div>
         </div>
-        <div class="copyright-socials border-t border-gray-700 py-4 px-12 ">
-            <p class="flex items-center justify-center"><i data-lucide="copyright" class="w-4 h-4 mx-2"></i>
-                cranzo.in, <?php echo date('Y'); ?>. All Rights Reserved</p>
-        </div>
-   </footer>
-
-<div class="sideButtons">
-    <div class="phone-widget">
-        <i class="fa-solid fa-phone"></i>
-        <a href="tel:+919876543210">+91 98765 43210</a>
-    </div>
-    <div class="phone-widget email">
-        <i class="fa-regular fa-envelope"></i>
-        <a href="mailto:info@yourmail.com">info@yourmail.com</a>
-    </div>
-</div>
-
-<script src="{{asset('front/js/jquery.min.js')}}"></script>
-<script src="{{asset('front/js/swiper-bundle.min.js')}}"></script>
-<script src="{{asset('front/js/custom.js')}}"></script>
-
-
-
-
+        <p class="text-center text-sm border-t border-white/10 py-4">cranzo.in, {{ date('Y') }}. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -9,40 +10,16 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        $events = DB::table('blogs')
+        $featured = DB::table('product')
             ->where('status', 1)
-            ->where('type', 4)
-            ->orderByDesc('created_at')
-            ->limit(3)
+            ->where('featured_item', 1)
+            ->orderByDesc('id')
+            ->limit(8)
             ->get();
 
-        $latestnews = DB::table('blogs')
-            ->where('status', 1)
-            ->where('type', 2)
-            ->orderByDesc('created_at')
-            ->limit(4)
-            ->get();
+        $this->attachProductImages($featured);
 
-        $webinar = DB::table('blogs')
-            ->where('status', 1)
-            ->where('type', 3)
-            ->orderByDesc('created_at')
-            ->limit(3)
-            ->get();
-
-        $blogs = DB::table('blogs')
-            ->where('status', 1)
-            ->where('type', 1)
-            ->orderByDesc('created_at')
-            ->limit(3)
-            ->get();
-
-        $categories = DB::table('category')
-            ->where('status', 1)
-            ->orderBy('name')
-            ->get();
-
-        return view('index', compact('events', 'latestnews', 'webinar', 'blogs', 'categories'));
+        return view('index', compact('featured'));
     }
 
     public function aboutUs()
@@ -100,18 +77,61 @@ class HomeController extends BaseController
         return view('contact_us');
     }
 
-    public function products()
+    public function submitContact(Request $request)
     {
-        $products = DB::table('product')
-            ->where('status', 1)
-            ->orderBy('product_title')
-            ->get();
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'message' => 'required|string|max:2000',
+        ]);
 
-        foreach ($products as $product) {
-            $product->images = DB::table('product_images')
-                ->where('product_id', $product->id)
-                ->get();
+        DB::table('contact_us')->insert([
+            'name' => $data['full_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'message' => $data['message'],
+            'ip_address' => $request->ip(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return back()->with('success', 'Thank you. We have received your message.');
+    }
+
+    public function products(Request $request)
+    {
+        $query = DB::table('product')->where('status', 1);
+
+        if ($request->filled('q')) {
+            $term = '%'.$request->string('q').'%';
+            $query->where(function ($builder) use ($term) {
+                $builder->where('product_title', 'like', $term)
+                    ->orWhere('sku_id', 'like', $term);
+            });
         }
+
+        if ($request->filled('category')) {
+            $query->where('category_id', (int) $request->input('category'));
+        }
+
+        if ($request->filled('subcategory')) {
+            $query->where('sub_category_id', (int) $request->input('subcategory'));
+        }
+
+        $sort = $request->input('sort', 'name');
+        if ($sort === 'price_asc') {
+            $query->orderBy('discounted_price');
+        } elseif ($sort === 'price_desc') {
+            $query->orderByDesc('discounted_price');
+        } elseif ($sort === 'newest') {
+            $query->orderByDesc('id');
+        } else {
+            $query->orderBy('product_title');
+        }
+
+        $products = $query->paginate(12)->withQueryString();
+        $this->attachProductImages(collect($products->items()));
 
         return view('products', compact('products'));
     }
@@ -138,12 +158,18 @@ class HomeController extends BaseController
             ->where('product_id', $product->id)
             ->get();
 
-        $subcategories = DB::table('sub_category')
+        $related = DB::table('product')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
             ->where('status', 1)
-            ->orderBy('name')
+            ->orderByDesc('id')
+            ->limit(4)
             ->get();
+        $this->attachProductImages($related);
 
-        return view('product_detail', compact('product', 'productImages', 'subcategories', 'productCatalogs'));
+        $stock = (int) DB::table('product_details')->where('product_id', $product->id)->sum('product_quantity');
+
+        return view('product_detail', compact('product', 'productImages', 'productCatalogs', 'related', 'stock'));
     }
 
     public function ourSolutionDetail($slug)
@@ -165,6 +191,8 @@ class HomeController extends BaseController
             ->where('status', 1)
             ->orderByDesc('id')
             ->get();
+
+        $this->attachProductImages($products);
 
         $subcategories = DB::table('sub_category')
             ->where('status', 1)

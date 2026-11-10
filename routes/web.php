@@ -6,15 +6,28 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\CartController;
 
-Route::get('/', function () {
-    return app(\App\Http\Controllers\HomeController::class)->index();
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about-us');
+Route::get('/our-partners', [HomeController::class, 'ourPartners'])->name('our-partners');
+Route::get('/events', [HomeController::class, 'events'])->name('events');
+Route::get('/news-room', [HomeController::class, 'newsRoom'])->name('news-room');
+Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contact-us');
+Route::get('/products', [HomeController::class, 'products'])->name('products');
+Route::get('/product-detail/{slug}', [HomeController::class, 'productDetail'])->name('product-detail');
+Route::get('/our-solutions/{slug}', [HomeController::class, 'ourSolutionDetail'])->name('our-solutions');
+Route::get('/blog/{slug}', [HomeController::class, 'blogDetail'])->name('blog.detail');
+Route::get('/news/{slug}', [HomeController::class, 'blogDetail'])->name('news.detail');
+Route::post('/contact-us', [HomeController::class, 'submitContact'])->name('contact.submit');
 
-
-// Route::get('/products', [HomeController::class, 'products'])->name('products');
-// Route::get('/product-detail/{slug}', [HomeController::class, 'productDetail'])->name('productDetail');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+Route::post('/checkout', [CartController::class, 'place'])->name('checkout.place');
+Route::get('/order/{orderNumber}', [CartController::class, 'complete'])->name('checkout.complete');
 
 // frontend authentication routes
 // Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
