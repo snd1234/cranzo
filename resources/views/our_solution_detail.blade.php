@@ -9,10 +9,15 @@
 </section>
 
 @if($subcategories->isNotEmpty())
-<section class="max-w-7xl mx-auto px-4 pt-8 flex gap-3 overflow-x-auto">
+<section class="max-w-7xl mx-auto px-4 pt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
     @foreach($subcategories as $subcategory)
         @if((int) $subcategory->category_id === (int) $category->id)
-            <a href="{{ url('/products?subcategory=' . $subcategory->id) }}" class="whitespace-nowrap bg-white border border-stone-200 rounded-full px-4 py-2 text-sm">{{ $subcategory->name }}</a>
+            <a href="{{ \App\Support\CataloguePath::subcategory($subcategory) }}" class="bg-white border border-stone-200 rounded-xl overflow-hidden text-sm hover:border-amber-500">
+                @if(!empty($subcategory->image))
+                    <img src="{{ asset(str_contains($subcategory->image, '/') ? $subcategory->image : 'uploads/subcategories/'.$subcategory->image) }}" alt="" class="h-24 w-full object-cover">
+                @endif
+                <span class="block px-3 py-2">{{ $subcategory->name }}</span>
+            </a>
         @endif
     @endforeach
 </section>

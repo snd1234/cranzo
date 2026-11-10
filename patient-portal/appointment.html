@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Patients Portal</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    
+    <!-- Apple Touch Icons -->
+	<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png">
+
+    <!-- All css files are included here. -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,600i,700,700i,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/plugin.css">
+    <link rel="stylesheet" href="assets/css/default.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+   
+
+</head>
+ <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<body id="home">
+
+    <!--wrapper section here.. -->
+    <section class="wrapper">
+
+        <!--header start here..-->
+        <header class="pp__header">
+            <!--header top here..-->
+            <div class="pp__header__top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="pp__header__top_left">
+                                <a href="tel:9876543210">
+                                    <span><i class="fa fa-phone fa-lg mr-2" aria-hidden="true"></i></span>
+                                    9876543210
+                                </a>
+                                <a href="mailto:abc@gamil.com">
+                                    <span><i class="fa fa-envelope-o mr-2" aria-hidden="true"></i></span>
+                                    abc@gamil.com
+                                </a>
+                                <a href="#">
+                                    <span><i class="fa fa-clock-o fa-lg mr-2" aria-hidden="true"></i></span>
+                                    Mon to sat 07 am to 12 am
+                                </a>
+
+                                <!-- <button href="#" class="bookAppnt float-right">Book Appointment</button> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header top here..-->
+            <!--main-menu here..-->
+            <div id="sticky-header-with-topbar" class="mainmenu__wrap sticky__header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-4  col-sm-6 col-xs-7">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <span>Patients</span> Portal
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8  d-none d-lg-block">
+                            <nav class="main__menu__nav ">
+                                <ul class="main__menu">
+                                    <li class="drop"><a href="#home">Home</a></li>
+                                    <li class="drop"><a href="#aboutus">About</a>
+                                        <!-- <ul class="dropdown">
+                                            <li><a href="#">About us</a></li>
+                                            <li><a href="#">Message</a></li>
+                                            <li><a href="#">Medical Staff</a></li>
+                                        </ul> -->
+                                    </li>
+                                    <li class="drop"><a href="#service">Services</a></li>
+                                    <li class="drop"><a href="#department">Department</a>
+                                        <!-- <ul class="dropdown">
+                                            <li><a href="#">Fertility Clinic</a></li>
+                                            <li><a href="#">Obsterics / Gynaecology</a></li>
+                                            <li><a href="#">Paediatrics & Neonatology</a></li>
+                                        </ul> -->
+                                    </li>
+                                    <li class="drop"><a href="#gallery">Gallery</a></li>
+                                    <li class="drop"><a href="#contactus">Contact</a></li>
+
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mobile-menu d-lg-none mean-container">
+                                <div class="mean-bar">
+                                    <a href="#nav" class="meanmenu-reveal"><span></span><span></span><span></span>
+                                    </a>
+
+                                    <nav class="mean-nav">
+                                        <ul style="display: none;">
+                                            <li class="drop"><a href="#home">Home</a></li>
+                                            <li class="drop"><a href="#aboutus">About</a>
+                                                <ul class="dropdown">
+                                                    <li><a href="#">About us</a></li>
+                                                    <li><a href="#">Message</a></li>
+                                                    <li><a href="#">Medical Staff</a></li>
+                                                </ul>
+                                                <span class="mean-expand" href="#">+</span>
+                                            </li>
+                                            <li class="drop"><a href="#service">Services</a></li>
+                                            <li class="drop"><a href="#department">Department</a>
+                                                <ul class="dropdown">
+                                                    <li><a href="#">Fertility Clinic</a></li>
+                                                    <li><a href="#">Obsterics / Gynaecology</a></li>
+                                                    <li><a href="#">Paediatrics & Neonatology</a></li>
+                                                </ul>
+                                                <span class="mean-expand" href="#">+</span>
+                                            </li>
+                                            <li class="drop"><a href="#gallery">Gallery</a></li>
+                                            <li class="drop"><a href="#contactus">Contact</a></li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--main-menu here..-->
+        </header>
+        <!--header End here ..-->
+
+       
+
+<!--Appointment section start here.. -->
+
+
+        <!--bradcaump start here.. -->
+            <div class="pp__bradcaump__area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="bradcaump__title text-center">
+                                <h2 class="bradcaump-title">Book Appointment</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        <!--bradcaump start here.. -->
+
+
+        <!--portal area login start here.. -->
+        <section class="pp_portal_area ptb--50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 order-lg-1 order-md-2 order-2 ">
+                        <!--acoordian area here.. -->
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                <h4>Registration / OPD Schedule</h4>
+                            </div>
+                            <div class="card-body ">
+                                <div id="accordion" class="accordion">
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" href="#collapseOne">
+                                            <a class="card-title">Casualty</a>
+                                        </div>
+                                        <div id="collapseOne" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                            <a class="card-title"> Critical Care & Family Medicine </a>
+                                        </div>
+                                        <div id="collapseTwo" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                            <a class="card-title">ENT </a>
+                                        </div>
+                                        <div id="collapseThree" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsefour">
+                                            <a class="card-title">General Medicine</a>
+                                        </div>
+                                        <div id="collapsefour" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsefive">
+                                            <a class="card-title">Nephrology</a>
+                                        </div>
+                                        <div id="collapsefive" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsesix">
+                                            <a class="card-title">Neurology</a>
+                                        </div>
+                                        <div id="collapsesix" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseseven">
+                                            <a class="card-title">Obsetetrics & Gynaecology</a>
+                                        </div>
+                                        <div id="collapseseven" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                            <a class="card-title">Ophthamology</a>
+                                        </div>
+                                        <div id="collapseEight" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsenine">
+                                            <a class="card-title">Orthopaedics</a>
+                                        </div>
+                                        <div id="collapsenine" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2">
+                                        <div class="card-header p-2 collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseten">
+                                            <a class="card-title">Plastic Surgery</a>
+                                        </div>
+                                        <div id="collapseten" class="card-body p-2 collapse" data-parent="#accordion" >
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped m-0 pp__table_area">
+                                                    <thead>
+                                                        <th>Doctor</th>
+                                                        <th>Sun</th>
+                                                        <th>Mon</th>
+                                                        <th>Tue</th>
+                                                        <th>Wed</th>
+                                                        <th>Thu</th>
+                                                        <th>Fri</th>
+                                                        <th>Sat</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><a href="#">Zeeshan</a></td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                            <td>06:00AM-11:00PM</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--acoordian area here.. -->
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 order-lg-2 order-md-1  order-1">
+                        <!--login area start here.. -->
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                <h4>Patient Login</h4>
+                            </div>
+                            <div class="card-body">
+                                <form class="pp__login_form">
+                                    <div class="row">
+                                        <div class="col-xl-12 col-lg-12">
+                                            <div class="form-group">
+                                               <input type="text" class="form-control" value="" placeholder="Mobile No.">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12 col-lg-12">
+                                            <div class="form-group">
+                                                <input type="password" class="form-control" value="" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-xl-12 col-lg-12">
+                                            <ul class="nav nav-tabs mb-2">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-toggle="tab" href="#password">Password</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="tab" href="#otp">OTP</a>
+                                                </li>
+                                            </ul>
+                                            
+                                           
+                                            <div class="tab-content">
+                                                <div class="tab-pane active " id="password">
+                                                    <div class="form-group">
+                                                        <input type="password" class="form-control" value="" placeholder="Password">
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane " id="otp">
+                                                    <div class="form-group">
+                                                        <buton class="btn btn-success btn-sm mb-2">Send OTP</buton>
+                                                        <input type="text" class="form-control" value="" placeholder="OTP">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                       
+                                        <div class="col-xl-12 col-lg-12">
+                                            <div class="form-group m-0">
+                                                <!-- <a href="#" class="d-inline-block">Forget password</a> -->
+                                                <input type="submit" class="btn btn-success btn-sm float-left mr-2" value="Send OTP">
+                                                <input type="text" class="form-control float-left" value="" placeholder="OTP" style="width: 100px;display: none;height: 32px">
+                                                <input type="submit" class="btn btn-success btn-sm float-right" value="Login">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!--login area end here.. -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--portal area login end here.. -->
+
+
+
+<!--Appointment section start here.. -->
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- footer area start here.. -->
+
+        <footer class="pp__footer">
+            <!--pp__footer_top start here.. -->
+            <div class="pp__footer_top ptb--30 ">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                            <ul>
+                                <li><a href="#">Schedule OPD Visit </a></li>
+                                <li><a href="#"> Lab Request</a></li>
+                                <li><a href="#"> Pending OPD</a></li>
+                                <li><a href="#"> Prescription</a></li>
+                                <li><a href="#"> Family Members</a></li>
+                                <li><a href="#"> My Document</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--pp__footer_top start here.. -->
+            <!--pp__footer_copyright start here.. -->
+            <div class="pp__footer_copyright ptb--20 text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p>Copyright © Tenwave Infotech Pvt. Ltd. All Rights Reserves</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--pp__footer_copyright start here.. -->
+        </footer>
+
+        <!-- footer area End here.. -->
+
+
+
+
+
+
+    </section>
+    <!--wrapper section here.. -->
+
+
+
+    <!--scroll-top here.. -->
+    <a href="javascript:void(0);" class="bdr-ripple-ani-btn" style="display: inline;">
+            <i class="fa fa-angle-up fa-lg" aria-hidden="true"></i>
+    </a>
+    <!--scroll-top here.. -->
+
+   
+
+    <!-- jquery latest version -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!-- <script src="assets/js/jquery.js"></script> -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.js"></script>
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+
+
+
+</body>
+
+</html>

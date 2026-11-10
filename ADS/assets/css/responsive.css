@@ -1,0 +1,74 @@
+
+
+@media only screen and (max-width:1230px){
+
+    .counter-number h1{font-size: 78px}
+    .counter-text h2{font-size: 20px;}
+    
+
+}
+
+
+
+@media only screen and (max-width:1024px){
+
+    .pp_suport_images{right: 0;}
+    .pp__solve__items {padding: 100px 30px 73px 20px;}
+    .single-counter{width:48%;}
+    .blog__post_title > h2{font-size: 18px;}
+    .blog__post_title{    margin-bottom: 20px;padding-bottom: 20px;}
+    .pp__blog__thumb a img{width: 100%;}
+    .newsletter__form .input__box input[type="email"]{width:430px;}
+    .pp__subscribe__inner h2{font-size: 36px;}
+    .counter-number{width:70px;}
+    .counter-text{padding-left: 70px;}
+    .counter-number h1 { font-size: 45px; margin-top: 10px;}
+
+}
+
+
+
+@media only screen and (max-width:992px){
+    .slider-content h1, .slider-content h2{font-size: 52px;line-height: 65px;}
+    .home--try {position: relative;width: 100%;z-index: 2;}
+    .htc__solve__items {padding: 80px 5%;}
+    .pp_suport_images {position: inherit;right: inherit;width: 100%;bottom: 0;}
+    .newsletter-icon i{font-size: 50px;}
+    .newsletter-text {padding-left: 68px;}
+    .pp__subscribe__inner h2{font-size: 24px;}
+    .newsletter__form .input__box input[type="email"]{width:100%;padding:0 20px;}
+    .newsletter_section_title {width: 45%;}
+    .newsletter__form{width:50%;}
+    .logo a{font-size: 1.5rem}
+    .scroll-header .mean-container a.meanmenu-reveal{top:-50px;}
+    .pp__header__top_left a{margin-right:0;padding: 14px 10px 14px 0;}
+
+   
+}
+
+
+@media only screen and (max-width:767px){
+
+    .pp__header__top_left {-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-pack: center;
+        -ms-flex-pack: center;justify-content: center;text-align: center;margin-bottom: 3px;
+    }
+    .pp__header__top_left  a{border-right:0;margin-right: 0;padding:0;display: block;}
+    .slider-content h1, .slider-content h2{font-size: 32px;line-height: 45px;}
+    .newsletter_section_title { width: 100%; margin-bottom: 15px;}
+    .pp__counter_area{padding: 50px 0;}
+    .counter-number h1 { font-size: 50px;}
+    .newsletter-icon{margin-top: 0;}
+    .newsletter__form , .newsletter__form .input__box input{width:100%;}
+    .contact-info-text {margin-bottom: 30px;}
+    
+}
+
+
+
+@media only screen and (max-width:568px){
+
+    .slider-content h1, .slider-content h2{font-size: 26px;line-height: 32px;}
+    .scroll-header .mean-container a.meanmenu-reveal {right: 22px;}
+    .counter-number{width:70px;}
+    .counter-text{padding-left: 70px;}
+}

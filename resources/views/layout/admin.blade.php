@@ -91,6 +91,33 @@
                                 <a class="nav-link @if(request()->is('system-auth/orders')) active @endif" href="{{ url('/system-auth/orders') }}">Order List</a>
                             </nav>
                         </div>
+                        @php
+                            $websiteOpen = request()->is('system-auth/*banner*') || request()->is('system-auth/cms-pages*') || request()->is('system-auth/faqs*');
+                            $marketingOpen = request()->is('system-auth/newsletter*');
+                        @endphp
+                        <a class="nav-link collapsed @if($websiteOpen) active @endif" href="#" data-bs-toggle="collapse" data-bs-target="#collapseWebsite" aria-expanded="@if($websiteOpen) true @else false @endif" aria-controls="collapseWebsite">
+                            <div class="sb-nav-link-icon"><i class="fas fa-image"></i></div>
+                            Website Management
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse @if($websiteOpen) show @endif" id="collapseWebsite" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link @if(request()->is('system-auth/*banner*')) active @endif" href="{{ route('banners.index') }}">Banner Management</a>
+                                <a class="nav-link @if(request()->is('system-auth/cms-pages*')) active @endif" href="{{ route('cms.index') }}">CMS Pages</a>
+                                <a class="nav-link @if(request()->is('system-auth/faqs*')) active @endif" href="{{ route('faqs.index') }}">FAQ</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed @if($marketingOpen) active @endif" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMarketing" aria-expanded="@if($marketingOpen) true @else false @endif" aria-controls="collapseMarketing">
+                            <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                            Marketing
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse @if($marketingOpen) show @endif" id="collapseMarketing" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link @if(request()->is('system-auth/newsletter-subscribers*')) active @endif" href="{{ route('newsletter.index') }}">Newsletter Subscribers</a>
+                                <a class="nav-link @if(request()->is('system-auth/newsletter-campaigns*')) active @endif" href="{{ route('newsletter.campaigns') }}">Newsletter Campaigns</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </nav>

@@ -52,11 +52,19 @@
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
                             </div>
+                            @include('admin.partials.seo_fields')
 
                             <!-- <div class="mb-2">
                                 <label class="form-label">Slug</label>
                                 <input type="text" name="slug" id="slug" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug') }}">
                             </div> -->
+
+                            <div class="mb-2">
+                                <label class="form-label">Image</label>
+                                <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp" class="form-control @error('image') is-invalid @enderror">
+                                <div class="form-text">JPG, PNG, or WEBP. Maximum 2 MB.</div>
+                                <div id="imagePreviewContainer" class="mt-2"></div>
+                            </div>
 
                             <div class="mb-2">
                                 <label class="form-label">Status</label>
@@ -77,28 +85,27 @@
         </div>
     </div>
 </main>
-@endsection
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const nameInput = document.getElementById('name');
-    const slugInput = document.getElementById('slug');
-
-    function slugify(str) {
-        return str.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
-    }
-
-    if (nameInput && slugInput) {
-        nameInput.addEventListener('input', function () {
-            if (!slugInput.dataset.touched) {
-                slugInput.value = slugify(this.value);
-            }
-        });
-
-        slugInput.addEventListener('input', function () {
-            this.dataset.touched = '1';
-            this.value = slugify(this.value);
-        });
-    }
+    const imageInput = document.getElementById('image');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    if (!imageInput || !previewContainer) return;
+    imageInput.addEventListener('change', function (e) {
+        previewContainer.innerHTML = '';
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.style.width = '120px';
+            img.style.height = '120px';
+            img.style.objectFit = 'cover';
+            img.classList.add('rounded', 'border');
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
 });
 </script>
+@endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class BaseController extends Controller
 {
@@ -37,9 +38,19 @@ class BaseController extends Controller
             $cartCount += (int) ($row['qty'] ?? 0);
         }
 
+        $footerPages = Schema::hasTable('cms_pages')
+            ? DB::table('cms_pages')
+                ->where('status', 1)
+                ->where('show_in_footer', 1)
+                ->orderBy('footer_order')
+                ->orderBy('id')
+                ->get()
+            : collect();
+
         view()->share('headerCategories', $categories);
         view()->share('latestProducts', $latestProducts);
         view()->share('cartCount', $cartCount);
+        view()->share('footerPages', $footerPages);
     }
 
     protected function attachProductImages(Collection $products): Collection

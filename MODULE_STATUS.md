@@ -46,9 +46,10 @@ Evidence is the Laravel source plus `cranzo_dev.sql`. The CodeIgniter applicatio
 | Subcategories | Partially implemented | 42 rows. Admin CRUD works and encrypts the edit id. Unique rule is on `name` globally, so the same subcategory name cannot exist under two parents. `products()` relationship points at a missing `Products` class. |
 | Third-level categories | Not implemented | `ternary_category` has two rows and no primary key, model, or screen. |
 | Brands | Not implemented | Brand is implied by the “Cranzo” title prefix only. |
-| Products (data) | Partially implemented | 278 products with SKU, two prices, dimensions, featured flag, COD flag, HTML description. No slug, weight, HSN, GST, video, part number, or warranty columns. |
-| Product admin create / edit / delete | Implemented but requires correction | List reads. Add validates and does not save. Update and delete methods are empty. |
-| Product images | Partially implemented | Filenames exist in `product_images`. Model uses the wrong table name (`product_image`), wrong key, and wrong columns. Public query filters a `status` column that is not there. |
+| Products (data) | Partially implemented | 277 products with SKU, two prices, dimensions, featured flag, COD flag, HTML description, and unique slugs. No weight, HSN, GST, banner, brand, or parent product columns. |
+| Product admin create / edit / delete | Implemented | Add, edit, and read-only view save the live `product`, `product_details`, and `product_images` rows. Delete marks the product inactive and keeps its media. |
+| Product images | Partially implemented | Admin uploads go to `public/uploads/products`. Historical filenames are still missing from disk. The image model now uses `product_images`. |
+| Homepage banners | Implemented | Admin CRUD for `banners`. The homepage shows up to 5 active banners by display order and falls back to `banner.jpg` when none are active. |
 | Colours and per-colour stock | Partially implemented | `colors` plus `product_details.product_quantity`. Admin can edit colours. No stock movement ledger. Quantities in the dump are mostly 100. No reservation or locking. |
 | Variants (size and other options) | Not implemented | Colour is the only option, and it is not selectable on the storefront. |
 | Attributes and specifications | Not implemented | Highlights are HTML blobs. |
@@ -93,12 +94,12 @@ Evidence is the Laravel source plus `cranzo_dev.sql`. The CodeIgniter applicatio
 | Module | Status | Notes |
 | --- | --- | --- |
 | Blogs / news / events | Partially implemented | Table and public pages work for Gulf Bio sample content. Admin blog routes are not registered. Slugs are not unique. `{!! !!}` output is an XSS risk if editors are not fully trusted. |
-| CMS pages | Not implemented | About page looks for `pages`. Model is copied from another project and references a missing `Content` class. |
+| CMS pages | Implemented | `cms_pages` drives the seven public pages, footer links, and sitemap entries. The old unused `Page` model is not wired to these routes. |
 | Partners | Not implemented | View and model exist. Table is not in the dump. Route is guarded with `Schema::hasTable`. |
-| Banners and homepage sections | Not implemented | Slider is hardcoded. |
+| Banners and homepage sections | Implemented | Admin CRUD for `banners`. Homepage shows up to 5 active banners. |
 | Testimonials | Not implemented | |
-| Contact form | Partially implemented | Saves name, email, phone, message, IP into `contact_us`. No admin inbox, no mail, no rate limit. |
-| Newsletter | Implemented but requires correction | Route inserts into missing `enquiry`. |
+| Contact form | Implemented | Saves name, email, phone, subject, message, and IP into `contact_us`. The form is rate limited. Mail is sent only when `CONTACT_NOTIFY_EMAIL` is set. |
+| Newsletter | Implemented | Footer AJAX saves a unique email in `newsletter_subscribers`. Campaigns queue only for consented, subscribed addresses. |
 | SEO metadata, sitemap, redirects, structured data | Not implemented | `SeoContent` model is unused. Blog meta columns are not rendered as unique document titles. |
 | Email templates | Not implemented | `MAIL_MAILER=log`. No mailables. |
 | SMS / WhatsApp | Not implemented | |

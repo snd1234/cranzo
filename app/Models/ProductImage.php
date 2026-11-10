@@ -2,85 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * App\Models\ContentCategory
- *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property string|null $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- */
 class ProductImage extends Model
 {
-    use HasFactory;
+    protected $table = 'product_images';
 
-    /**
-     * Table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'product_image';
+    protected $primaryKey = 'image_id';
 
-    /**
-     * Primary key.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'id';
+    public $incrementing = false;
 
-    /**
-     * The "type" of the primary key ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'int';
+    public $timestamps = false;
 
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = true;
-
-    /**
-     * Mass assignable attributes.
-     *
-     * @var array
-     */
     protected $fillable = [
+        'image_id',
+        'product_details_id',
         'product_id',
-        'image_path',
-        'status',
-        'created_at',
-        'updated_at',
+        'thumbnail',
+        'image',
+        'created_date',
     ];
-
-    /**
-     * Attribute casting.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-    ];
-
-    /**
-     * Relationship with ProductCategory.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    // public function productCategory()
-    // {
-    //     return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
-    // }
 
     public function product()
     {
-        return $this->belongsTo(Products::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

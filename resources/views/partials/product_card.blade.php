@@ -6,7 +6,7 @@
     $off = $regular > $selling && $regular > 0 ? (int) round((($regular - $selling) / $regular) * 100) : null;
 @endphp
 <article class="bg-white rounded-xl shadow-sm overflow-hidden border border-stone-200 flex flex-col">
-    <a href="{{ url('/product-detail/' . $product->id) }}" class="block bg-stone-100 h-48">
+    <a href="{{ \App\Support\CataloguePath::product($product) }}" class="block bg-stone-100 h-48">
         @if($imagePath)
             <img src="{{ asset('uploads/products/' . $imagePath) }}" alt="{{ $product->product_title }}" class="h-48 w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             <span class="hidden h-48 w-full items-center justify-center text-stone-400 text-sm">Image coming soon</span>
@@ -16,7 +16,7 @@
     </a>
     <div class="p-5 flex flex-col flex-1">
         <h3 class="text-base font-semibold text-stone-900 leading-snug">
-            <a href="{{ url('/product-detail/' . $product->id) }}">{{ $product->product_title }}</a>
+            <a href="{{ \App\Support\CataloguePath::product($product) }}">{{ $product->product_title }}</a>
         </h3>
         <p class="text-sm text-stone-500 mt-1">SKU {{ $product->sku_id }}</p>
         <div class="mt-4 flex items-baseline gap-2">
@@ -28,6 +28,6 @@
                 @endif
             @endif
         </div>
-        <a href="{{ url('/product-detail/' . $product->id) }}" class="mt-4 inline-flex text-sm font-medium text-amber-800">View product</a>
+        <a href="{{ \App\Support\CataloguePath::product($product) }}" class="mt-4 inline-flex text-sm font-medium text-amber-800">View product</a>
     </div>
 </article>

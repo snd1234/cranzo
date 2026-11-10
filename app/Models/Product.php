@@ -55,8 +55,13 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'sub_category_id',
+        'ternary_category_id',
         'product_title',
+        'slug',
         'description',
+        'meta_title',
+        'meta_keywords',
+        'meta_description',
         'product_highlights',
         'sku_id',
         'actual_price',
@@ -72,7 +77,6 @@ class Product extends Model
         'created_at',
         'updated_at',
         'created_by',
-        'updated_by',
     ];
 
     /**
@@ -102,6 +106,11 @@ class Product extends Model
     public function productImages()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(ProductDetail::class, 'product_id', 'id');
     }
 
 }

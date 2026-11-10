@@ -32,7 +32,9 @@
                         <thead class="table-light">
                             <tr>
                                 <th width="5%">#</th>
+                                <th width="8%">Image</th>
                                 <th>Name</th>
+                                <th>Slug</th>
                                 <th>Category</th>
                                 <th width="10%">Status</th>
                                 <th width="15%">Created</th>
@@ -43,8 +45,14 @@
                             @forelse($subcategories as $subcategory)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        @if(!empty($subcategory['image']))
+                                            <img src="{{ asset(str_contains($subcategory['image'], '/') ? $subcategory['image'] : 'uploads/subcategories/'.$subcategory['image']) }}" alt="" style="width:48px;height:48px;object-fit:cover;" class="rounded border">
+                                        @endif
+                                    </td>
                                     <td><strong>{{ $subcategory['name'] }}</strong></td>
-                                    <td>{{ $subcategory['category']['name']}}</td>
+                                    <td>{{ $subcategory['slug'] ?? '' }}</td>
+                                    <td>{{ data_get($subcategory, 'category.name', '—') }}</td>
                                     <td>
                                         @if($subcategory['status'] == 1)
                                             <span class="badge bg-success">Active</span>
@@ -64,7 +72,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">
+                                    <td colspan="8" class="text-center py-4 text-muted">
                                         <i class="fas fa-inbox me-2"></i>No sub categories found.
                                     </td>
                                 </tr>

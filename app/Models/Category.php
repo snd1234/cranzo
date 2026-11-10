@@ -54,6 +54,11 @@ class Category extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
+        'image',
+        'meta_title',
+        'meta_keywords',
+        'meta_description',
         'status',
         'created_at',
         'created_by',

@@ -55,6 +55,19 @@
                                     <label class="form-label">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $subCategory->name) }}" required>
                                 </div>
+                                @include('admin.partials.seo_fields', ['record' => $subCategory])
+
+                                <div class="mb-2">
+                                    <label class="form-label">Image</label>
+                                    @if($subCategory->image)
+                                        <div class="mb-2">
+                                            <img src="{{ asset(str_contains($subCategory->image, '/') ? $subCategory->image : 'uploads/subcategories/'.$subCategory->image) }}" alt="" style="width:120px;height:120px;object-fit:cover;" class="rounded border">
+                                        </div>
+                                    @endif
+                                    <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp" class="form-control @error('image') is-invalid @enderror">
+                                    <div class="form-text">Leave empty to keep the current image. JPG, PNG, or WEBP. Maximum 2 MB.</div>
+                                    <div id="imagePreviewContainer" class="mt-2"></div>
+                                </div>
 
                                 <div class="mb-2">
                                     <label class="form-label">Status</label>
@@ -75,5 +88,28 @@
             </div>
         </div>
     </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const imageInput = document.getElementById('image');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        if (!imageInput || !previewContainer) return;
+        imageInput.addEventListener('change', function (e) {
+            previewContainer.innerHTML = '';
+            const file = e.target.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                const img = document.createElement('img');
+                img.src = ev.target.result;
+                img.style.width = '120px';
+                img.style.height = '120px';
+                img.style.objectFit = 'cover';
+                img.classList.add('rounded', 'border');
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+    </script>
 
 @endsection

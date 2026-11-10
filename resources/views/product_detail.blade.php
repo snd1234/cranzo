@@ -60,4 +60,20 @@
     </div>
 </section>
 @endif
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Product',
+    'name' => $product->product_title,
+    'sku' => $product->sku_id,
+    'description' => \Illuminate\Support\Str::limit(trim(strip_tags($product->description)), 300, ''),
+    'offers' => [
+        '@type' => 'Offer',
+        'priceCurrency' => 'INR',
+        'price' => number_format((float) $product->discounted_price, 2, '.', ''),
+        'availability' => $stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        'url' => \App\Support\CataloguePath::product($product),
+    ],
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
 @endsection

@@ -1,0 +1,224 @@
+@media only screen and (min-width: 1201px) {
+.carousel> .carousel-inner> .item > .carousel-caption > h1{
+	text-transform: uppercase;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.carousel> .carousel-inner> .item > .carousel-caption > h3{
+    font-size: 30px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+.navbar-static .nav> li >a{padding: 15px 30px 15px 0px;}
+
+.image-banner .banner-cont {
+	padding-top: 200px;
+	padding-bottom: 200px;
+}
+
+.image-banner .banner-cont .heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.image-banner .banner-cont .subheading {
+    font-size: 30px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+}
+/* Medium Layout: 1280px. */
+@media only screen and (min-width: 992px) and (max-width: 1200px) { 
+.carousel> .carousel-inner> .item > .carousel-caption > h1{
+	text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.carousel> .carousel-inner> .item > .carousel-caption > h3{
+    font-size: 24px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+.navbar-static .nav> li >a{padding: 15px 30px 15px 0px;}    
+
+.image-banner .banner-cont {
+	padding-top: 200px;
+	padding-bottom: 200px;
+}
+
+.image-banner .banner-cont .heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.image-banner .banner-cont .subheading {
+    font-size: 24px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+}
+/* Tablet Layout: 768px. */
+@media only screen and (min-width: 768px) and (max-width: 991px) { 
+.carousel> .carousel-inner> .item > .carousel-caption > h1{
+	text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.carousel> .carousel-inner> .item > .carousel-caption > h3{
+    font-size: 24px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+ 
+ .image-banner .banner-cont {
+	padding-top: 200px;
+	padding-bottom: 200px;
+}
+   
+.image-banner .banner-cont .heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.image-banner .banner-cont .subheading {
+    font-size: 24px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+   
+}
+/* Mobile Layout: 320px. */
+@media only screen and (max-width: 767px) { 
+.carousel> .carousel-inner> .item > .carousel-caption > h1{
+	text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.carousel> .carousel-inner> .item > .carousel-caption > h3{
+    font-size: 20px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+    
+.image-banner .banner-cont{
+	padding-top: 80px;
+	padding-bottom: 80px;
+	}	
+
+.carousel-inner > .item > .carousel-caption {
+    top: 30%;
+    bottom: 50%;
+}		
+
+.image-banner .banner-cont .heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.image-banner .banner-cont .subheading {
+    font-size: 20px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+	
+}
+/* Wide Mobile Layout: 480px. */
+@media only screen and (min-width: 481px) and (max-width: 767px) { 
+
+.carousel> .carousel-inner> .item > .carousel-caption > h1{
+	text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.carousel> .carousel-inner> .item > .carousel-caption > h3{
+    font-size: 20px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+.image-banner .banner-cont{
+	padding-top: 80px;
+	padding-bottom: 80px;
+	}
+
+.carousel-inner > .item > .carousel-caption {
+    top: 30%;
+    bottom: 50%;
+}
+
+
+.image-banner .banner-cont .heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.image-banner .banner-cont .subheading {
+    font-size: 20px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+}
+
+@media only screen and (max-width: 480px) { 
+
+.carousel> .carousel-inner> .item > .carousel-caption > h1{
+	text-transform: uppercase;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.carousel> .carousel-inner> .item > .carousel-caption > h3{
+    font-size: 16px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+.image-banner .banner-cont{
+	padding-top: 80px;
+	padding-bottom: 80px;
+	}
+
+.carousel-inner > .item > .carousel-caption {
+    top: 13%;
+    bottom: 50%;
+}
+
+.image-banner .banner-cont .heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1em;
+    margin-bottom: 50px;
+}
+.image-banner .banner-cont .subheading {
+    font-size: 16px;
+    line-height: 1em;
+    margin-bottom: 25px;
+}
+
+}

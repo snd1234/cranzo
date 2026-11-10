@@ -31,7 +31,9 @@
                             <thead class="table-light">
                                 <tr>
                                     <th width="5%">#</th>
+                                    <th width="8%">Image</th>
                                     <th>Name</th>
+                                    <th>Slug</th>
                                     <th width="10%">Status</th>
                                     <th width="15%">Created</th>
                                     <th width="10%">Actions</th>
@@ -41,7 +43,13 @@
                                 @forelse($categories as $category)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            @if(!empty($category['image']))
+                                                <img src="{{ asset(str_contains($category['image'], '/') ? $category['image'] : 'uploads/categories/'.$category['image']) }}" alt="" style="width:48px;height:48px;object-fit:cover;" class="rounded border">
+                                            @endif
+                                        </td>
                                         <td><strong>{{ $category['name'] }}</strong></td>
+                                        <td>{{ $category['slug'] ?? '' }}</td>
                                         <td>
                                             @if($category['status'] == 1)
                                                 <span class="badge bg-success">Active</span>
@@ -61,7 +69,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">
+                                        <td colspan="7" class="text-center py-4 text-muted">
                                             <i class="fas fa-inbox me-2"></i>No categories found.
                                         </td>
                                     </tr>

@@ -45,8 +45,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td><strong>{{ $product['product_title'] }}</strong></td>
-                                    <td>{{ $product['category']['name'] }}</td>
-                                    <td>{{ $product['sub_category']['name'] }}</td>
+                                    <td>{{ data_get($product, 'category.name', '—') }}</td>
+                                    <td>{{ data_get($product, 'sub_category.name', '—') }}</td>
                                     <td>₹{{ number_format($product['actual_price'], 2) }}</td>
                                     <td>
                                         @if($product['status'] == 1)
@@ -57,6 +57,9 @@
                                     </td>
                                     <td>{{ date("M d, Y", strtotime($product['created_at'])) }}</td>
                                     <td>
+                                        <a href="{{ route('product.view', $product['id']) }}" class="btn btn-sm btn-outline-secondary" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
                                         <a href="{{ url('system-auth/update-product/'.$product['id']) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>

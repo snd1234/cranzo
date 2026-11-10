@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\ProductRequest;
 use App\Models\{Admin, Category, SubCategory, Product, Orders, OrderDetail, Addresss};
+use App\Services\ProductCatalog;
+use App\Support\CataloguePath;
+use App\Support\Slugger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AdminController extends BaseController
 {
@@ -128,13 +133,17 @@ class AdminController extends BaseController
     public function addCategory(Request $request)
     {
         if ($request->isMethod('post')) {
-            $validated = $request->validate([
+            $this->prepareSlug($request);
+            $validated = $request->validate(array_merge([
                 'name'  => 'required|string|max:255|unique:category,name',
                 'status' => 'required|in:0,1',
-            ]);
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            ], $this->seoRules('category')));
             $category = Category::create([
                 'name' => $validated['name'],
+                'image' => $request->hasFile('image') ? $this->storeUploadedImage($request->file('image'), 'categories') : null,
                 'status' => $validated['status'],
+                ...$this->seoValues('category', $validated['name']),
                 'created_by' => Auth::guard('admin')->id(),
                 'created_at' => now(),
                 'updated_by' => Auth::guard('admin')->id(),
@@ -152,12 +161,20 @@ class AdminController extends BaseController
     {
         $category = Category::findOrFail($id);
         if ($request->isMethod('put')) {
-            $validated = $request->validate([
+            $this->prepareSlug($request);
+            $validated = $request->validate(array_merge([
                 'name'  => 'required|string|max:255|unique:category,name,' . $category->id,
                 'status' => 'required|in:0,1',
-            ]);
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            ], $this->seoRules('category', $category->id)));
             $category->name = $validated['name'];
             $category->status = $validated['status'];
+            $category->fill($this->seoValues('category', $validated['name'], $category->id));
+            if ($request->hasFile('image')) {
+                $filename = $this->storeUploadedImage($request->file('image'), 'categories');
+                $this->deleteUploadedImage($category->image, 'categories');
+                $category->image = $filename;
+            }
             $category->updated_by = Auth::guard('admin')->id();
             $category->updated_at = now();
             if(!$category->save()){
@@ -196,15 +213,19 @@ class AdminController extends BaseController
     public function addSubCategory(Request $request)
     {
         if ($request->isMethod('post')) {
-            $validated = $request->validate([
+            $this->prepareSlug($request);
+            $validated = $request->validate(array_merge([
                 'category_id' => 'required|exists:category,id',
                 'name'  => 'required|string|max:255|unique:sub_category,name',
                 'status' => 'required|in:0,1',
-            ]);
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            ], $this->seoRules('sub_category')));
             $subcategory = SubCategory::create([
                 'category_id' => $validated['category_id'],
                 'name' => $validated['name'],
+                'image' => $request->hasFile('image') ? $this->storeUploadedImage($request->file('image'), 'subcategories') : null,
                 'status' => $validated['status'],
+                ...$this->seoValues('sub_category', $validated['name']),
                 'created_by' => Auth::guard('admin')->id(),
                 'created_at' => now(),
                 'updated_by' => Auth::guard('admin')->id(),
@@ -224,14 +245,22 @@ class AdminController extends BaseController
         $id = decrypt($id);
         $subCategory = SubCategory::findOrFail($id);
         if ($request->isMethod('put')) {
-            $validated = $request->validate([
+            $this->prepareSlug($request);
+            $validated = $request->validate(array_merge([
                 'category_id' => 'required|exists:category,id',
                 'name'  => 'required|string|max:255|unique:sub_category,name,' . $subCategory->id,
                 'status' => 'required|in:0,1',
-            ]);
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            ], $this->seoRules('sub_category', $subCategory->id)));
             $subCategory->category_id = $validated['category_id'];
             $subCategory->name = $validated['name'];
             $subCategory->status = $validated['status'];
+            $subCategory->fill($this->seoValues('sub_category', $validated['name'], $subCategory->id));
+            if ($request->hasFile('image')) {
+                $filename = $this->storeUploadedImage($request->file('image'), 'subcategories');
+                $this->deleteUploadedImage($subCategory->image, 'subcategories');
+                $subCategory->image = $filename;
+            }
             $subCategory->updated_by = Auth::guard('admin')->id();
             $subCategory->updated_at = now();
             if(!$subCategory->save()){
@@ -272,28 +301,86 @@ class AdminController extends BaseController
         // to be implemented
     }
     
-    public function addProduct(Request $request)
+    public function addProduct(Request $request, ProductCatalog $catalog)
     {
-        
-         if ($request->isMethod('post')) {
-            $validated = $request->validate([
-                'category_id' => 'required|exists:category,id',
-                'product_title'  => 'required|string|max:255|unique:sub_category,name',
-                'status' => 'required|in:0,1',
-            ]);
+        if ($request->isMethod('post')) {
+            $validated = $this->validateProduct($request);
+            $productId = $catalog->create($validated, $request->file('images', []) ?? [], (int) Auth::guard('admin')->id());
+
+            return redirect()->route('product.view', $productId)->with('success', 'Product added.');
         }
-        $categories = Category::where('status', 1)->get();
-        $subcategories = SubCategory::where('status', 1)->get();
-        return view('admin.add_product', compact('categories', 'subcategories'));
-           
+
+        return view('admin.add_product', $this->productFormData());
     }
-    public function updateProduct(Request $request, $id)
+
+    public function viewProduct($id)
     {
-        // to be implemented
+        $product = Product::findOrFail($id);
+        $data = $this->productFormData($product);
+        $data['publicUrl'] = $product->status ? CataloguePath::product($product) : null;
+
+        return view('admin.view_product', $data);
     }
+
+    public function updateProduct(Request $request, $id, ProductCatalog $catalog)
+    {
+        $product = Product::findOrFail($id);
+        if ($request->isMethod('put')) {
+            $validated = $this->validateProduct($request);
+            $catalog->update(
+                $product->id,
+                $validated,
+                $request->file('images', []) ?? [],
+                array_map('intval', $request->input('remove_images', [])),
+                (int) Auth::guard('admin')->id()
+            );
+
+            return redirect()->route('product.view', $product->id)->with('success', 'Product updated.');
+        }
+
+        return view('admin.edit_product', $this->productFormData($product));
+    }
+
     public function deleteProduct($id)
     {
-        // to be implemented
+        $product = Product::findOrFail($id);
+        $product->status = 0;
+        $product->updated_at = now();
+        $product->update_by = Auth::guard('admin')->id();
+        $product->save();
+
+        return redirect()->route('product.index')->with('success', 'Product marked inactive. Its images and stock were kept.');
+    }
+
+    private function validateProduct(Request $request): array
+    {
+        $this->prepareSlug($request);
+        $form = ProductRequest::createFrom($request);
+        $form->setContainer(app())->setRedirector(app('redirect'));
+        $form->validateResolved();
+
+        return $form->validated();
+    }
+
+    private function productFormData(?Product $product = null): array
+    {
+        return [
+            'product' => $product,
+            'categories' => Category::orderBy('name')->get(),
+            'subcategories' => DB::table('sub_category')->orderBy('name')->get(['id', 'category_id', 'name']),
+            'ternaryCategories' => DB::table('ternary_category')->orderBy('ternary_title')->get(['ternary_id', 'ternary_title', 'sub_category_id', 'category_id']),
+            'colors' => DB::table('colors')->where('color_status', 1)->orderBy('color_title')->get(),
+            'details' => $product
+                ? DB::table('product_details')
+                    ->leftJoin('colors', 'colors.color_id', '=', 'product_details.color_id')
+                    ->where('product_details.product_id', $product->id)
+                    ->orderBy('product_details.product_details_id')
+                    ->get(['product_details.product_details_id', 'product_details.color_id', 'product_details.product_quantity', 'colors.color_title'])
+                : collect(),
+            'images' => $product
+                ? DB::table('product_images')->where('product_id', $product->id)->orderBy('image_id')->get()
+                : collect(),
+        ];
     }
 
     public function addColor(Request $request)
@@ -367,5 +454,67 @@ class AdminController extends BaseController
                 ->findOrFail($id);
         //echo "<pre>"; print_r($orderData); die;
         return view('admin.view_order', compact('orderData'));
+    }
+
+    private function prepareSlug(Request $request): void
+    {
+        if (! $request->exists('slug')) {
+            return;
+        }
+
+        $slug = Str::slug((string) $request->input('slug'));
+        $request->merge(['slug' => $slug !== '' ? $slug : null]);
+    }
+
+    private function seoRules(string $table, ?int $ignoreId = null): array
+    {
+        $unique = 'unique:'.$table.',slug';
+        if ($ignoreId) {
+            $unique .= ','.$ignoreId;
+        }
+
+        return [
+            'slug' => ['nullable', 'string', 'max:191', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $unique],
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+        ];
+    }
+
+    private function seoValues(string $table, string $source, ?int $ignoreId = null, ?array $validated = null): array
+    {
+        $validated ??= request()->all();
+
+        return [
+            'slug' => ! empty($validated['slug']) ? $validated['slug'] : Slugger::unique($table, $source, $ignoreId),
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_keywords' => $validated['meta_keywords'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+        ];
+    }
+
+    private function storeUploadedImage($file, string $folder): string
+    {
+        $extension = strtolower($file->extension() ?: 'jpg');
+        $filename = $folder.'-'.time().'-'.bin2hex(random_bytes(4)).'.'.$extension;
+        $directory = public_path('uploads/'.$folder);
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+        $file->move($directory, $filename);
+
+        return $filename;
+    }
+
+    private function deleteUploadedImage(?string $stored, string $folder): void
+    {
+        if (! $stored || str_contains($stored, '://')) {
+            return;
+        }
+
+        $path = public_path('uploads/'.$folder.'/'.basename($stored));
+        if (is_file($path)) {
+            unlink($path);
+        }
     }
 }

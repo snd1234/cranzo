@@ -12,11 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function ($middleware) {
         $middleware->redirectGuestsTo(function ($request) {
-            if ($request->is('admin/*')) {
-                return route('admin.login.form');
+            if ($request->is('system-auth/*') || $request->is('admin/*')) {
+                return route('login.form');
             }
 
-            return route('login'); // frontend (if you ever use it)
+            return route('login.form');
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {

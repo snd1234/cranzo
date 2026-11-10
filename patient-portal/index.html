@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Patients Portal</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    
+    <!-- Apple Touch Icons -->
+	<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png">
+
+    <!-- All css files are included here. -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,600i,700,700i,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/plugin.css">
+    <link rel="stylesheet" href="assets/css/default.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+   
+
+</head>
+ <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+<body id="home">
+
+    <!--wrapper section here.. -->
+    <section class="wrapper">
+
+        <!--header start here..-->
+        <header class="pp__header">
+            <!--header top here..-->
+            <div class="pp__header__top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="pp__header__top_left">
+                                <a href="tel:9876543210">
+                                    <span><i class="fa fa-phone fa-lg mr-2" aria-hidden="true"></i></span>
+                                    9876543210
+                                </a>
+                                <a href="mailto:abc@gamil.com">
+                                    <span><i class="fa fa-envelope-o mr-2" aria-hidden="true"></i></span>
+                                    abc@gamil.com
+                                </a>
+                                <a href="#">
+                                    <span><i class="fa fa-clock-o fa-lg mr-2" aria-hidden="true"></i></span>
+                                    Mon to sat 07 am to 12 am
+                                </a>
+
+                                <button onclick="location.href = 'appointment.html';"  class="bookAppnt float-right">Book Appointment</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header top here..-->
+            <!--main-menu here..-->
+            <div id="sticky-header-with-topbar" class="mainmenu__wrap sticky__header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-4  col-sm-6 col-xs-7">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <span>Patients</span> Portal
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8  d-none d-lg-block">
+                            <nav class="main__menu__nav ">
+                                <ul class="main__menu">
+                                    <li class="drop"><a href="#home">Home</a></li>
+                                    <li class="drop"><a href="#aboutus">About</a>
+                                        <!-- <ul class="dropdown">
+                                            <li><a href="#">About us</a></li>
+                                            <li><a href="#">Message</a></li>
+                                            <li><a href="#">Medical Staff</a></li>
+                                        </ul> -->
+                                    </li>
+                                    <li class="drop"><a href="#service">Services</a></li>
+                                    <li class="drop"><a href="#department">Department</a>
+                                        <!-- <ul class="dropdown">
+                                            <li><a href="#">Fertility Clinic</a></li>
+                                            <li><a href="#">Obsterics / Gynaecology</a></li>
+                                            <li><a href="#">Paediatrics & Neonatology</a></li>
+                                        </ul> -->
+                                    </li>
+                                    <li class="drop"><a href="#gallery">Gallery</a></li>
+                                    <li class="drop"><a href="#contactus">Contact</a></li>
+
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mobile-menu d-lg-none mean-container">
+                                <div class="mean-bar">
+                                    <a href="#nav" class="meanmenu-reveal"><span></span><span></span><span></span>
+                                    </a>
+
+                                    <nav class="mean-nav">
+                                        <ul style="display: none;">
+                                            <li class="drop"><a href="#home">Home</a></li>
+                                            <li class="drop"><a href="#aboutus">About</a>
+                                                <ul class="dropdown">
+                                                    <li><a href="#">About us</a></li>
+                                                    <li><a href="#">Message</a></li>
+                                                    <li><a href="#">Medical Staff</a></li>
+                                                </ul>
+                                                <span class="mean-expand" href="#">+</span>
+                                            </li>
+                                            <li class="drop"><a href="#service">Services</a></li>
+                                            <li class="drop"><a href="#department">Department</a>
+                                                <ul class="dropdown">
+                                                    <li><a href="#">Fertility Clinic</a></li>
+                                                    <li><a href="#">Obsterics / Gynaecology</a></li>
+                                                    <li><a href="#">Paediatrics & Neonatology</a></li>
+                                                </ul>
+                                                <span class="mean-expand" href="#">+</span>
+                                            </li>
+                                            <li class="drop"><a href="#gallery">Gallery</a></li>
+                                            <li class="drop"><a href="#contactus">Contact</a></li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--main-menu here..-->
+        </header>
+        <!--header End here ..-->
+
+        <!--slider-area start here.. -->
+        <div class="slider__wrap">
+            <div>
+                <img src="assets/img/slider-1.jpg" alt="slider">
+                <div class="slider__outer__text">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="slider__inner1__text">
+                                    <div class="slider__inner2__text">
+                                        <div class="slider-content slider-text-animation">
+                                            <h1>Better life needs</h1>
+                                            <h2>better care</h2>
+                                            <a href="#">Meet Our Doctors</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <img src="assets/img/slider-2.jpg" alt="slider">
+                <div class="slider__outer__text">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="slider__inner1__text">
+                                    <div class="slider__inner2__text">
+                                        <div class="slider-content slider-text-animation">
+                                            <h1>Better life needs</h1>
+                                            <h2>better care</h2>
+                                            <a href="#">Meet Our Doctors</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <img src="assets/img/slider-3.jpg" alt="slider">
+                <div class="slider__outer__text">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="slider__inner1__text">
+                                    <div class="slider__inner2__text">
+                                        <div class="slider-content slider-text-animation">
+                                            <h1>Better life needs</h1>
+                                            <h2>better care</h2>
+                                            <a href="#">Meet Our Doctors</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--slider-area End here.. -->
+
+        <!--Suport area Start here.. -->
+        <section class="pp__suport ptb--50" id="aboutus">
+            <div class="container">
+                <div class="row">
+                    <div class="pp__support__wrap clearfix">
+                        <div class="pp_suport_images">
+                            <img src="assets/img/h_about.png" alt="">
+                        </div>
+                        <div class="col-lg-7 col-sm-12 col-12">
+                            <div class="pp__support__content">
+                                <div class="pp__support__inner">
+                                    <h4 class="text--theme">About...</h4>
+                                    <h2 class="text--theme">Health is the root of <br> all happiness</h2>
+                                    <div class="pp__support__details">
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy text ever since the
+                                            1500s, when an unknown printer.</p>
+                                    </div>
+                                    <!-- <div class="pp__spt__dai">
+                                        <div class="play_video">
+                                            <a href="#"><i class="fa fa-play" aria-hidden="true"></i></a>
+                                            <span>Play This Video</span>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Suport area End here.. -->
+
+        <!--solve arae start here.. -->
+        <section class="pp__solve__area" id="service">
+            <div class="container-fluid">
+                <div class="home--try"
+                    style="background: rgba(0, 0, 0, 0) url(assets/img/bg_service.png) no-repeat scroll 0 0 / cover;">
+                    <div class="pp__try__solveleft">
+                        <div class="pp__try__details">
+                            <div class="try_solve_middle_inner">
+                                <h2>Happiness is nothing more than good health and a bad memory.</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-lg-5 col-lg-7 col-md-12 col-12">
+                        <div class="pp__solve__items">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6 doctor-feature-inner">
+                                    <div class="doctor-feature mb--20">
+                                            <div class="ser_icon">
+                                                    <img src="assets/img/ser-cion.png" alt="services Icon">
+                                                </div>
+                                        <h2><a href="#">Stress Management</a></h2>
+                                        <p>Eaque ipsa quae ab illo inventore veritatis.</p>
+                                    </div>
+                                </div>			
+                                <div class="col-md-6 col-sm-6 col-xs-6 doctor-feature-inner">
+                                    <div class="doctor-feature mb--20">
+                                            <div class="ser_icon">
+                                                    <img src="assets/img/ser-cion-3.png" alt="services Icon">
+                                                </div>
+                                        <h2><a href="#">Medical Consulting</a></h2>
+                                        <p>Eaque ipsa quae ab illo inventore veritatis.</p>
+                                    </div>
+                                </div>		
+                                <div class="col-md-6 col-sm-6 col-xs-6 doctor-feature-inner">
+                                    <div class="doctor-feature mb--20">
+                                            <div class="ser_icon">
+                                                    <img src="assets/img/ser-cion-2.png" alt="services Icon">
+                                                </div>
+                                        <h2><a href="#">Relationship</a></h2>
+                                        <p>Eaque ipsa quae ab illo inventore veritatis.</p>
+                                    </div>
+                                </div>			
+                                <div class="col-md-6 col-sm-6 col-xs-6 doctor-feature-inner">
+                                    <div class="doctor-feature mb--20">
+                                            <div class="ser_icon">
+                                                    <img src="assets/img/ser-cion-4.png" alt="services Icon">
+                                                </div>
+                                        <h2><a href="#">Anxiety</a></h2>
+                                        <p>Eaque ipsa quae ab illo inventore veritatis.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--solve arae end here.. -->
+
+
+        <!--working area strat here.. -->
+        <section class="pp__working__area gallery--1 ptb--50" id="department">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section__title text-center pb--50">
+                            <h2 class="title__line text--theme">Our Working Area</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Start Single Gallery -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="singel_project mb--30">
+                            <div class="project_img">
+                                <a href="#">
+                                    <img src="assets/img/dept01.png" alt="Cardiology Icon">
+                                </a>
+                            </div>
+                            <div class="project_content">
+                                <h3><img src="assets/img/icon-1.png" alt="Cardiology Dept"><a
+                                        href="#">Cardiology Dep.</a></h3>
+                                <p>The point of using Lorem Ipsum is that it has a more-or-less normal</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="singel_project mb--30">
+                            <div class="project_img">
+                                <a href="#">
+                                    <img src="assets/img/dept02.png" alt="Cardiology Dept">
+                                </a>
+                            </div>
+                            <div class="project_content">
+                                <h3><img src="assets/img/icon-11.png" alt="Cardiology icon"><a
+                                        href="#">Surgery Dep.</a></h3>
+                                <p>The point of using Lorem Ipsum is that it has a more-or-less normal</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="singel_project mb--30">
+                            <div class="project_img">
+                                <a href="#">
+                                    <img src="assets/img/dept03.png" alt="Cardiology Icon">
+                                </a>
+                            </div>
+                            <div class="project_content">
+                                <h3><img src="assets/img/icon-111.png" alt="Cardiology Dept"><a
+                                        href="#">Child Care Dep.</a></h3>
+                                <p>The point of using Lorem Ipsum is that it has a more-or-less normal</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Gallery -->
+                </div>
+            </div>
+        </section>
+        <!--working area end here.. -->
+
+
+        <!--counter up area strat here.. -->
+        <section class="pp__counter_area  bg-light-gray">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="single-counter-inner">
+                            <div class="counter-number">
+                                <h1 class="counter">10</h1>
+                            </div>
+                            <div class="counter-text">
+                                <h2>Years of </h2>
+                                <h2>Experience</h2>
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="single-counter-inner">
+                            <div class="counter-number">
+                                <h1 class="counter">75</h1>
+                            </div>
+                            <div class="counter-text">
+                                <h2>Sucessful Full </h2>
+                                <h2>Treatment</h2>
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="single-counter-inner">
+                            <div class="counter-number">
+                                <h1 class="counter">92</h1>
+                            </div>
+                            <div class="counter-text">
+                                <h2>Hospitals </h2>
+                                <h2>Founder </h2>
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="single-counter-inner">
+                            <div class="counter-number">
+                                <h1 class="counter">12</h1>
+                            </div>
+                            <div class="counter-text">
+                                <h2>Books &amp; </h2>
+                                <h2>Podcasts</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--counter up area end here.. -->
+
+
+
+      
+
+        <!--blog area start here.. -->
+        <section class="pp__blog_area ptb--50" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section__title text-center">
+                            <h2 class="title__line text--theme">Health News</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pp__blog__wrap clearfix mt--30">
+                    <!-- Start single Blog -->
+                    <div class="col-lg-8 col-xl-7 col-md-12 col-12">
+                        <div class="single_latest_post flex left_grid mb--30">
+                            <div class="pp__blog__thumb">
+                                <a href="#">
+                                    <img src="assets/img/img-1.png" alt="blog images">
+                                </a>
+                            </div>
+
+                            <div class="pp__blog__content">
+                                <div class="blog__post_title">
+                                    <h2><a href="#">Best Depression affects children’s mental development.</a></h2>
+                                    <p>There are many variations of passages of Lorem Ipsum available.</p>
+                                </div>
+                                <div class="blog_post__meta">
+                                    <div class="post_author_img">
+                                        <a href="#"><img src="images/blog/latest_post/author_img_1.png" alt=""></a>
+                                    </div>
+                                    <div class="post_content">
+                                        <div class="author_tile">
+                                            <h4><a href="#">Doctors Ltd.</a></h4>
+                                            <div class="publish_info">
+                                                <ul>
+                                                    <li>2 Days Ago</li>
+                                                    <li>44 read</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single_latest_post flex left_grid mb--30">
+
+                            <div class="pp__blog__thumb">
+                                <a href="#">
+                                    <img src="assets/img/img-2.png" alt="blog images">
+                                </a>
+                            </div>
+
+                            <div class="pp__blog__content">
+                                <div class="blog__post_title">
+                                    <h2><a href="#">Best Depression affects children’s mental development.</a></h2>
+                                    <p>There are many variations of passages of Lorem Ipsum available.</p>
+                                </div>
+                                <div class="blog_post__meta">
+                                    <div class="post_author_img">
+                                        <a href="#"><img src="images/blog/latest_post/author_img_2.png" alt=""></a>
+                                    </div>
+                                    <div class="post_content">
+                                        <div class="author_tile">
+                                            <h4><a href="#">Clinic Ltd.</a></h4>
+                                            <div class="publish_info">
+                                                <ul>
+                                                    <li>2 Days Ago</li>
+                                                    <li>44 read</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-xl-5 col-md-12 col-12">
+                        <div class="single_latest_post right_grid">
+                            <div class="pp__blog__thumb">
+                                <a href="blog-details.html">
+                                    <img src="assets/img/img-3.png" alt="blog images">
+                                </a>
+                            </div>
+
+                            <div class="pp__blog__content">
+                                <div class="blog__post_title">
+                                    <h2><a href="blog-details.html">Anxiety disorder affects human life very badly</a></h2>
+                                    <p>There are many variations of passages of Lorem Ipsum available.</p>
+                                </div>
+                                <div class="blog_post__meta">
+                                    <div class="post_author_img">
+                                        <a href="#"><img src="images/blog/latest_post/author_img_3.png" alt=""></a>
+                                    </div>
+                                    <div class="post_content">
+                                        <div class="author_tile">
+                                            <h4><a href="#">Medical Ltd.</a></h4>
+                                            <div class="publish_info">
+                                                <ul>
+                                                    <li>2 Days Ago</li>
+                                                    <li>44 read</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End single Blog -->
+                </div>
+            </div>
+        </section>
+
+        <!--blog area end here.. -->
+
+        <!--gallery area start here.. -->
+        <section class="pp__gallery ptb--50" id="gallery">
+            <div class="single-gallery">
+                <img src="assets/img/p1.jpg" alt="">
+                <div class="single-gallery-overlay">
+                    <a href="assets/img/p1.jpg" class="gallery-photo"><img src="assets/img/cross-shape.png" alt=""></a>									
+                    <div class="single-gallery-text">
+                        <div class="single-gallery-icon">
+                            <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="single-gallery-text-inner">
+                            <h2><a href="#">Mediclub</a></h2>
+                            <span>quam perferendis rerum. </span>
+                        </div>
+                    </div>
+                </div>
+            </div>		
+            <div class="single-gallery">
+                <img src="assets/img/p2.jpg" alt="">
+                <div class="single-gallery-overlay">
+                    <a href="assets/img/p2.jpg" class="gallery-photo"><img src="assets/img/cross-shape.png" alt=""></a>									
+                    <div class="single-gallery-text">
+                        <div class="single-gallery-icon">
+                            <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="single-gallery-text-inner">
+                            <h2><a href="#">Mediclub</a></h2>
+                            <span>quam perferendis rerum. </span>
+                        </div>
+                    </div>
+                </div>
+            </div>		
+            <div class="single-gallery">
+                <img src="assets/img/p3.jpg" alt="">
+                <div class="single-gallery-overlay">
+                    <a href="assets/img/p3.jpg" class="gallery-photo"><img src="assets/img/cross-shape.png" alt=""></a>									
+                    <div class="single-gallery-text">
+                        <div class="single-gallery-icon">
+                            <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="single-gallery-text-inner">
+                            <h2><a href="#">Mediclub</a></h2>
+                            <span>quam perferendis rerum. </span>
+                        </div>
+                    </div>
+                </div>
+            </div>		
+            <div class="single-gallery">
+                <img src="assets/img/p4.jpg" alt="">
+                <div class="single-gallery-overlay">
+                    <a href="assets/img/p4.jpg" class="gallery-photo"><img src="assets/img/cross-shape.png" alt=""></a>									
+                    <div class="single-gallery-text">
+                        <div class="single-gallery-icon">
+                            <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="single-gallery-text-inner">
+                            <h2><a href="#">Mediclub</a></h2>
+                            <span>quam perferendis rerum. </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--gallery area end here.. -->
+
+
+          <!--subscribe area  start here .. -->
+        <section class="pp__subscribe__area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="pp__subscribe__inner">
+                            <div class="newsletter_section_title">
+                                <div class="newsletter-icon">
+                                    <i class="fa fa-medkit" aria-hidden="true"></i>
+                                </div>
+                                <div class="newsletter-text">
+                                    <h4>Special offer</h4>
+                                    <h2 class="text-theme">Get a free medical Checkup</h2>
+                                </div>
+                            </div>
+                            <div class="newsletter__form">
+                                <div class="input__box">
+                                    <form action="#">
+                                        <div class="input_email_inner">
+                                            <input type="email" placeholder="Type Email Address">
+                                        </div>
+                                        <button type="submit">Subscribe</button>
+                                    </form>
+                                </div>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--subscribe area end here .. -->
+
+
+        <!--contact us start here..  -->
+        <section class="pp__contact__area ptb--50" id="contactus">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                        <div class="contact-info-inner">
+                            <div class="contact-info-text">
+                                <h2><i class="fa fa-map-marker" aria-hidden="true"></i> Address</h2>
+                                <span>Tenwave infotech private limited </span>
+                                <span>293, Dhanmill Road, Chattarpur Hills, New Delhi, 110074
+                                    </span>
+                            </div>				
+                            <div class="contact-info-text">
+                                <h2><i class="fa fa-phone" aria-hidden="true"></i> Phone Number</h2>
+                                <span>011 2630 1554</span>
+                                <span>+91-7011657478</span>
+                            </div>			
+                            <div class="contact-info-text">
+                                <h2><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</h2>
+                                <span>info@tenwaveinfo.com</span>
+                                <span>info@tenwaveinfo.com</span>
+                            </div>
+                        </div>
+                    </div>	
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                        <div class="contact-form career-form">	
+                            <form action="#" method="post">			
+                                    <div class="row">
+                                                    
+                                    <div class="col-md-6 col-sm-6 col-xs-12 pd-right-10">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            <input placeholder="First Name" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 pd-right-10">
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input placeholder="Last Name" type="text" class="form-control">
+                                        </div>
+                                    </div>							
+                                    <div class="col-md-6 col-sm-6 col-xs-12 pd-left-10">
+                                        <div class="form-group">
+                                            <label>E-mail</label>
+                                            <input placeholder="E-mail*" type="email"  class="form-control">
+                                        </div>
+                                    </div>				
+                                    <div class="col-md-6 col-sm-6 col-xs-12 pd-right-10">
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            <input placeholder="Phone" type="text"  class="form-control">
+                                        </div>
+                                    </div>																						
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label>MESSAGE</label>
+                                            <textarea placeholder="type in a message" rows="5" cols="10"></textarea>
+                                        </div>
+                                    </div>															
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="contact-btn">
+                                                <button type="submit">Send Message</button>
+                                            </div>	
+                                    </div>																
+                                
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--contact us start here..  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- footer area start here.. -->
+
+        <footer class="pp__footer">
+            <!--pp__footer_top start here.. -->
+            <div class="pp__footer_top ptb--30 ">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                            <ul>
+                                <li><a href="#">Schedule OPD Visit </a></li>
+                                <li><a href="#"> Lab Request</a></li>
+                                <li><a href="#"> Pending OPD</a></li>
+                                <li><a href="#"> Prescription</a></li>
+                                <li><a href="#"> Family Members</a></li>
+                                <li><a href="#"> My Document</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--pp__footer_top start here.. -->
+            <!--pp__footer_copyright start here.. -->
+            <div class="pp__footer_copyright ptb--20 text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <p>Copyright © Tenwave Infotech Pvt. Ltd. All Rights Reserves</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--pp__footer_copyright start here.. -->
+        </footer>
+
+        <!-- footer area End here.. -->
+
+
+
+
+
+
+    </section>
+    <!--wrapper section here.. -->
+
+
+
+    <!--scroll-top here.. -->
+    <a href="javascript:void(0);" class="bdr-ripple-ani-btn" style="display: inline;">
+            <i class="fa fa-angle-up fa-lg" aria-hidden="true"></i>
+    </a>
+    <!--scroll-top here.. -->
+
+   
+
+    <!-- jquery latest version -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!-- <script src="assets/js/jquery.js"></script> -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.js"></script>
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+
+
+
+</body>
+
+</html>
