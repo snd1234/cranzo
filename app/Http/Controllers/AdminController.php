@@ -33,6 +33,9 @@ class AdminController extends BaseController
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
+        $request->session()->regenerate();
+        $request->session()->regenerateToken();
+
         return redirect('/system-auth/login');
     }
 

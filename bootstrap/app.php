@@ -12,12 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function ($middleware) {
         $middleware->redirectGuestsTo(function ($request) {
-            if ($request->is('system-auth/*') || $request->is('admin/*')) {
+            if ($request->is('system-auth') || $request->is('system-auth/*') || $request->is('admin/*')) {
                 return route('login.form');
             }
 
-            return route('login.form');
+            return route('customer.login');
         });
+        $middleware->redirectUsersTo(fn () => route('account.dashboard'));
+        $middleware->alias(['staff' => \App\Http\Middleware\EnsureStaff::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

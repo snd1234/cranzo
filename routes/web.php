@@ -11,6 +11,16 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CmsPageController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CustomerAddressController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\OrderDeskController;
+use App\Http\Controllers\ShopDeskController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
@@ -40,9 +50,58 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/coupon', [CartController::class, 'applyCoupon'])->middleware('throttle:10,1')->name('cart.coupon');
+Route::delete('/cart/coupon', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::post('/wishlist', [WishlistController::class, 'store'])->middleware('throttle:30,1')->name('wishlist.store');
+Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+Route::post('/wishlist/{product}/cart', [WishlistController::class, 'move'])->name('wishlist.move');
+Route::post('/reviews', [ReviewController::class, 'store'])->middleware(['auth', 'verified', 'throttle:5,1'])->name('reviews.store');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [CartController::class, 'place'])->name('checkout.place');
 Route::get('/order/{orderNumber}', [CartController::class, 'complete'])->name('checkout.complete');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
+    Route::post('/login', [CustomerAuthController::class, 'login'])->middleware('throttle:5,1')->name('customer.login.submit');
+    Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
+    Route::post('/register', [CustomerAuthController::class, 'register'])->middleware('throttle:5,1')->name('customer.register.submit');
+    Route::get('/forgot-password', [CustomerAuthController::class, 'showForgot'])->name('password.request');
+    Route::post('/forgot-password', [CustomerAuthController::class, 'sendReset'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/reset-password/{token}', [CustomerAuthController::class, 'showReset'])->name('password.reset');
+    Route::post('/reset-password', [CustomerAuthController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
+});
+Route::post('/logout', [CustomerAuthController::class, 'logout'])->middleware('auth')->name('customer.logout');
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', fn () => view('auth.customer_verify'))->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return redirect()->route('account.dashboard');
+    })->middleware('signed')->name('verification.verify');
+    Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('success', 'A fresh verification link has been sent.');
+    })->middleware('throttle:6,1')->name('verification.send');
+});
+Route::middleware(['auth', 'verified'])->prefix('account')->group(function () {
+    Route::get('/', [AccountController::class, 'dashboard'])->name('account.dashboard');
+    Route::get('/profile', [AccountController::class, 'editProfile'])->name('account.profile');
+    Route::put('/profile', [AccountController::class, 'updateProfile'])->name('account.profile.update');
+    Route::put('/password', [AccountController::class, 'updatePassword'])->name('account.password');
+    Route::get('/orders', [AccountController::class, 'orders'])->name('account.orders');
+    Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('account.order');
+    Route::get('/orders/{order}/invoice', [InvoiceController::class, 'customer'])->name('account.invoice');
+    Route::post('/orders/{order}/returns', [ReturnController::class, 'store'])->name('account.returns.store');
+    Route::get('/returns', [ReturnController::class, 'mine'])->name('account.returns');
+    Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('account.order.cancel');
+    Route::post('/orders/{order}/reorder', [AccountController::class, 'reorder'])->name('account.order.reorder');
+    Route::get('/addresses', [CustomerAddressController::class, 'index'])->name('account.addresses');
+    Route::post('/addresses', [CustomerAddressController::class, 'store'])->name('account.addresses.store');
+    Route::put('/addresses/{address}', [CustomerAddressController::class, 'update'])->name('account.addresses.update');
+    Route::delete('/addresses/{address}', [CustomerAddressController::class, 'destroy'])->name('account.addresses.destroy');
+});
 
 // frontend authentication routes
 // Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
@@ -97,7 +156,34 @@ Route::prefix('system-auth')->group(function () {
     Route::match(['get', 'delete'], '/delete-product/{id}', [AdminController::class, 'deleteProduct'])->name('product.delete')->middleware('auth:admin');
 
     // Order routes
-    Route::get('/orders', [AdminController::class, 'orderList'])->name('order.index')->middleware('auth:admin');
+    Route::middleware(['auth:admin', 'staff:orders'])->group(function () {
+        Route::get('/orders', [OrderDeskController::class, 'index'])->name('order.index');
+        Route::get('/orders/{order}', [OrderDeskController::class, 'show'])->name('order.desk');
+        Route::put('/orders/{order}', [OrderDeskController::class, 'update'])->name('order.desk.update');
+        Route::get('/orders/{order}/invoice', [InvoiceController::class, 'admin'])->name('order.invoice');
+        Route::get('/returns', [ShopDeskController::class, 'returns'])->name('returns.index');
+        Route::put('/returns/{return}', [ShopDeskController::class, 'updateReturn'])->name('returns.update');
+    });
+    Route::middleware(['auth:admin', 'staff:marketing'])->group(function () {
+        Route::get('/coupons', [ShopDeskController::class, 'coupons'])->name('coupons.index');
+        Route::post('/coupons', [ShopDeskController::class, 'storeCoupon'])->name('coupons.store');
+        Route::post('/coupons/{coupon}/status', [ShopDeskController::class, 'couponStatus'])->name('coupons.status');
+    });
+    Route::middleware(['auth:admin', 'staff:reports'])->group(function () {
+        Route::get('/reports', [ShopDeskController::class, 'reports'])->name('reports.index');
+        Route::get('/reports/orders.csv', [ShopDeskController::class, 'exportOrders'])->name('reports.orders');
+    });
+    Route::middleware(['auth:admin', 'staff:stock'])->group(function () {
+        Route::get('/stock', [ShopDeskController::class, 'stock'])->name('stock.index');
+        Route::get('/abandoned-carts', [ShopDeskController::class, 'carts'])->name('carts.abandoned');
+        Route::post('/abandoned-carts/{cart}/recover', [ShopDeskController::class, 'recoverCart'])->name('carts.recover');
+    });
+    Route::middleware(['auth:admin', 'staff:support'])->group(function () {
+        Route::get('/messages', [ShopDeskController::class, 'contacts'])->name('messages.index');
+        Route::put('/messages/{message}', [ShopDeskController::class, 'updateContact'])->name('messages.update');
+        Route::get('/reviews', [ShopDeskController::class, 'reviews'])->name('reviews.index');
+        Route::post('/reviews/{review}/status', [ShopDeskController::class, 'reviewStatus'])->name('reviews.status');
+    });
 
     Route::middleware('auth:admin')->group(function () {
         Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');

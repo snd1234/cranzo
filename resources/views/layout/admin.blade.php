@@ -88,7 +88,11 @@
                         </a>
                         <div class="collapse @if(request()->is('system-auth/orders*')) show @endif" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link @if(request()->is('system-auth/orders')) active @endif" href="{{ url('/system-auth/orders') }}">Order List</a>
+                                @if(\App\Support\Staff::allows('orders'))<a class="nav-link" href="{{ route('order.index') }}">Order List</a><a class="nav-link" href="{{ route('returns.index') }}">Returns</a>@endif
+                                @if(\App\Support\Staff::allows('reports'))<a class="nav-link" href="{{ route('reports.index') }}">Reports</a>@endif
+                                @if(\App\Support\Staff::allows('stock'))<a class="nav-link" href="{{ route('stock.index') }}">Stock</a><a class="nav-link" href="{{ route('carts.abandoned') }}">Abandoned carts</a>@endif
+                                @if(\App\Support\Staff::allows('support'))<a class="nav-link" href="{{ route('messages.index') }}">Messages</a><a class="nav-link" href="{{ route('reviews.index') }}">Reviews</a>@endif
+                                @if(\App\Support\Staff::allows('marketing'))<a class="nav-link" href="{{ route('coupons.index') }}">Coupons</a>@endif
                             </nav>
                         </div>
                         @php

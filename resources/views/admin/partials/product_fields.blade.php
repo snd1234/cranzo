@@ -61,6 +61,7 @@
             <div class="col-md-3 mb-2"><label class="form-label">Width</label><input name="width" class="form-control" value="{{ old('width', $product->width ?? '') }}"></div>
             <div class="col-md-3 mb-2"><label class="form-label">Height</label><input name="height" class="form-control" value="{{ old('height', $product->height ?? '') }}"></div>
             <div class="col-md-3 mb-2"><label class="form-label">Unit</label><input name="m_unit" class="form-control" value="{{ old('m_unit', $product->m_unit ?? '') }}"></div>
+            <div class="col-md-3 mb-2"><label class="form-label">GST % (optional)</label><input name="gst_rate" class="form-control" value="{{ old('gst_rate', $product->gst_rate ?? '') }}" placeholder="Leave blank if unset"></div>
         </div>
         <div class="mb-2">
             <label class="form-label">Highlights</label>

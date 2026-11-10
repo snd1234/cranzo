@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CartRecord;
+use App\Services\CheckoutQuote;
+use App\Services\Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class CartController extends BaseController
 {
     public function index()
     {
-        $items = $this->cartItems();
+        $quote = CheckoutQuote::summary();
 
         return view('cart', [
-            'items' => $items,
-            'total' => $items->sum('line_total'),
+            'items' => $quote['items'],
+            'quote' => $quote,
+            'total' => $quote['total'],
         ]);
     }
 
@@ -23,14 +29,17 @@ class CartController extends BaseController
         $data = $request->validate([
             'product_id' => 'required|integer',
             'quantity' => 'required|integer|min:1|max:10',
+            'color_id' => 'nullable|integer',
         ]);
 
         $product = $this->sellableProduct((int) $data['product_id']);
+        $colorId = $data['color_id'] ?? null;
         $cart = session('shop_cart', []);
         $qty = min(10, ($cart[$product->id]['qty'] ?? 0) + (int) $data['quantity']);
-        $this->assertStock($product->id, $qty);
-        $cart[$product->id] = ['qty' => $qty];
+        $this->assertStock($product->id, $qty, $colorId ? (int) $colorId : null);
+        $cart[$product->id] = ['qty' => $qty, 'color_id' => $colorId ? (int) $colorId : null];
         session(['shop_cart' => $cart]);
+        CartRecord::sync();
 
         if ($request->boolean('buy_now')) {
             return redirect()->route('checkout');
@@ -46,11 +55,13 @@ class CartController extends BaseController
             'quantity' => 'required|integer|min:1|max:10',
         ]);
 
-        $this->assertStock((int) $data['product_id'], (int) $data['quantity']);
         $cart = session('shop_cart', []);
+        $colorId = $cart[$data['product_id']]['color_id'] ?? null;
+        $this->assertStock((int) $data['product_id'], (int) $data['quantity'], $colorId ? (int) $colorId : null);
         if (isset($cart[$data['product_id']])) {
             $cart[$data['product_id']]['qty'] = (int) $data['quantity'];
             session(['shop_cart' => $cart]);
+            CartRecord::sync();
         }
 
         return back();
@@ -61,6 +72,7 @@ class CartController extends BaseController
         $cart = session('shop_cart', []);
         unset($cart[$id]);
         session(['shop_cart' => $cart]);
+        CartRecord::sync();
 
         return back()->with('success', 'Item removed.');
     }
@@ -73,42 +85,73 @@ class CartController extends BaseController
         }
 
         $states = DB::table('state')->where('status', 1)->orderBy('state_name')->get();
+        $addresses = auth()->check()
+            ? DB::table('address')->where('user_id', auth()->id())->orderBy('default_type')->orderByDesc('id')->get()
+            : collect();
+
+        $quote = CheckoutQuote::summary();
 
         return view('checkout', [
-            'items' => $items,
-            'total' => $items->sum('line_total'),
+            'items' => $quote['items'],
+            'quote' => $quote,
             'states' => $states,
+            'addresses' => $addresses,
         ]);
     }
 
     public function place(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:128',
-            'mobile_number' => 'required|string|max:15',
-            'address' => 'required|string|max:256',
-            'locality' => 'required|string|max:256',
-            'city' => 'required|string|max:30',
-            'state_id' => 'required|integer',
-            'pincode' => 'required|digits:6',
-        ]);
+        if ($request->filled('address_id')) {
+            abort_unless(auth()->check(), 403);
+            $saved = DB::table('address')
+                ->where('id', $request->integer('address_id'))
+                ->where('user_id', auth()->id())
+                ->first();
+            if (! $saved) {
+                throw ValidationException::withMessages(['address_id' => 'Choose one of your saved addresses.']);
+            }
+            $data = [
+                'name' => $saved->name,
+                'mobile_number' => $saved->mobile_number,
+                'address' => $saved->address,
+                'locality' => $saved->locality,
+                'city' => $saved->city,
+                'state_id' => $saved->state_id,
+                'pincode' => (string) $saved->pincode,
+            ];
+        } else {
+            $data = $request->validate([
+                'name' => 'required|string|max:128',
+                'mobile_number' => 'required|string|max:15',
+                'address' => 'required|string|max:256',
+                'locality' => 'required|string|max:256',
+                'city' => 'required|string|max:30',
+                'state_id' => 'required|integer',
+                'pincode' => 'required|digits:6',
+            ]);
+        }
 
-        $items = $this->cartItems();
+        if ($request->input('payment_method', 'cod') !== 'cod') {
+            return back()->withErrors(['payment_method' => 'Online payment is not available yet. Choose cash on delivery.'])->withInput();
+        }
+
+        $quote = CheckoutQuote::summary((int) $data['state_id']);
+        $items = $quote['items'];
         if ($items->isEmpty()) {
             return redirect()->route('cart.index');
         }
-
-        foreach ($items as $item) {
-            $this->assertStock($item->id, $item->qty);
+        if ($quote['coupon_error']) {
+            return back()->withErrors(['coupon' => $quote['coupon_error']]);
         }
 
         $orderNumber = now()->format('YmdHis').random_int(10, 99);
 
-        DB::transaction(function () use ($data, $items, $orderNumber) {
+        try {
+        DB::transaction(function () use ($data, $items, $orderNumber, $quote) {
             $addressId = ((int) DB::table('address')->lockForUpdate()->max('id')) + 1;
             DB::table('address')->insert([
                 'id' => $addressId,
-                'user_id' => 0,
+                'user_id' => auth()->id() ?: 0,
                 'name' => $data['name'],
                 'mobile_number' => $data['mobile_number'],
                 'address' => $data['address'],
@@ -124,7 +167,7 @@ class CartController extends BaseController
             $orderId = DB::table('orders')->insertGetId([
                 'session_id' => session()->getId(),
                 'order_number' => $orderNumber,
-                'user_id' => 0,
+                'user_id' => auth()->id() ?: 0,
                 'address_id' => $addressId,
                 'order_status' => 1,
                 'payment_status' => 1,
@@ -140,7 +183,7 @@ class CartController extends BaseController
                 DB::table('order_details')->insert([
                     'id' => $detailId,
                     'order_id' => $orderId,
-                    'user_id' => 0,
+                    'user_id' => auth()->id() ?: 0,
                     'product_id' => $item->id,
                     'product_title' => $item->product_title,
                     'image' => $item->image_name ?: 'no-image.jpg',
@@ -148,27 +191,54 @@ class CartController extends BaseController
                     'amount_per_item' => (string) (int) $item->price,
                 ]);
 
-                $stockRow = DB::table('product_details')->where('product_id', $item->id)->orderBy('product_details_id')->first();
-                if ($stockRow) {
-                    DB::table('product_details')
-                        ->where('product_details_id', $stockRow->product_details_id)
-                        ->update(['product_quantity' => max(0, (int) $stockRow->product_quantity - $item->qty)]);
-                }
+                Inventory::deduct((int) $item->id, $item->color_id ? (int) $item->color_id : null, (int) $item->qty, (int) $orderId);
             }
 
             $paymentId = ((int) DB::table('payments')->max('payment_id')) + 1;
             DB::table('payments')->insert([
                 'payment_id' => $paymentId,
                 'order_id' => $orderId,
-                'total_amount' => (string) (int) $items->sum('line_total'),
+                'total_amount' => (string) (int) round($quote['total']),
                 'amount_recieved' => '0',
                 'discount_percent' => null,
                 'payment_status' => 1,
                 'created_date' => now(),
             ]);
+            if (\Illuminate\Support\Facades\Schema::hasTable('order_adjustments')) {
+                DB::table('order_adjustments')->insert([
+                    'order_id' => $orderId,
+                    'subtotal' => $quote['subtotal'],
+                    'discount' => $quote['discount'],
+                    'tax' => $quote['tax'],
+                    'total' => $quote['total'],
+                    'coupon_code' => $quote['coupon'],
+                    'tax_label' => $quote['tax_label'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            if ($quote['coupon']) {
+                $coupon = DB::table('coupons')->where('code', $quote['coupon'])->first();
+                if ($coupon) {
+                    DB::table('coupon_redemptions')->insert([
+                        'coupon_id' => $coupon->id,
+                        'user_id' => auth()->id(),
+                        'order_id' => $orderId,
+                        'amount' => $quote['discount'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
         });
+        } catch (\RuntimeException $exception) {
+            return back()->withErrors(['quantity' => 'Not enough stock to place this order.']);
+        }
 
+        $this->sendOrderMail($data['name'], $orderNumber, $quote['total']);
+        CartRecord::converted();
         session()->forget('shop_cart');
+        session()->forget('shop_coupon');
         session(['last_order_number' => $orderNumber]);
 
         return redirect()->route('checkout.complete', $orderNumber);
@@ -191,35 +261,45 @@ class CartController extends BaseController
         return view('order_complete', compact('order', 'details', 'payment'));
     }
 
-    private function cartItems()
+    public function applyCoupon(Request $request)
     {
-        $cart = session('shop_cart', []);
-        if ($cart === []) {
-            return collect();
+        $data = $request->validate(['code' => ['required', 'string', 'max:40']]);
+        session(['shop_coupon' => strtoupper(trim($data['code']))]);
+        $quote = CheckoutQuote::summary();
+        if ($quote['coupon_error']) {
+            session()->forget('shop_coupon');
+
+            return back()->withErrors(['coupon' => $quote['coupon_error']]);
         }
 
-        $products = DB::table('product')
-            ->whereIn('id', array_keys($cart))
-            ->where('status', 1)
-            ->get();
+        return back()->with('success', 'Coupon applied.');
+    }
 
-        $this->attachProductImages($products);
-        $products = $products->keyBy('id');
+    public function removeCoupon()
+    {
+        session()->forget('shop_coupon');
 
-        return collect($cart)->map(function ($row, $id) use ($products) {
-            $product = $products->get((int) $id);
-            if (! $product) {
-                return null;
-            }
+        return back()->with('success', 'Coupon removed.');
+    }
 
-            $image = $product->images->first();
-            $product->qty = (int) $row['qty'];
-            $product->price = (float) $product->discounted_price;
-            $product->line_total = $product->price * $product->qty;
-            $product->image_name = $image->image ?? $image->thumbnail ?? null;
+    private function cartItems()
+    {
+        return CheckoutQuote::items();
+    }
 
-            return $product;
-        })->filter()->values();
+    private function sendOrderMail(string $name, string $orderNumber, float $total): void
+    {
+        $email = auth()->user()->email ?? null;
+        if (! $email) {
+            return;
+        }
+        try {
+            Mail::raw($name.', your Cranzo order '.$orderNumber.' is placed. Total ₹'.number_format($total, 2).'. Payment is cash on delivery.', function ($message) use ($email, $orderNumber) {
+                $message->to($email)->subject('Order '.$orderNumber.' placed');
+            });
+        } catch (Throwable $exception) {
+            report($exception);
+        }
     }
 
     private function sellableProduct(int $id): object
@@ -232,9 +312,13 @@ class CartController extends BaseController
         return $product;
     }
 
-    private function assertStock(int $productId, int $qty): void
+    private function assertStock(int $productId, int $qty, ?int $colorId = null): void
     {
-        $stock = (int) DB::table('product_details')->where('product_id', $productId)->sum('product_quantity');
+        $query = DB::table('product_details')->where('product_id', $productId);
+        if ($colorId) {
+            $query->where('color_id', $colorId);
+        }
+        $stock = (int) $query->sum('product_quantity');
         if ($stock < $qty) {
             throw ValidationException::withMessages(['quantity' => 'Only '.$stock.' units are available.']);
         }

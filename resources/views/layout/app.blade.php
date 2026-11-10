@@ -45,13 +45,13 @@
                 </form>
             </div>
             <div class="ml-auto flex items-center gap-4 sm:gap-6 text-slate-700">
-                <a href="{{ url('/about-us') }}" class="hidden sm:flex flex-col items-center text-xs leading-tight">
+                <a href="{{ auth()->check() ? route('account.dashboard') : route('customer.login') }}" class="hidden sm:flex flex-col items-center text-xs leading-tight">
                     <i class="fa-regular fa-user text-lg"></i>
                     <span>My Account</span>
                 </a>
-                <a href="{{ url('/products') }}" class="hidden sm:flex flex-col items-center text-xs leading-tight">
+                <a href="{{ route('wishlist.index') }}" class="hidden sm:flex flex-col items-center text-xs leading-tight">
                     <i class="fa-regular fa-heart text-lg"></i>
-                    <span>Wishlist</span>
+                    <span>Wishlist ({{ $wishlistCount }})</span>
                 </a>
                 <a href="{{ url('/cart') }}" class="relative flex flex-col items-center text-xs leading-tight" aria-label="Cart">
                     <i class="fa-solid fa-cart-shopping text-lg"></i>
@@ -103,7 +103,7 @@
         <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 px-4 py-4 space-y-3 text-sm max-h-[70vh] overflow-y-auto">
             <a class="block" href="{{ url('/products') }}">All products</a>
             <a class="block" href="{{ url('/cart') }}">Cart ({{ $cartCount }})</a>
-            <a class="block" href="{{ url('/about-us') }}">My Account</a>
+            <a class="block" href="{{ auth()->check() ? route('account.dashboard') : route('customer.login') }}">My Account</a>
             <a class="block" href="{{ url('/contact-us') }}">Contact</a>
             @if($carMenu)
                 <a class="block font-semibold" href="{{ \App\Support\CataloguePath::category($carMenu) }}">Car Accessories</a>

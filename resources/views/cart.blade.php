@@ -16,7 +16,7 @@
                     <article class="bg-white border border-stone-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-4">
                         <div class="flex-1">
                             <a href="{{ \App\Support\CataloguePath::product($item) }}" class="font-semibold">{{ $item->product_title }}</a>
-                            <p class="text-sm text-stone-500 mt-1">₹{{ number_format($item->price, 0) }} each</p>
+                            <p class="text-sm text-stone-500 mt-1">₹{{ number_format($item->price, 0) }} each @if($item->color_name) · {{ $item->color_name }} @endif</p>
                         </div>
                         <form action="{{ route('cart.update') }}" method="post" class="flex items-center gap-2">
                             @csrf

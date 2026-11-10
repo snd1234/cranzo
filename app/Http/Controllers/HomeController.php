@@ -168,6 +168,21 @@ class HomeController extends BaseController
             $subcategory = DB::table('sub_category')->where('id', $subcategoryId)->first();
         }
 
+        if ($request->filled('price_min') && is_numeric($request->input('price_min'))) {
+            $query->where('discounted_price', '>=', (float) $request->input('price_min'));
+        }
+        if ($request->filled('price_max') && is_numeric($request->input('price_max'))) {
+            $query->where('discounted_price', '<=', (float) $request->input('price_max'));
+        }
+        if ($request->filled('color') && ctype_digit((string) $request->input('color'))) {
+            $ids = DB::table('product_details')->where('color_id', (int) $request->input('color'))->pluck('product_id');
+            $query->whereIn('id', $ids->isEmpty() ? [0] : $ids);
+        }
+        if ($request->input('stock') === '1') {
+            $ids = DB::table('product_details')->select('product_id')->groupBy('product_id')->havingRaw('SUM(product_quantity) > 0')->pluck('product_id');
+            $query->whereIn('id', $ids->isEmpty() ? [0] : $ids);
+        }
+
         $sort = $request->input('sort', 'name');
         if ($sort === 'price_asc') {
             $query->orderBy('discounted_price');
@@ -196,7 +211,9 @@ class HomeController extends BaseController
             ]);
         }
 
-        return view('products', compact('products'));
+        $colors = DB::table('colors')->where('color_status', 1)->orderBy('color_title')->get();
+
+        return view('products', compact('products', 'colors'));
     }
 
     public function productDetail($slug)
@@ -249,8 +266,17 @@ class HomeController extends BaseController
         $this->attachProductImages($related);
 
         $stock = (int) DB::table('product_details')->where('product_id', $product->id)->sum('product_quantity');
+        $colors = DB::table('product_details')
+            ->leftJoin('colors', 'colors.color_id', '=', 'product_details.color_id')
+            ->where('product_details.product_id', $product->id)
+            ->get(['product_details.color_id', 'product_details.product_quantity', 'colors.color_title']);
+        $reviews = DB::table('reviews')->where('product_id', $product->id)->where('status', 1)->orderByDesc('created_date')->get();
+        $recentIds = collect(session('shop_recent', []))->prepend($product->id)->unique()->take(8)->values()->all();
+        session(['shop_recent' => $recentIds]);
+        $recent = DB::table('product')->whereIn('id', $recentIds)->where('id', '!=', $product->id)->where('status', 1)->limit(4)->get();
+        $this->attachProductImages($recent);
 
-        return view('product_detail', compact('product', 'productImages', 'productCatalogs', 'related', 'stock'));
+        return view('product_detail', compact('product', 'productImages', 'productCatalogs', 'related', 'stock', 'colors', 'reviews', 'recent'));
     }
 
     public function ourSolutionDetail($slug)

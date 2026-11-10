@@ -10,31 +10,49 @@ class BaseController extends Controller
 {
     public function __construct()
     {
-        $categories = DB::table('category')
-            ->where('status', 1)
-            ->orderBy('name')
-            ->get()
-            ->map(function ($category) {
-                $category->subcategories = DB::table('sub_category')
-                    ->where('category_id', $category->id)
-                    ->where('status', 1)
-                    ->orderBy('name')
-                    ->get();
+        foreach (self::layoutData() as $key => $value) {
+            view()->share($key, $value);
+        }
+    }
 
-                return $category;
-            });
+    public static function layoutData(): array
+    {
+        $categories = Schema::hasTable('category')
+            ? DB::table('category')
+                ->where('status', 1)
+                ->orderBy('name')
+                ->get()
+                ->map(function ($category) {
+                    $category->subcategories = Schema::hasTable('sub_category')
+                        ? DB::table('sub_category')
+                            ->where('category_id', $category->id)
+                            ->where('status', 1)
+                            ->orderBy('name')
+                            ->get()
+                        : collect();
 
-        $latestProducts = DB::table('product')
-            ->where('status', 1)
-            ->orderByDesc('created_at')
-            ->limit(6)
-            ->get();
+                    return $category;
+                })
+            : collect();
 
-        $this->attachProductImages($latestProducts);
+        $latestProducts = Schema::hasTable('product')
+            ? DB::table('product')
+                ->where('status', 1)
+                ->orderByDesc('created_at')
+                ->limit(6)
+                ->get()
+            : collect();
 
-        $cart = session('shop_cart', []);
+        if ($latestProducts->isNotEmpty() && Schema::hasTable('product_images')) {
+            $ids = $latestProducts->pluck('id')->filter()->all();
+            $images = DB::table('product_images')->whereIn('product_id', $ids)->get()->groupBy('product_id');
+            foreach ($latestProducts as $product) {
+                $product->images = $images->get($product->id, collect());
+            }
+        }
+
         $cartCount = 0;
-        foreach ($cart as $row) {
+        foreach (session('shop_cart', []) as $row) {
             $cartCount += (int) ($row['qty'] ?? 0);
         }
 
@@ -47,10 +65,13 @@ class BaseController extends Controller
                 ->get()
             : collect();
 
-        view()->share('headerCategories', $categories);
-        view()->share('latestProducts', $latestProducts);
-        view()->share('cartCount', $cartCount);
-        view()->share('footerPages', $footerPages);
+        return [
+            'headerCategories' => $categories,
+            'latestProducts' => $latestProducts,
+            'cartCount' => $cartCount,
+            'wishlistCount' => WishlistController::countForView(),
+            'footerPages' => $footerPages,
+        ];
     }
 
     protected function attachProductImages(Collection $products): Collection

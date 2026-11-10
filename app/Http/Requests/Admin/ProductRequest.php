@@ -24,6 +24,7 @@ class ProductRequest extends FormRequest
 
         $rules = [
             'product_title' => 'required|string|max:255',
+            'gst_rate' => 'nullable|numeric|min:0|max:100',
             'slug' => ['nullable', 'string', 'max:191', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slugRule, $redirectRule],
             'category_id' => 'required|integer|exists:category,id',
             'sub_category_id' => [
