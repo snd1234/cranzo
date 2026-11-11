@@ -88,6 +88,9 @@ class CartController extends BaseController
         $addresses = auth()->check()
             ? DB::table('address')->where('user_id', auth()->id())->orderBy('default_type')->orderByDesc('id')->get()
             : collect();
+        $addresses->each(function ($address) use ($states) {
+            $address->state_name = optional($states->first(fn ($state) => (string) $state->id === (string) $address->state_id))->state_name;
+        });
 
         $quote = CheckoutQuote::summary();
 
@@ -101,6 +104,12 @@ class CartController extends BaseController
 
     public function place(Request $request)
     {
+        $request->validate([
+            'payment_method' => ['required', 'in:cod'],
+        ], [
+            'payment_method.in' => 'Online payment is not available yet. Choose cash on delivery.',
+        ]);
+
         if ($request->filled('address_id')) {
             abort_unless(auth()->check(), 403);
             $saved = DB::table('address')
@@ -111,28 +120,30 @@ class CartController extends BaseController
                 throw ValidationException::withMessages(['address_id' => 'Choose one of your saved addresses.']);
             }
             $data = [
-                'name' => $saved->name,
-                'mobile_number' => $saved->mobile_number,
-                'address' => $saved->address,
-                'locality' => $saved->locality,
-                'city' => $saved->city,
+                'name' => trim(strip_tags((string) $saved->name)),
+                'mobile_number' => preg_replace('/\s+/', '', (string) $saved->mobile_number) ?? '',
+                'address' => trim(strip_tags((string) $saved->address)),
+                'locality' => trim(strip_tags((string) $saved->locality)),
+                'city' => trim(strip_tags((string) $saved->city)),
                 'state_id' => $saved->state_id,
                 'pincode' => (string) $saved->pincode,
             ];
+            $check = validator($data, $this->addressRules(), $this->addressMessages());
+            if ($check->fails()) {
+                throw ValidationException::withMessages([
+                    'address_id' => 'This saved address is incomplete. Choose another one or enter a new address.',
+                ]);
+            }
         } else {
-            $data = $request->validate([
-                'name' => 'required|string|max:128',
-                'mobile_number' => 'required|string|max:15',
-                'address' => 'required|string|max:256',
-                'locality' => 'required|string|max:256',
-                'city' => 'required|string|max:30',
-                'state_id' => 'required|integer',
-                'pincode' => 'required|digits:6',
+            $request->merge([
+                'name' => trim(strip_tags((string) $request->input('name'))),
+                'mobile_number' => preg_replace('/\s+/', '', trim(strip_tags((string) $request->input('mobile_number')))) ?? '',
+                'address' => trim(strip_tags((string) $request->input('address'))),
+                'locality' => trim(strip_tags((string) $request->input('locality'))),
+                'city' => trim(strip_tags((string) $request->input('city'))),
+                'pincode' => trim(strip_tags((string) $request->input('pincode'))),
             ]);
-        }
-
-        if ($request->input('payment_method', 'cod') !== 'cod') {
-            return back()->withErrors(['payment_method' => 'Online payment is not available yet. Choose cash on delivery.'])->withInput();
+            $data = $request->validate($this->addressRules(), $this->addressMessages());
         }
 
         $quote = CheckoutQuote::summary((int) $data['state_id']);
@@ -160,7 +171,7 @@ class CartController extends BaseController
                 'city' => $data['city'],
                 'state_id' => (string) $data['state_id'],
                 'address_type' => 1,
-                'default_type' => 1,
+                'default_type' => 2,
                 'created_date' => now(),
             ]);
 
@@ -242,6 +253,30 @@ class CartController extends BaseController
         session(['last_order_number' => $orderNumber]);
 
         return redirect()->route('checkout.complete', $orderNumber);
+    }
+
+    private function addressRules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:128', 'regex:/^[\p{L}\s.\'-]{2,128}$/u'],
+            'mobile_number' => ['required', 'regex:/^[6-9][0-9]{9}$/'],
+            'address' => ['required', 'string', 'max:256'],
+            'locality' => ['required', 'string', 'max:256'],
+            'city' => ['required', 'string', 'max:30', 'regex:/^[\p{L}\s.\'-]{2,30}$/u'],
+            'state_id' => ['required', 'integer', \Illuminate\Validation\Rule::exists('state', 'id')->where('status', 1)],
+            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+        ];
+    }
+
+    private function addressMessages(): array
+    {
+        return [
+            'name.regex' => 'Enter the recipient name using letters only.',
+            'mobile_number.regex' => 'Enter a 10-digit Indian mobile number.',
+            'city.regex' => 'Enter a city name using letters only.',
+            'state_id.exists' => 'Select a state from the list.',
+            'pincode.regex' => 'Enter a 6-digit PIN code.',
+        ];
     }
 
     public function complete(string $orderNumber)

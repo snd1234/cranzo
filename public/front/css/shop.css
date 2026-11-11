@@ -139,5 +139,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .cms-prose li { margin: 0.25rem 0; }
 .cms-prose h2, .cms-prose h3 { margin-top: 1.25rem; font-weight: 600; color: #0f172a; }
 .cms-prose a { color: var(--shop-blue); }
+.address-choice {
+    display: block;
+    border: 1px solid #eadfce;
+    border-radius: 1rem;
+    background: #fff;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+}
+.address-choice:has(input:checked),
+.address-choice.is-selected {
+    border-color: #8a6a24;
+    background: #fbf6ec;
+    box-shadow: 0 0 0 1px #8a6a24;
+}
 .gallery-thumb.is-selected { outline: 2px solid #0b1f3a; outline-offset: 2px; }
 .color-option.is-selected { border-color: #0b1f3a; background: #0b1f3a; color: #fff; }

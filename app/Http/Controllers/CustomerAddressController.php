@@ -26,14 +26,16 @@ class CustomerAddressController extends BaseController
         $data = $this->validated($request);
         DB::transaction(function () use ($data, $request) {
             $id = ((int) DB::table('address')->lockForUpdate()->max('id')) + 1;
-            if ($request->boolean('default_shipping')) {
-                DB::table('address')->where('user_id', Auth::id())->where('address_type', 1)->update(['default_type' => 2]);
+            $makeDefault = $request->boolean('default_shipping')
+                || ! DB::table('address')->where('user_id', Auth::id())->where('default_type', 1)->exists();
+            if ($makeDefault) {
+                DB::table('address')->where('user_id', Auth::id())->update(['default_type' => 2]);
             }
             DB::table('address')->insert($data + [
                 'id' => $id,
                 'user_id' => Auth::id(),
                 'address_type' => 1,
-                'default_type' => $request->boolean('default_shipping') ? 1 : 2,
+                'default_type' => $makeDefault ? 1 : 2,
                 'created_date' => now(),
             ]);
         });
@@ -46,11 +48,12 @@ class CustomerAddressController extends BaseController
         $this->own($address);
         $data = $this->validated($request);
         DB::transaction(function () use ($address, $data, $request) {
-            if ($request->boolean('default_shipping')) {
-                DB::table('address')->where('user_id', Auth::id())->where('address_type', 1)->update(['default_type' => 2]);
+            $makeDefault = $request->boolean('default_shipping');
+            if ($makeDefault) {
+                DB::table('address')->where('user_id', Auth::id())->update(['default_type' => 2]);
             }
             DB::table('address')->where('id', $address)->where('user_id', Auth::id())->update($data + [
-                'default_type' => $request->boolean('default_shipping') ? 1 : 2,
+                'default_type' => $makeDefault ? 1 : 2,
             ]);
         });
 
