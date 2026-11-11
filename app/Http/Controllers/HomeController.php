@@ -265,6 +265,8 @@ class HomeController extends BaseController
             ->get();
         $this->attachProductImages($related);
 
+        $category = DB::table('category')->where('id', $product->category_id)->where('status', 1)->first();
+        $subcategory = DB::table('sub_category')->where('id', $product->sub_category_id)->where('status', 1)->first();
         $stock = (int) DB::table('product_details')->where('product_id', $product->id)->sum('product_quantity');
         $colors = DB::table('product_details')
             ->leftJoin('colors', 'colors.color_id', '=', 'product_details.color_id')
@@ -276,7 +278,7 @@ class HomeController extends BaseController
         $recent = DB::table('product')->whereIn('id', $recentIds)->where('id', '!=', $product->id)->where('status', 1)->limit(4)->get();
         $this->attachProductImages($recent);
 
-        return view('product_detail', compact('product', 'productImages', 'productCatalogs', 'related', 'stock', 'colors', 'reviews', 'recent'));
+        return view('product_detail', compact('product', 'productImages', 'productCatalogs', 'related', 'stock', 'colors', 'reviews', 'recent', 'category', 'subcategory'));
     }
 
     public function ourSolutionDetail($slug)

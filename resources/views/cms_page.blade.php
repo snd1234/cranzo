@@ -14,7 +14,7 @@
     @if($page->imageUrl())
         <img src="{{ $page->imageUrl() }}" alt="" class="mt-6 w-full rounded-xl object-cover max-h-80">
     @endif
-    <div class="prose mt-6 bg-white border border-stone-200 rounded-xl p-5 space-y-3 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_a]:text-blue-700">
+    <div class="cms-prose shop-card mt-6 p-5 sm:p-8">
         {!! \App\Support\HtmlCleaner::clean($page->content) !!}
     </div>
 </section>

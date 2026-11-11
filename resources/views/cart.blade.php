@@ -34,7 +34,7 @@
             </div>
             <aside class="bg-white border border-stone-200 rounded-xl p-5 h-fit">
                 <p class="flex justify-between text-lg"><span>Total</span><span>₹{{ number_format($total, 0) }}</span></p>
-                <p class="text-sm text-stone-500 mt-2">Shipping is confirmed at checkout. Cash on delivery is available.</p>
+                <p class="text-sm text-stone-500 mt-2">Tax, coupons, and the payable total are calculated at checkout. Cash on delivery is available.</p>
                 <a href="{{ route('checkout') }}" class="mt-5 block text-center bg-stone-950 text-white rounded-full px-5 py-3 font-medium">Checkout</a>
             </aside>
         </div>

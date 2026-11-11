@@ -3,8 +3,9 @@
 @section('content')
 <section class="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-3 gap-8">
     <div class="lg:col-span-2">
-        <h1 class="text-3xl font-semibold">Checkout</h1>
-        <p class="text-stone-600 mt-2">Cash on delivery. The total is calculated on the server from current product prices.</p>
+        <p class="text-xs font-medium uppercase tracking-wide text-blue-700">Cart · Details · Confirmation</p>
+        <h1 class="text-3xl font-semibold mt-1">Checkout</h1>
+        <p class="text-stone-600 mt-2">Cash on delivery. Prices, tax, and discounts are calculated on the server. UPI, cards, and net banking are shown but not available yet.</p>
         <form action="{{ route('checkout.place') }}" method="post" class="mt-6 grid sm:grid-cols-2 gap-4 bg-white border border-stone-200 rounded-xl p-5">
             @csrf
             @if($addresses->isNotEmpty())

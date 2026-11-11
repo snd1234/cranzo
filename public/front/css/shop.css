@@ -1,0 +1,143 @@
+:root {
+    --shop-navy: #0b1f3a;
+    --shop-blue: #1d4ed8;
+    --shop-amber: #f59e0b;
+    --shop-line: #e7e5e4;
+    --shop-ink: #1b1613;
+    --shop-gold: #c8a04e;
+    --shop-cream: #f6f1e7;
+    --shop-muted: #c9bfb2;
+}
+.site-bar, .site-header, .site-footer {
+    font-family: "Outfit", "Segoe UI", sans-serif;
+}
+.site-bar {
+    background: #f3ead8;
+    color: #6b5420;
+    letter-spacing: 0.08em;
+}
+.site-header {
+    background: #fffdf9;
+    color: var(--shop-ink);
+    border-bottom: 1px solid #eadfce;
+}
+.site-header a { color: inherit; }
+.site-word {
+    color: #8a6a24;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 1.05rem;
+}
+.site-search {
+    width: 100%;
+    border: 1px solid #e4d8c4;
+    border-radius: 999px;
+    background: #fff;
+    padding: 0.7rem 0.95rem;
+    color: var(--shop-ink);
+}
+.site-search:focus { outline: 2px solid var(--shop-gold); outline-offset: 1px; }
+.site-nav {
+    border-top: 1px solid #eadfce;
+    background: #fffdf9;
+}
+.site-sub { color: #5c534c; }
+.site-nav > ul > li > a {
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+.site-nav > ul > li > a:hover { color: #8a6a24; }
+.nav-drop {
+    display: none;
+    width: min(34rem, 80vw);
+    max-height: 70vh;
+    overflow: auto;
+    background: #fff;
+    color: var(--shop-ink);
+    border-radius: 0.9rem;
+    border: 1px solid rgba(200, 160, 78, 0.55);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    padding: 0.55rem;
+}
+.nav-drop-title {
+    color: #8a6a24;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.7rem 0.35rem;
+}
+.nav-drop-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+    .nav-drop-grid { grid-template-columns: 1fr 1fr; }
+}
+.site-header .nav-drop a {
+    display: block;
+    color: #1b1613;
+    border-radius: 0.55rem;
+    padding: 0.5rem 0.7rem;
+    font-weight: 500;
+}
+.site-header .nav-drop a:hover {
+    color: #1b1613;
+    background: #f6f1e7;
+}
+.site-footer {
+    background: var(--shop-ink);
+    color: #d9d0c5;
+    border-top: 3px solid var(--shop-gold);
+}
+.site-footer h2 {
+    color: var(--shop-gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+.site-footer a:hover { color: var(--shop-gold); }
+.site-gold-btn {
+    background: var(--shop-gold);
+    color: var(--shop-ink);
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+    font-weight: 600;
+}
+.site-legal {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--shop-muted);
+    border-top: 1px solid rgba(200, 160, 78, 0.25);
+    padding: 1rem;
+}
+html { scroll-behavior: smooth; }
+body { text-rendering: optimizeLegibility; }
+img { max-width: 100%; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--shop-blue);
+    outline-offset: 2px;
+}
+.shop-field {
+    margin-top: 0.35rem;
+    width: 100%;
+    border: 1px solid #d6d3d1;
+    border-radius: 0.75rem;
+    background: #fff;
+    padding: 0.7rem 0.85rem;
+    color: #0f172a;
+}
+.shop-field:focus { border-color: var(--shop-blue); box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15); outline: none; }
+.shop-card { background: #fff; border: 1px solid var(--shop-line); border-radius: 1rem; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); }
+.product-card { transition: box-shadow .2s ease, transform .2s ease; }
+.product-card:hover { box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08); transform: translateY(-2px); }
+.group:hover > .nav-drop, .group:focus-within > .nav-drop { display: block; }
+.cms-prose p { margin: 0.75rem 0; line-height: 1.7; }
+.cms-prose ul, .cms-prose ol { margin: 0.75rem 0 0.75rem 1.25rem; }
+.cms-prose li { margin: 0.25rem 0; }
+.cms-prose h2, .cms-prose h3 { margin-top: 1.25rem; font-weight: 600; color: #0f172a; }
+.cms-prose a { color: var(--shop-blue); }
+.gallery-thumb.is-selected { outline: 2px solid #0b1f3a; outline-offset: 2px; }
+.color-option.is-selected { border-color: #0b1f3a; background: #0b1f3a; color: #fff; }

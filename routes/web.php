@@ -58,7 +58,7 @@ Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->na
 Route::post('/wishlist/{product}/cart', [WishlistController::class, 'move'])->name('wishlist.move');
 Route::post('/reviews', [ReviewController::class, 'store'])->middleware(['auth', 'throttle:5,1'])->name('reviews.store');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
-Route::post('/checkout', [CartController::class, 'place'])->name('checkout.place');
+Route::post('/checkout', [CartController::class, 'place'])->middleware('throttle:8,1')->name('checkout.place');
 Route::get('/order/{orderNumber}', [CartController::class, 'complete'])->name('checkout.complete');
 
 Route::middleware('guest')->group(function () {

@@ -79,6 +79,14 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 @endif
 
+<section class="bg-white border-y border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 py-4 grid sm:grid-cols-3 gap-3 text-sm text-slate-700">
+        <p><i class="fa-solid fa-shield-halved text-blue-700 mr-2"></i>Listed products are from the Cranzo catalogue</p>
+        <p><i class="fa-solid fa-truck text-blue-700 mr-2"></i>Cash on delivery at checkout</p>
+        <p><i class="fa-solid fa-box text-blue-700 mr-2"></i>Stock is checked again when you place an order</p>
+    </div>
+</section>
+
 <section class="max-w-7xl mx-auto px-4 py-12">
     <div class="flex items-end justify-between mb-6">
         <h2 class="text-2xl font-semibold">Categories</h2>
