@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CartController;
@@ -20,7 +17,6 @@ use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderDeskController;
 use App\Http\Controllers\ShopDeskController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
@@ -72,19 +68,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [CustomerAuthController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
 });
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->middleware('auth')->name('customer.logout');
-Route::middleware('auth')->group(function () {
-    Route::get('/email/verify', fn () => redirect()->route('account.dashboard'))->name('verification.notice');
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-
-        return redirect()->route('account.dashboard');
-    })->middleware('signed')->name('verification.verify');
-    Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('success', 'A fresh verification link has been sent.');
-    })->middleware('throttle:6,1')->name('verification.send');
-});
 Route::middleware(['auth'])->prefix('account')->group(function () {
     Route::get('/', [AccountController::class, 'dashboard'])->name('account.dashboard');
     Route::get('/profile', [AccountController::class, 'editProfile'])->name('account.profile');
@@ -102,16 +85,6 @@ Route::middleware(['auth'])->prefix('account')->group(function () {
     Route::put('/addresses/{address}', [CustomerAddressController::class, 'update'])->middleware('throttle:10,1')->name('account.addresses.update');
     Route::delete('/addresses/{address}', [CustomerAddressController::class, 'destroy'])->middleware('throttle:10,1')->name('account.addresses.destroy');
 });
-
-// frontend authentication routes
-// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
-// Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
-// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register.form');
-// Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
-
-Route::get('/home', [AuthController::class, 'home'])->name('home')->middleware('auth');
 
 // admin routes
 Route::prefix('system-auth')->group(function () {
@@ -220,6 +193,5 @@ Route::prefix('system-auth')->group(function () {
         Route::post('/newsletter-campaigns', [NewsletterController::class, 'storeCampaign'])->name('newsletter.campaigns.store');
         Route::post('/newsletter-campaigns/{campaign}/queue', [NewsletterController::class, 'queueCampaign'])->name('newsletter.campaigns.queue');
     });
-    Route::get('/view-order/{id}', [AdminController::class, 'viewOrder'])->name('order.view')->middleware('auth:admin');
 
 });

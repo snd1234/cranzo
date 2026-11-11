@@ -252,10 +252,6 @@ class HomeController extends BaseController
             ->where('product_id', $product->id)
             ->get();
 
-        $productCatalogs = DB::table('product_images')
-            ->where('product_id', $product->id)
-            ->get();
-
         $related = DB::table('product')
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
@@ -278,7 +274,7 @@ class HomeController extends BaseController
         $recent = DB::table('product')->whereIn('id', $recentIds)->where('id', '!=', $product->id)->where('status', 1)->limit(4)->get();
         $this->attachProductImages($recent);
 
-        return view('product_detail', compact('product', 'productImages', 'productCatalogs', 'related', 'stock', 'colors', 'reviews', 'recent', 'category', 'subcategory'));
+        return view('product_detail', compact('product', 'productImages', 'related', 'stock', 'colors', 'reviews', 'recent', 'category', 'subcategory'));
     }
 
     public function ourSolutionDetail($slug)
@@ -319,11 +315,6 @@ class HomeController extends BaseController
             ->get();
 
         return view('our_solution_detail', compact('category', 'products', 'subcategories'));
-    }
-
-    public function commonDetailPage()
-    {
-        return view('common_detail_page');
     }
 
     public function blogDetail($slug)

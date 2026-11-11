@@ -103,10 +103,11 @@ class ShopDeskController extends Controller
                 $query->where('name', 'like', $term)->orWhere('email', 'like', $term)->orWhere('phone', 'like', $term)->orWhere('subject', 'like', $term);
             })
             ->when($request->filled('status'), fn ($query) => $query->where('status', $request->input('status')))
-            ->orderByDesc('id')->paginate(20)->withQueryString();
+            ->orderByDesc('id')->paginate(12)->withQueryString();
         $unread = DB::table('contact_us')->where('status', 'new')->count();
+        $statusCounts = DB::table('contact_us')->select('status', DB::raw('COUNT(*) as total'))->groupBy('status')->pluck('total', 'status');
 
-        return view('admin.shop.contacts', compact('messages', 'unread'));
+        return view('admin.shop.contacts', compact('messages', 'unread', 'statusCounts'));
     }
 
     public function updateContact(Request $request, int $message)

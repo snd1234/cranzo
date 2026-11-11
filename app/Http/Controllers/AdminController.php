@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\ProductRequest;
-use App\Models\{Admin, Category, SubCategory, Product, Orders, OrderDetail, Addresss};
+use App\Models\{Admin, Category, SubCategory, Product};
 use App\Services\ProductCatalog;
 use App\Support\CataloguePath;
 use App\Support\Slugger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ class AdminController extends BaseController
 
     public function dashboard()
     {
-        return view('admin.dashboard');
+        return view('admin.dashboard', $this->dashboardData());
     }   
 
     public function userList()
@@ -443,20 +444,126 @@ class AdminController extends BaseController
         return redirect()->route('colors')->with('success', 'Color updated successfully.');
     }
 
-    public function orderList()
+    private function dashboardData(): array
     {
-        $orders = Orders::with('user:id,first_name,middle_name,last_name,email,mobile_number')->orderBy('id', 'desc')->get()->toArray();
-        // echo "<pre>"; print_r($orders); die;
-        return view('admin.orders', compact('orders'));
-    }
+        $threshold = (int) config('shop.low_stock', 5);
+        $orders = Schema::hasTable('orders') ? DB::table('orders') : null;
+        $openOrders = $orders
+            ? (clone $orders)->whereNull('cancelled_at')->where('order_status', 1)->where('delivery_status', 1)->count()
+            : 0;
+        $todayOrders = $orders
+            ? (clone $orders)->whereDate('booking_date', now()->toDateString())->count()
+            : 0;
+        $sales = 0.0;
+        if ($orders && Schema::hasTable('order_adjustments')) {
+            $ids = (clone $orders)->whereNull('cancelled_at')->pluck('id');
+            $sales = $ids->isEmpty() ? 0 : (float) DB::table('order_adjustments')->whereIn('order_id', $ids)->sum('total');
+        }
 
-    public function viewOrder($id)
-    {
-        $id = decrypt($id);//echo $id;
-        $orderData = Orders::with('user:id,first_name,middle_name,last_name,email,mobile_number', 'orderDetail', 'Address.state')
-                ->findOrFail($id);
-        //echo "<pre>"; print_r($orderData); die;
-        return view('admin.view_order', compact('orderData'));
+        $activeProducts = Schema::hasTable('product') ? DB::table('product')->where('status', 1)->count() : 0;
+        $productCount = Schema::hasTable('product') ? DB::table('product')->count() : 0;
+        $lowStock = 0;
+        $outOfStock = 0;
+        if (Schema::hasTable('product') && Schema::hasTable('product_details')) {
+            $stocks = DB::table('product')
+                ->leftJoin('product_details', 'product_details.product_id', '=', 'product.id')
+                ->where('product.status', 1)
+                ->groupBy('product.id')
+                ->selectRaw('product.id, COALESCE(SUM(product_details.product_quantity), 0) as stock')
+                ->get();
+            $lowStock = $stocks->filter(fn ($row) => (int) $row->stock <= $threshold)->count();
+            $outOfStock = $stocks->filter(fn ($row) => (int) $row->stock <= 0)->count();
+        }
+
+        $recent = collect();
+        if ($orders) {
+            $recent = DB::table('orders')
+                ->leftJoin('users', 'users.id', '=', 'orders.user_id')
+                ->leftJoin('order_adjustments', 'order_adjustments.order_id', '=', 'orders.id')
+                ->orderByDesc('orders.id')
+                ->limit(8)
+                ->get([
+                    'orders.id',
+                    'orders.order_number',
+                    'orders.booking_date',
+                    'orders.order_status',
+                    'orders.payment_status',
+                    'orders.delivery_status',
+                    'orders.cancelled_at',
+                    'users.first_name',
+                    'users.last_name',
+                    'users.email',
+                    'order_adjustments.total',
+                ]);
+        }
+
+        $best = Schema::hasTable('order_details')
+            ? DB::table('order_details')
+                ->selectRaw('product_title, SUM(order_quantity) as sold, SUM(order_quantity * CAST(amount_per_item AS DECIMAL(12,2))) as revenue')
+                ->groupBy('product_title')
+                ->orderByDesc('sold')
+                ->limit(6)
+                ->get()
+            : collect();
+
+        $days = collect();
+        if ($orders) {
+            $start = now()->subDays(13)->startOfDay();
+            $counts = DB::table('orders')
+                ->where('booking_date', '>=', $start)
+                ->selectRaw('DATE(booking_date) as day, COUNT(*) as total')
+                ->groupBy('day')
+                ->pluck('total', 'day');
+            for ($i = 0; $i < 14; $i++) {
+                $date = $start->copy()->addDays($i);
+                $key = $date->toDateString();
+                $days->push([
+                    'label' => $date->format('d M'),
+                    'count' => (int) ($counts[$key] ?? 0),
+                ]);
+            }
+        }
+
+        $count = function (string $table, ?callable $filter = null): int {
+            if (! Schema::hasTable($table)) {
+                return 0;
+            }
+            $query = DB::table($table);
+            if ($filter) {
+                $filter($query);
+            }
+
+            return $query->count();
+        };
+
+        return [
+            'stats' => [
+                'orders' => $orders ? (clone $orders)->count() : 0,
+                'open_orders' => $openOrders,
+                'today_orders' => $todayOrders,
+                'sales' => $sales,
+                'products' => $productCount,
+                'active_products' => $activeProducts,
+                'customers' => Schema::hasTable('users') ? DB::table('users')->count() : 0,
+                'low_stock' => $lowStock,
+                'out_of_stock' => $outOfStock,
+                'low_stock_threshold' => $threshold,
+                'categories' => $count('category'),
+                'subcategories' => $count('sub_category'),
+                'returns' => $count('return_requests', fn ($query) => $query->where('status', 'pending')),
+                'messages' => $count('contact_us', fn ($query) => $query->where('status', 'new')),
+                'reviews' => $count('reviews', fn ($query) => $query->where('status', 0)),
+                'subscribers' => $count('newsletter_subscribers'),
+                'coupons' => $count('coupons', fn ($query) => $query->where('status', 1)),
+                'banners' => $count('banners', fn ($query) => $query->where('status', 1)),
+                'pages' => $count('cms_pages'),
+                'faqs' => $count('faqs', fn ($query) => $query->where('status', 1)),
+            ],
+            'recentOrders' => $recent,
+            'bestSellers' => $best,
+            'orderDays' => $days,
+            'orderDayMax' => max(1, (int) $days->max('count')),
+        ];
     }
 
     private function prepareSlug(Request $request): void
