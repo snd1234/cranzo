@@ -39,7 +39,7 @@ class CustomerAccountTest extends TestCase
         ])->assertRedirect('/register')->assertSessionHasErrors('email');
     }
 
-    public function test_unverified_customer_cannot_open_the_account(): void
+    public function test_profile_rejects_an_invalid_mobile_number(): void
     {
         $user = User::create([
             'username' => 'new@example.com',
@@ -50,7 +50,28 @@ class CustomerAccountTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $this->actingAs($user)->get('/account')->assertRedirect('/email/verify');
+        $this->actingAs($user)->from('/account/profile')->put('/account/profile', [
+            'first_name' => 'New',
+            'last_name' => 'Customer',
+            'email' => 'new@example.com',
+            'mobile_number' => '12345',
+        ])->assertRedirect('/account/profile')->assertSessionHasErrors('mobile_number');
+
+        $this->assertSame('9988776655', $user->fresh()->mobile_number);
+    }
+
+    public function test_customer_can_open_the_account_without_email_verification(): void
+    {
+        $user = User::create([
+            'username' => 'new@example.com',
+            'first_name' => 'New',
+            'last_name' => 'Customer',
+            'email' => 'new@example.com',
+            'mobile_number' => '9988776655',
+            'password' => 'password123',
+        ]);
+
+        $this->actingAs($user)->get('/account')->assertOk();
     }
 
     public function test_customer_cannot_view_another_customers_order(): void

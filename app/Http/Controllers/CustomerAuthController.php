@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\ShopCart;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -67,14 +66,13 @@ class CustomerAuthController extends BaseController
             'password' => $data['password'],
         ]);
 
-        event(new Registered($user));
         Auth::login($user);
         $request->session()->regenerate();
         $this->claimGuestOrders($guestSession, (int) $user->id);
         ShopCart::sanitize();
         \App\Http\Controllers\WishlistController::claim($guestSession, (int) Auth::id());
 
-        return redirect()->route('verification.notice');
+        return redirect()->route('account.dashboard');
     }
 
     public function logout(Request $request)

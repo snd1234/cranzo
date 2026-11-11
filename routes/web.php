@@ -56,7 +56,7 @@ Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.in
 Route::post('/wishlist', [WishlistController::class, 'store'])->middleware('throttle:30,1')->name('wishlist.store');
 Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 Route::post('/wishlist/{product}/cart', [WishlistController::class, 'move'])->name('wishlist.move');
-Route::post('/reviews', [ReviewController::class, 'store'])->middleware(['auth', 'verified', 'throttle:5,1'])->name('reviews.store');
+Route::post('/reviews', [ReviewController::class, 'store'])->middleware(['auth', 'throttle:5,1'])->name('reviews.store');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [CartController::class, 'place'])->name('checkout.place');
 Route::get('/order/{orderNumber}', [CartController::class, 'complete'])->name('checkout.complete');
@@ -73,7 +73,7 @@ Route::middleware('guest')->group(function () {
 });
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->middleware('auth')->name('customer.logout');
 Route::middleware('auth')->group(function () {
-    Route::get('/email/verify', fn () => view('auth.customer_verify'))->name('verification.notice');
+    Route::get('/email/verify', fn () => redirect()->route('account.dashboard'))->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
 
@@ -85,11 +85,11 @@ Route::middleware('auth')->group(function () {
         return back()->with('success', 'A fresh verification link has been sent.');
     })->middleware('throttle:6,1')->name('verification.send');
 });
-Route::middleware(['auth', 'verified'])->prefix('account')->group(function () {
+Route::middleware(['auth'])->prefix('account')->group(function () {
     Route::get('/', [AccountController::class, 'dashboard'])->name('account.dashboard');
     Route::get('/profile', [AccountController::class, 'editProfile'])->name('account.profile');
-    Route::put('/profile', [AccountController::class, 'updateProfile'])->name('account.profile.update');
-    Route::put('/password', [AccountController::class, 'updatePassword'])->name('account.password');
+    Route::put('/profile', [AccountController::class, 'updateProfile'])->middleware('throttle:10,1')->name('account.profile.update');
+    Route::put('/password', [AccountController::class, 'updatePassword'])->middleware('throttle:5,1')->name('account.password');
     Route::get('/orders', [AccountController::class, 'orders'])->name('account.orders');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('account.order');
     Route::get('/orders/{order}/invoice', [InvoiceController::class, 'customer'])->name('account.invoice');
@@ -98,9 +98,9 @@ Route::middleware(['auth', 'verified'])->prefix('account')->group(function () {
     Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('account.order.cancel');
     Route::post('/orders/{order}/reorder', [AccountController::class, 'reorder'])->name('account.order.reorder');
     Route::get('/addresses', [CustomerAddressController::class, 'index'])->name('account.addresses');
-    Route::post('/addresses', [CustomerAddressController::class, 'store'])->name('account.addresses.store');
-    Route::put('/addresses/{address}', [CustomerAddressController::class, 'update'])->name('account.addresses.update');
-    Route::delete('/addresses/{address}', [CustomerAddressController::class, 'destroy'])->name('account.addresses.destroy');
+    Route::post('/addresses', [CustomerAddressController::class, 'store'])->middleware('throttle:10,1')->name('account.addresses.store');
+    Route::put('/addresses/{address}', [CustomerAddressController::class, 'update'])->middleware('throttle:10,1')->name('account.addresses.update');
+    Route::delete('/addresses/{address}', [CustomerAddressController::class, 'destroy'])->middleware('throttle:10,1')->name('account.addresses.destroy');
 });
 
 // frontend authentication routes

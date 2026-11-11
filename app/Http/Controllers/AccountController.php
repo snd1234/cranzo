@@ -7,6 +7,9 @@ use App\Services\Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class AccountController extends BaseController
@@ -33,15 +36,24 @@ class AccountController extends BaseController
     public function updateProfile(Request $request)
     {
         $user = $request->user();
+        $request->merge([
+            'first_name' => $this->plain($request->input('first_name')),
+            'last_name' => $this->plain($request->input('last_name')),
+            'email' => strtolower($this->plain($request->input('email'))),
+            'mobile_number' => preg_replace('/\s+/', '', $this->plain($request->input('mobile_number'))) ?? '',
+        ]);
         $data = $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'first_name' => ['required', 'string', 'max:80'],
-            'last_name' => ['required', 'string', 'max:80'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
-            'mobile_number' => ['required', 'regex:/^[6-9][0-9]{9}$/', 'unique:users,mobile_number,'.$user->id],
+            'first_name' => ['required', 'string', 'max:80', 'regex:/^[\p{L}\s.\'-]{1,80}$/u'],
+            'last_name' => ['required', 'string', 'max:80', 'regex:/^[\p{L}\s.\'-]{1,80}$/u'],
+            'email' => ['required', 'email:filter', 'max:255', Rule::unique('users', 'email')->ignore($user->id), Rule::unique('users', 'username')->ignore($user->id)],
+            'mobile_number' => ['required', 'regex:/^[6-9][0-9]{9}$/', Rule::unique('users', 'mobile_number')->ignore($user->id)],
+        ], [
+            'first_name.regex' => 'Enter a first name using letters only.',
+            'last_name.regex' => 'Enter a last name using letters only.',
+            'mobile_number.regex' => 'Enter a 10-digit Indian mobile number.',
+            'mobile_number.unique' => 'That mobile number is already used by another account.',
         ]);
 
-        $emailChanged = $data['email'] !== $user->email;
         $user->fill([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -49,16 +61,7 @@ class AccountController extends BaseController
             'username' => $data['email'],
             'mobile_number' => $data['mobile_number'],
         ]);
-        if ($emailChanged) {
-            $user->email_verified_at = null;
-        }
         $user->save();
-
-        if ($emailChanged) {
-            $user->sendEmailVerificationNotification();
-
-            return redirect()->route('verification.notice')->with('success', 'Confirm the new email address before using the account again.');
-        }
 
         return back()->with('success', 'Profile updated.');
     }
@@ -67,10 +70,22 @@ class AccountController extends BaseController
     {
         $data = $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', 'confirmed', PasswordRule::min(8)],
+            'password' => ['required', 'confirmed', PasswordRule::min(8)->max(72)->letters()->numbers(), function (string $attribute, mixed $value, \Closure $fail) use ($request) {
+                if (Hash::check((string) $value, (string) $request->user()->password)) {
+                    $fail('Choose a password that is different from your current password.');
+                }
+            }],
+        ], [
+            'password.min' => 'Use at least 8 characters, including a letter and a number.',
+            'password.letters' => 'Use at least 8 characters, including a letter and a number.',
+            'password.numbers' => 'Use at least 8 characters, including a letter and a number.',
         ]);
 
-        $request->user()->update(['password' => $data['password']]);
+        $request->user()->forceFill([
+            'password' => $data['password'],
+            'remember_token' => Str::random(60),
+        ])->save();
+        $request->session()->regenerate();
 
         return back()->with('success', 'Password updated.');
     }
@@ -142,5 +157,10 @@ class AccountController extends BaseController
         abort_if(! $row, 404);
 
         return $row;
+    }
+
+    private function plain(mixed $value): string
+    {
+        return trim(strip_tags((string) $value));
     }
 }

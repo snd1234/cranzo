@@ -1,8 +1,11 @@
 @extends('account.layout')
 
 @section('account')
-<h1 class="text-3xl font-semibold">Order {{ $row->order_number }}</h1>
-<p class="mt-2 text-stone-600">{{ $row->cancelled_at ? 'Cancelled' : 'Received' }} · booked {{ $row->booking_date }}</p>
+<div class="mb-6">
+    <a class="text-sm text-blue-700" href="{{ route('account.orders') }}">Back to orders</a>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900">Order {{ $row->order_number }}</h1>
+    <p class="mt-2"><span class="text-xs font-medium rounded-full px-2.5 py-1 {{ \App\Support\OrderLabel::tone($row) }}">{{ \App\Support\OrderLabel::summary($row) }}</span>@if($row->booking_date)<span class="text-stone-600 text-sm"> · {{ \Illuminate\Support\Carbon::parse($row->booking_date)->format('d M Y') }}</span>@endif</p>
+</div>
 <div class="mt-6 bg-white border border-stone-200 rounded-xl p-5">
     @foreach($details as $line)
         <p class="flex justify-between gap-3 py-2 border-b border-stone-100">

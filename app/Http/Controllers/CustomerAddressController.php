@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class CustomerAddressController extends BaseController
 {
@@ -18,6 +19,10 @@ class CustomerAddressController extends BaseController
 
     public function store(Request $request)
     {
+        if (DB::table('address')->where('user_id', Auth::id())->count() >= 10) {
+            return back()->withErrors(['address' => 'You can save up to 10 addresses. Remove one before adding another.'])->withInput();
+        }
+
         $data = $this->validated($request);
         DB::transaction(function () use ($data, $request) {
             $id = ((int) DB::table('address')->lockForUpdate()->max('id')) + 1;
@@ -44,7 +49,7 @@ class CustomerAddressController extends BaseController
             if ($request->boolean('default_shipping')) {
                 DB::table('address')->where('user_id', Auth::id())->where('address_type', 1)->update(['default_type' => 2]);
             }
-            DB::table('address')->where('id', $address)->update($data + [
+            DB::table('address')->where('id', $address)->where('user_id', Auth::id())->update($data + [
                 'default_type' => $request->boolean('default_shipping') ? 1 : 2,
             ]);
         });
@@ -66,15 +71,35 @@ class CustomerAddressController extends BaseController
 
     private function validated(Request $request): array
     {
+        $request->merge([
+            'name' => $this->plain($request->input('name')),
+            'mobile_number' => preg_replace('/\s+/', '', $this->plain($request->input('mobile_number'))) ?? '',
+            'address' => $this->plain($request->input('address')),
+            'locality' => $this->plain($request->input('locality')),
+            'city' => $this->plain($request->input('city')),
+            'pincode' => $this->plain($request->input('pincode')),
+        ]);
+
         return $request->validate([
-            'name' => ['required', 'string', 'max:128'],
+            'name' => ['required', 'string', 'max:128', 'regex:/^[\p{L}\s.\'-]{2,128}$/u'],
             'mobile_number' => ['required', 'regex:/^[6-9][0-9]{9}$/'],
             'address' => ['required', 'string', 'max:256'],
             'locality' => ['required', 'string', 'max:256'],
-            'city' => ['required', 'string', 'max:30'],
-            'state_id' => ['required', 'integer', 'exists:state,id'],
-            'pincode' => ['required', 'digits:6'],
+            'city' => ['required', 'string', 'max:30', 'regex:/^[\p{L}\s.\'-]{2,30}$/u'],
+            'state_id' => ['required', 'integer', Rule::exists('state', 'id')->where('status', 1)],
+            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+        ], [
+            'name.regex' => 'Enter the recipient name using letters only.',
+            'mobile_number.regex' => 'Enter a 10-digit Indian mobile number.',
+            'city.regex' => 'Enter a city name using letters only.',
+            'state_id.exists' => 'Select a state from the list.',
+            'pincode.regex' => 'Enter a 6-digit PIN code.',
         ]);
+    }
+
+    private function plain(mixed $value): string
+    {
+        return trim(strip_tags((string) $value));
     }
 
     private function own(int $id): object
