@@ -103,6 +103,7 @@
         <p class="flex justify-between text-sm"><span>Discount</span><span>₹{{ number_format($quote['discount'], 0) }}</span></p>
         <p class="flex justify-between text-sm"><span>{{ $quote['tax_label'] }}</span><span>₹{{ number_format($quote['tax'], 0) }}</span></p>
         <p class="mt-3 flex justify-between font-semibold rounded-xl bg-[#1b1613] text-white px-3 py-3"><span>Total</span><span class="text-[#c8a04e]">₹{{ number_format($quote['total'], 0) }}</span></p>
+        {{-- Coupon entry is hidden until coupons are ready to offer.
         <form method="post" action="{{ route('cart.coupon') }}" class="mt-4 flex gap-2">
             @csrf
             <input name="code" placeholder="Coupon" class="shop-field mt-0">
@@ -111,6 +112,7 @@
         @if($quote['coupon'])
             <form method="post" action="{{ route('cart.coupon.remove') }}" class="mt-2">@csrf @method('DELETE')<button class="text-sm" type="submit">Remove {{ $quote['coupon'] }}</button></form>
         @endif
+        --}}
     </aside>
 </section>
 <script>

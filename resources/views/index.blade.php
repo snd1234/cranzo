@@ -79,11 +79,29 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 @endif
 
-<section class="bg-white border-y border-stone-200">
-    <div class="max-w-7xl mx-auto px-4 py-4 grid sm:grid-cols-3 gap-3 text-sm text-slate-700">
-        <p><i class="fa-solid fa-shield-halved text-blue-700 mr-2"></i>Listed products are from the Cranzo catalogue</p>
-        <p><i class="fa-solid fa-truck text-blue-700 mr-2"></i>Cash on delivery at checkout</p>
-        <p><i class="fa-solid fa-box text-blue-700 mr-2"></i>Stock is checked again when you place an order</p>
+<section class="home-notes" aria-label="Shopping notes">
+    <div class="max-w-7xl mx-auto px-4 py-6 grid sm:grid-cols-3 gap-4">
+        <article class="home-note">
+            <span class="home-note-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+            <div>
+                <p class="home-note-label">Catalogue</p>
+                <p class="home-note-text">Listed products are from the Cranzo catalogue</p>
+            </div>
+        </article>
+        <article class="home-note">
+            <span class="home-note-icon" aria-hidden="true"><i class="fa-solid fa-truck"></i></span>
+            <div>
+                <p class="home-note-label">Payment</p>
+                <p class="home-note-text">Cash on delivery at checkout</p>
+            </div>
+        </article>
+        <article class="home-note">
+            <span class="home-note-icon" aria-hidden="true"><i class="fa-solid fa-box"></i></span>
+            <div>
+                <p class="home-note-label">Stock</p>
+                <p class="home-note-text">Stock is checked again when you place an order</p>
+            </div>
+        </article>
     </div>
 </section>
 
@@ -107,14 +125,23 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-4 pb-12">
-    <h2 class="text-2xl font-semibold mb-6">Featured products</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        @forelse($featured as $product)
-            @include('partials.product_card', ['product' => $product])
-        @empty
-            <p class="text-stone-500">No featured products are active.</p>
-        @endforelse
+<section class="home-featured">
+    <div class="max-w-7xl mx-auto px-4 py-14">
+        <div class="home-featured-head">
+            <div>
+                <p class="home-featured-kicker">From the catalogue</p>
+                <h2>Featured products</h2>
+                <p class="home-featured-note">Marked featured in the shop. Prices are the amounts stored on each product.</p>
+            </div>
+            <a href="{{ url('/products') }}" class="site-gold-btn">Shop all products</a>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @forelse($featured as $product)
+                @include('partials.product_card', ['product' => $product, 'highlight' => true])
+            @empty
+                <p class="home-featured-note">No featured products are active.</p>
+            @endforelse
+        </div>
     </div>
 </section>
 @endsection

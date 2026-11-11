@@ -1,23 +1,59 @@
 @extends('layout.app')
 
+@php
+    $pageTitle = $subcategory->name ?? $category->name ?? 'Car and bike accessories';
+    if (request('q')) {
+        $pageTitle = 'Results for "'.request('q').'"';
+    }
+    $heroImage = null;
+    if (! empty($subcategory?->image)) {
+        $heroFile = str_contains($subcategory->image, '/') ? $subcategory->image : 'uploads/subcategories/'.$subcategory->image;
+        if (is_file(public_path($heroFile))) {
+            $heroImage = asset($heroFile);
+        }
+    } elseif (! empty($category?->image) && ! $subcategory) {
+        $heroFile = str_contains($category->image, '/') ? $category->image : 'uploads/categories/'.$category->image;
+        if (is_file(public_path($heroFile))) {
+            $heroImage = asset($heroFile);
+        }
+    }
+    $kept = array_filter(request()->only(['q', 'category', 'subcategory']), fn ($value) => $value !== null && $value !== '');
+    $clearUrl = url('/products').($kept ? '?'.http_build_query($kept) : '');
+    $hasExtra = request()->filled('price_min') || request()->filled('price_max') || request()->filled('color') || request('stock') === '1' || (request()->filled('sort') && request('sort') !== 'name');
+@endphp
+
 @section('content')
-<section class="bg-slate-950 text-white">
-    <div class="max-w-7xl mx-auto px-4 py-10">
-        <p class="text-xs uppercase tracking-wide text-amber-300">Shop</p>
-        <h1 class="text-3xl font-semibold mt-1">
-            @if(request('q'))
-                Results for “{{ request('q') }}”
-            @else
-                Car and bike accessories
-            @endif
-        </h1>
-        <p class="text-stone-300 mt-2">{{ $products->total() }} {{ \Illuminate\Support\Str::plural('product', $products->total()) }}</p>
+<section class="catalogue-hero">
+    <div class="max-w-7xl mx-auto px-4 py-10 catalogue-hero-inner {{ $heroImage ? 'has-image' : '' }}">
+        <div>
+            <nav class="catalogue-crumb" aria-label="Breadcrumb">
+                <a href="{{ url('/') }}">Home</a>
+                <span aria-hidden="true">/</span>
+                @if($category)
+                    @if($subcategory)
+                        <a href="{{ \App\Support\CataloguePath::category($category) }}">{{ $category->name }}</a>
+                        <span aria-hidden="true">/</span>
+                        <span>{{ $subcategory->name }}</span>
+                    @else
+                        <span>{{ $category->name }}</span>
+                    @endif
+                @else
+                    <span>Shop</span>
+                @endif
+            </nav>
+            <p class="catalogue-kicker">Cranzo catalogue</p>
+            <h1>{{ $pageTitle }}</h1>
+            <p class="catalogue-lead">{{ $products->total() }} {{ \Illuminate\Support\Str::plural('product', $products->total()) }}</p>
+        </div>
+        @if($heroImage)
+            <img src="{{ $heroImage }}" alt="" class="catalogue-hero-image">
+        @endif
     </div>
 </section>
 
 <section class="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-[260px_minmax(0,1fr)] gap-6">
-    <form method="get" class="shop-card p-4 h-fit lg:sticky lg:top-28 grid gap-3">
-        <h2 class="font-semibold">Filters</h2>
+    <form method="get" class="shop-card catalogue-filters p-4 h-fit lg:sticky lg:top-28 grid gap-3">
+        <h2 class="font-semibold text-lg">Filters</h2>
         @if(request('q'))<input type="hidden" name="q" value="{{ request('q') }}">@endif
         @if(request('category'))<input type="hidden" name="category" value="{{ request('category') }}">@endif
         @if(request('subcategory'))<input type="hidden" name="subcategory" value="{{ request('subcategory') }}">@endif
@@ -40,15 +76,20 @@
             </select>
         </label>
         <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="stock" value="1" @checked(request('stock') === '1')> In stock only</label>
-        <button class="bg-blue-700 text-white rounded-full px-4 py-2.5 font-medium" type="submit">Apply filters</button>
-        <a class="text-sm text-blue-700 text-center" href="{{ url('/products') }}">Clear filters</a>
+        <button class="site-gold-btn catalogue-apply" type="submit">Apply filters</button>
+        @if($hasExtra)
+            <a class="catalogue-clear" href="{{ $clearUrl }}">Clear filters</a>
+        @endif
+        @if($category || $subcategory || request('q'))
+            <a class="catalogue-clear" href="{{ url('/products') }}">View all products</a>
+        @endif
     </form>
     <div>
         <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
             @forelse($products as $product)
                 @include('partials.product_card', ['product' => $product])
             @empty
-                <p class="shop-card p-6 text-stone-500 sm:col-span-2 xl:col-span-3">No products matched these filters. <a class="text-blue-700" href="{{ url('/products') }}">View all products</a></p>
+                <p class="shop-card p-6 text-stone-600 sm:col-span-2 xl:col-span-3">No products matched these filters. <a class="catalogue-clear" href="{{ url('/products') }}">View all products</a></p>
             @endforelse
         </div>
         <div class="mt-8">{{ $products->links('pagination::tailwind') }}</div>

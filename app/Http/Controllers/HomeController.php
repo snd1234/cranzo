@@ -157,15 +157,21 @@ class HomeController extends BaseController
             });
         }
 
+        $category = null;
         $subcategory = null;
         if ($request->filled('category')) {
-            $query->where('category_id', $this->catalogueId('category', (string) $request->input('category')));
+            $categoryId = $this->catalogueId('category', (string) $request->input('category'));
+            $query->where('category_id', $categoryId);
+            $category = DB::table('category')->where('id', $categoryId)->where('status', 1)->first();
         }
 
         if ($request->filled('subcategory')) {
             $subcategoryId = $this->catalogueId('sub_category', (string) $request->input('subcategory'));
             $query->where('sub_category_id', $subcategoryId);
             $subcategory = DB::table('sub_category')->where('id', $subcategoryId)->first();
+            if ($subcategory && ! $category) {
+                $category = DB::table('category')->where('id', $subcategory->category_id)->where('status', 1)->first();
+            }
         }
 
         if ($request->filled('price_min') && is_numeric($request->input('price_min'))) {
@@ -213,7 +219,7 @@ class HomeController extends BaseController
 
         $colors = DB::table('colors')->where('color_status', 1)->orderBy('color_title')->get();
 
-        return view('products', compact('products', 'colors'));
+        return view('products', compact('products', 'colors', 'category', 'subcategory'));
     }
 
     public function productDetail($slug)

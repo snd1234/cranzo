@@ -39,8 +39,14 @@ class CheckoutQuote
             $product->color_name = $colorId ? DB::table('colors')->where('color_id', $colorId)->value('color_title') : null;
             $product->price = (float) $product->discounted_price;
             $product->line_total = round($product->price * $qty, 2);
-            $image = $images->get($product->id, collect())->first();
-            $product->image_name = $image->image ?? $image->thumbnail ?? null;
+            $product->image_name = null;
+            foreach ($images->get($product->id, collect()) as $image) {
+                $candidate = $image->image ?: $image->thumbnail;
+                if ($candidate && is_file(public_path('uploads/products/'.$candidate))) {
+                    $product->image_name = $candidate;
+                    break;
+                }
+            }
             $product->gst_rate = isset($product->gst_rate) ? $product->gst_rate : null;
 
             return $product;
