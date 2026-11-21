@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
             return route('customer.login');
         });
         $middleware->redirectUsersTo(fn () => route('account.dashboard'));
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/razorpay',
+        ]);
         $middleware->alias(['staff' => \App\Http\Middleware\EnsureStaff::class]);
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })

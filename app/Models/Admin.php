@@ -34,5 +34,12 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+    ];
+
+    protected $casts = [
+        'last_login_at' => 'datetime',
+        'locked_until' => 'datetime',
+        'password' => 'hashed',
     ];
 }

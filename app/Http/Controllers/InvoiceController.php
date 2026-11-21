@@ -59,11 +59,14 @@ class InvoiceController extends BaseController
             ]));
         }
 
-        $payment = (int) $row->booking_type === 2 ? 'Cash on delivery' : 'As recorded';
-        if ((int) $row->payment_status === 2) {
+        if ((int) $row->booking_type === 1) {
+            $payment = (int) $row->payment_status === 2 ? 'Paid online' : 'Online payment pending';
+        } elseif ((int) $row->payment_status === 2 && (int) $row->booking_type === 2) {
             $payment = 'COD received';
-        } elseif ((int) $row->payment_status === 1 && (int) $row->booking_type === 2) {
+        } elseif ((int) $row->booking_type === 2) {
             $payment = 'COD pending';
+        } else {
+            $payment = 'As recorded';
         }
 
         $pdf = InvoicePdf::make([

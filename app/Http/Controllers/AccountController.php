@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password as PasswordRule;
@@ -100,6 +101,13 @@ class AccountController extends BaseController
         return back()->with('success', 'Password updated.');
     }
 
+    public function payments()
+    {
+        return view('account.payments', [
+            'payments' => $this->paymentHistory(),
+        ]);
+    }
+
     public function orders()
     {
         $orders = DB::table('orders')->where('user_id', Auth::id())->orderByDesc('id')->paginate(10);
@@ -130,14 +138,50 @@ class AccountController extends BaseController
                 return;
             }
 
-            foreach (DB::table('order_details')->where('order_id', $row->id)->get() as $line) {
-                Inventory::restore((int) $line->product_id, (int) $line->order_quantity, (int) $row->id);
+            $bookingType = \Illuminate\Support\Facades\Schema::hasColumn('orders', 'booking_type') ? (int) $locked->booking_type : 2;
+            $deducted = Inventory::alreadyDeducted((int) $locked->id);
+            if ($bookingType !== 1 || $deducted) {
+                foreach (DB::table('order_details')->where('order_id', $row->id)->get() as $line) {
+                    Inventory::restore((int) $line->product_id, (int) $line->order_quantity, (int) $row->id);
+                }
             }
 
             DB::table('orders')->where('id', $row->id)->update(['cancelled_at' => now()]);
         });
 
         return back()->with('success', 'The order has been cancelled.');
+    }
+
+    public function retryPayment(int $order)
+    {
+        $row = $this->ownOrder($order);
+        $bookingType = \Illuminate\Support\Facades\Schema::hasColumn('orders', 'booking_type') ? (int) $row->booking_type : 0;
+        if ($row->cancelled_at || (int) $row->payment_status !== 1 || $bookingType !== 1) {
+            return back()->withErrors(['order' => 'This order cannot be paid again.']);
+        }
+
+        $cart = [];
+        foreach (DB::table('order_details')->where('order_id', $row->id)->get() as $line) {
+            $product = DB::table('product')->where('id', $line->product_id)->where('status', 1)->first();
+            if (! $product) {
+                continue;
+            }
+            $stock = (int) DB::table('product_details')->where('product_id', $line->product_id)->sum('product_quantity');
+            if ($stock < 1) {
+                continue;
+            }
+            $cart[$line->product_id] = ['qty' => min(10, (int) $line->order_quantity, $stock)];
+        }
+        if ($cart === []) {
+            return back()->withErrors(['order' => 'Those products are no longer available.']);
+        }
+
+        session([
+            'shop_cart' => $cart,
+            'pending_online_order' => $row->order_number,
+        ]);
+
+        return redirect()->route('checkout')->with('success', 'Review the order and choose online payment to try again.');
     }
 
     public function reorder(int $order)
@@ -167,6 +211,87 @@ class AccountController extends BaseController
         abort_if(! $row, 404);
 
         return $row;
+    }
+
+    private function paymentHistory()
+    {
+        if (! Schema::hasTable('payments') || ! Schema::hasTable('orders')) {
+            return collect();
+        }
+
+        $columns = [
+            'payments.payment_id',
+            'payments.order_id',
+            'payments.total_amount',
+            'payments.payment_status',
+            'orders.order_number',
+            'orders.payment_status as order_payment_status',
+        ];
+        foreach (['amount', 'currency', 'payment_gateway', 'payment_state', 'gateway_transaction_id', 'created_date'] as $column) {
+            if (Schema::hasColumn('payments', $column)) {
+                $columns[] = 'payments.'.$column;
+            }
+        }
+        if (Schema::hasColumn('orders', 'booking_type')) {
+            $columns[] = 'orders.booking_type';
+        }
+        if (Schema::hasColumn('orders', 'booking_date')) {
+            $columns[] = 'orders.booking_date';
+        }
+
+        return DB::table('payments')
+            ->join('orders', 'orders.id', '=', 'payments.order_id')
+            ->where('orders.user_id', Auth::id())
+            ->orderByDesc('payments.payment_id')
+            ->limit(20)
+            ->get($columns)
+            ->map(fn ($row) => $this->presentPayment($row));
+    }
+
+    private function presentPayment(object $row): array
+    {
+        $type = (int) ($this->field($row, 'booking_type') ?? 0);
+        $paid = (int) ($this->field($row, 'order_payment_status') ?? $row->payment_status) === 2;
+        $state = (string) ($this->field($row, 'payment_state') ?? '');
+        $gateway = (string) ($this->field($row, 'payment_gateway') ?? '');
+        $amount = $this->field($row, 'amount');
+        $amount = $amount !== null && $amount !== '' ? (float) $amount : (float) $row->total_amount;
+        $when = $this->field($row, 'created_date') ?: $this->field($row, 'booking_date');
+
+        if ($state === 'refunded') {
+            $status = 'Refunded';
+        } elseif ($state === 'failed') {
+            $status = 'Unsuccessful';
+        } elseif ($type === 1 || $gateway === 'razorpay') {
+            $status = $paid ? 'Paid online' : 'Online payment pending';
+        } elseif ($type === 2 || $gateway === 'cod') {
+            $status = $paid ? 'COD received' : 'Cash on delivery pending';
+        } else {
+            $status = $paid ? 'Paid' : 'Pending';
+        }
+
+        if ($type === 2 || $gateway === 'cod') {
+            $method = 'Cash on delivery';
+        } elseif ($type === 1 || $gateway === 'razorpay') {
+            $method = 'Razorpay';
+        } else {
+            $method = 'As recorded';
+        }
+
+        return [
+            'order_id' => (int) $row->order_id,
+            'order_number' => (string) $row->order_number,
+            'when' => $when ? \Illuminate\Support\Carbon::parse($when)->format('d M Y, H:i') : '',
+            'method' => $method,
+            'status' => $status,
+            'amount' => '₹'.number_format($amount, 2),
+            'reference' => $this->field($row, 'gateway_transaction_id') ?: null,
+        ];
+    }
+
+    private function field(object $row, string $key): mixed
+    {
+        return property_exists($row, $key) ? $row->$key : null;
     }
 
     private function plain(mixed $value): string

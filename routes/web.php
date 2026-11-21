@@ -16,6 +16,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderDeskController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ShopDeskController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -55,6 +56,10 @@ Route::post('/wishlist/{product}/cart', [WishlistController::class, 'move'])->na
 Route::post('/reviews', [ReviewController::class, 'store'])->middleware(['auth', 'throttle:5,1'])->name('reviews.store');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [CartController::class, 'place'])->middleware('throttle:8,1')->name('checkout.place');
+Route::post('/checkout/online', [PaymentController::class, 'start'])->middleware('throttle:8,1')->name('checkout.online');
+Route::post('/checkout/online/verify', [PaymentController::class, 'verify'])->middleware('throttle:20,1')->name('checkout.online.verify');
+Route::post('/checkout/online/cancel', [PaymentController::class, 'cancel'])->middleware('throttle:20,1')->name('checkout.online.cancel');
+Route::post('/webhooks/razorpay', [PaymentController::class, 'webhook'])->middleware('throttle:120,1')->name('webhooks.razorpay');
 Route::get('/order/{orderNumber}', [CartController::class, 'complete'])->name('checkout.complete');
 
 Route::middleware('guest')->group(function () {
@@ -79,7 +84,9 @@ Route::middleware(['auth', 'verified'])->prefix('account')->group(function () {
     Route::put('/profile', [AccountController::class, 'updateProfile'])->middleware('throttle:10,1')->name('account.profile.update');
     Route::put('/password', [AccountController::class, 'updatePassword'])->middleware('throttle:5,1')->name('account.password');
     Route::get('/orders', [AccountController::class, 'orders'])->name('account.orders');
+    Route::get('/payments', [AccountController::class, 'payments'])->name('account.payments');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('account.order');
+    Route::get('/orders/{order}/retry-payment', [AccountController::class, 'retryPayment'])->name('account.order.retry');
     Route::get('/orders/{order}/invoice', [InvoiceController::class, 'customer'])->name('account.invoice');
     Route::post('/orders/{order}/returns', [ReturnController::class, 'store'])->name('account.returns.store');
     Route::get('/returns', [ReturnController::class, 'mine'])->name('account.returns');

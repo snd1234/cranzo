@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Http\Controllers\BaseController;
+use App\Services\Payments\RazorpayClient;
+use App\Services\Payments\SdkRazorpayClient;
 use App\Support\Seo;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(RazorpayClient::class, SdkRazorpayClient::class);
     }
 
     /**
@@ -22,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
         View::composer('layout.app', function ($view) {
             $data = $view->getData();
             if (! array_key_exists('seo', $data)) {

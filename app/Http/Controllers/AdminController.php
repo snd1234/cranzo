@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\ProductRequest;
 use App\Models\{Admin, Category, SubCategory, Product};
+use App\Models\Admin as AdminAccount;
+use App\Services\LoginTracker;
 use App\Services\ProductCatalog;
 use App\Support\CataloguePath;
 use App\Support\Slugger;
@@ -25,9 +27,20 @@ class AdminController extends BaseController
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $account = AdminAccount::query()->where('email', $credentials['email'] ?? '')->first();
+        if ($account && LoginTracker::locked($account)) {
+            return back()->withErrors(['email' => 'This account is temporarily locked. Try again in a few minutes.']);
+        }
         if (Auth::guard('admin')->attempt($credentials)) {
+            LoginTracker::succeeded(Auth::guard('admin')->user(), $request);
+            $request->session()->regenerate();
+
             return redirect()->intended('system-auth/dashboard');
         }
+        if ($account) {
+            LoginTracker::failed($account);
+        }
+
         return back()->withErrors(['email' => 'Invalid credentials.']);
     }
 

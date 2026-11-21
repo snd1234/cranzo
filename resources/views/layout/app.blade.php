@@ -32,7 +32,7 @@
         $navCategories = $headerCategories->reject(fn ($category) => in_array($category->id, array_filter([$carMenu->id ?? null, $bikeMenu->id ?? null]), true))->take(4);
     @endphp
     <div class="site-bar text-xs sm:text-sm">
-        <p class="max-w-7xl mx-auto px-4 py-2 text-center">Genuine Cranzo products · Car and bike accessories · Cash on delivery</p>
+        <p class="max-w-7xl mx-auto px-4 py-2 text-center">Genuine Cranzo products · Car and bike accessories</p>
     </div>
 
     <header class="site-header sticky top-0 z-30">
@@ -179,7 +179,7 @@
                 </form>
             </div>
         </div>
-        <p class="site-legal">cranzo.in, {{ date('Y') }}. All rights reserved. Cash on delivery. Online payment is not enabled yet.</p>
+        <p class="site-legal">cranzo.in, {{ date('Y') }}. All rights reserved.</p>
     </footer>
     <script src="{{ asset('front/js/shop.js') }}"></script>
     <script>

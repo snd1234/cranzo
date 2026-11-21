@@ -20,7 +20,7 @@
                 <li><span>Confirmation</span></li>
             </ol>
             <h1>Checkout</h1>
-            <form action="{{ route('checkout.place') }}" method="post" class="mt-5 grid gap-4">
+            <form action="{{ route('checkout.place') }}" method="post" class="mt-5 grid gap-4" id="checkout-form" data-online-url="{{ route('checkout.online') }}" data-verify-url="{{ route('checkout.online.verify') }}" data-cancel-url="{{ route('checkout.online.cancel') }}" data-online="{{ !empty($onlineEnabled) ? '1' : '0' }}">
                 @csrf
                 @if($errors->any())
                     <div class="rounded-xl border border-red-200 bg-red-50 text-red-800 text-sm p-4 grid gap-1" role="alert">
@@ -89,13 +89,14 @@
                 </div>
                 <div class="checkout-card">
                     <h2><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Payment</h2>
-                    <div class="checkout-pay">
+                    <div class="checkout-pay" id="checkout-methods">
+                        @if(!empty($onlineEnabled))
+                            <label><input type="radio" name="payment_method" value="online"> Pay online — UPI, cards, net banking and wallets</label>
+                        @endif
                         <label class="is-on"><input type="radio" name="payment_method" value="cod" checked> Cash on delivery</label>
-                        <label><input type="radio" disabled> UPI — not available yet</label>
-                        <label><input type="radio" disabled> Card — not available yet</label>
-                        <label><input type="radio" disabled> Net banking — not available yet</label>
                     </div>
-                    <button class="checkout-place" type="submit">Place cash on delivery order</button>
+                    <p id="checkout-alert" class="text-sm text-red-700" hidden></p>
+                    <button class="checkout-place" id="checkout-submit" type="submit">Place cash on delivery order</button>
                 </div>
             </form>
         </div>
@@ -146,5 +147,122 @@ document.querySelectorAll('[name=address_id]').forEach(function (choice) {
 document.getElementById('new-address')?.querySelectorAll('input, select').forEach(function (field) {
     field.required = !document.getElementById('new-address').classList.contains('hidden');
 });
+
+const checkoutForm = document.getElementById('checkout-form');
+const checkoutButton = document.getElementById('checkout-submit');
+const checkoutAlert = document.getElementById('checkout-alert');
+function selectedMethod() {
+    return checkoutForm?.querySelector('[name=payment_method]:checked')?.value || 'cod';
+}
+function showAlert(message) {
+    if (!checkoutAlert) return;
+    checkoutAlert.hidden = !message;
+    checkoutAlert.textContent = message || '';
+}
+checkoutForm?.querySelectorAll('[name=payment_method]').forEach(function (choice) {
+    choice.addEventListener('change', function () {
+        const online = selectedMethod() === 'online';
+        checkoutForm.dataset.skipLock = online ? '1' : '';
+        if (checkoutButton) checkoutButton.textContent = online ? 'Pay securely' : 'Place cash on delivery order';
+        checkoutForm.querySelectorAll('#checkout-methods label').forEach(function (label) {
+            label.classList.toggle('is-on', Boolean(label.querySelector('input')?.checked));
+        });
+    });
+});
+checkoutForm?.addEventListener('submit', function (event) {
+    if (selectedMethod() !== 'online') return;
+    event.preventDefault();
+    if (checkoutForm.dataset.paying === '1') return;
+    checkoutForm.dataset.paying = '1';
+    if (checkoutButton) {
+        checkoutButton.disabled = true;
+        checkoutButton.textContent = 'Opening secure payment...';
+    }
+    showAlert('');
+    const token = checkoutForm.querySelector('[name=_token]')?.value || '';
+    fetch(checkoutForm.dataset.onlineUrl, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': token },
+        body: new FormData(checkoutForm)
+    }).then(function (response) {
+        return response.json().then(function (data) { return { ok: response.ok, data: data }; });
+    }).then(function (result) {
+        if (!result.ok) {
+            const errors = result.data.errors || {};
+            const first = Object.values(errors)[0];
+            throw new Error(Array.isArray(first) ? first[0] : (result.data.message || 'Payment could not be started.'));
+        }
+        openRazorpay(result.data);
+    }).catch(function (error) {
+        releaseCheckout(error.message || 'Payment could not be started.');
+    });
+});
+function releaseCheckout(message) {
+    if (!checkoutForm) return;
+    checkoutForm.dataset.paying = '';
+    if (checkoutButton) {
+        checkoutButton.disabled = false;
+        checkoutButton.textContent = 'Pay securely';
+    }
+    showAlert(message);
+}
+function postJson(url, payload) {
+    const token = checkoutForm.querySelector('[name=_token]')?.value || '';
+    return fetch(url, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
+        body: JSON.stringify(payload)
+    }).then(function (response) {
+        return response.json().then(function (data) { return { ok: response.ok, data: data }; });
+    });
+}
+function openRazorpay(data) {
+    if (typeof Razorpay !== 'function') {
+        releaseCheckout('Secure payment could not be loaded. Refresh the page and try again.');
+        return;
+    }
+    const checkout = new Razorpay({
+        key: data.key,
+        amount: data.amount,
+        currency: data.currency,
+        name: data.name,
+        description: data.description,
+        order_id: data.razorpay_order_id,
+        prefill: data.prefill,
+        theme: { color: '#1b1613' },
+        handler: function (response) {
+            if (checkoutButton) checkoutButton.textContent = 'Confirming payment...';
+            postJson(checkoutForm.dataset.verifyUrl, {
+                order_number: data.order_number,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+            }).then(function (result) {
+                if (!result.ok || !result.data.redirect) {
+                    const errors = result.data.errors || {};
+                    const first = Object.values(errors)[0];
+                    releaseCheckout(Array.isArray(first) ? first[0] : 'Payment could not be confirmed.');
+                    return;
+                }
+                window.location = result.data.redirect;
+            }).catch(function () {
+                releaseCheckout('Payment could not be confirmed. If money was taken, it will be checked from the payment notice.');
+            });
+        },
+        modal: {
+            ondismiss: function () {
+                postJson(checkoutForm.dataset.cancelUrl, { order_number: data.order_number }).catch(function () {});
+                releaseCheckout('Payment was cancelled. You can try again.');
+            }
+        }
+    });
+    checkout.on('payment.failed', function () {
+        releaseCheckout('Payment was not completed. You can try again.');
+    });
+    checkout.open();
+}
 </script>
+@if(!empty($onlineEnabled))
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+@endif
 @endsection

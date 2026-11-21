@@ -14,6 +14,7 @@
             @foreach ([
                 ['account.dashboard', 'account.dashboard', 'fa-gauge-high', 'Dashboard'],
                 ['account.orders', 'account.order*', 'fa-box', 'Orders'],
+                ['account.payments', 'account.payments', 'fa-receipt', 'Payments'],
                 ['account.addresses', 'account.addresses', 'fa-location-dot', 'Addresses'],
                 ['wishlist.index', 'wishlist.index', 'fa-heart', 'Wishlist'],
                 ['account.returns', 'account.returns', 'fa-rotate-left', 'Returns'],

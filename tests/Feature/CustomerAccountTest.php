@@ -117,6 +117,80 @@ class CustomerAccountTest extends TestCase
         $this->actingAs($owner)->get('/account/orders/'.$orderId)->assertOk();
     }
 
+    public function test_profile_shows_only_that_customers_payment_history(): void
+    {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->unsignedTinyInteger('booking_type')->nullable();
+        });
+        Schema::create('payments', function (Blueprint $table) {
+            $table->integer('payment_id');
+            $table->integer('order_id');
+            $table->string('total_amount');
+            $table->string('amount_recieved')->nullable();
+            $table->unsignedTinyInteger('payment_status');
+            $table->dateTime('created_date')->nullable();
+            $table->decimal('amount', 12, 2)->nullable();
+            $table->string('payment_gateway')->nullable();
+            $table->string('payment_state')->nullable();
+            $table->string('gateway_transaction_id')->nullable();
+        });
+        $owner = User::create([
+            'username' => 'owner@example.com',
+            'first_name' => 'Own',
+            'last_name' => 'Er',
+            'email' => 'owner@example.com',
+            'mobile_number' => '9012345678',
+            'password' => 'password123',
+        ]);
+        $owner->forceFill(['email_verified_at' => now()])->save();
+        $other = User::create([
+            'username' => 'other@example.com',
+            'first_name' => 'Oth',
+            'last_name' => 'Er',
+            'email' => 'other@example.com',
+            'mobile_number' => '9012345679',
+            'password' => 'password123',
+        ]);
+        $other->forceFill(['email_verified_at' => now()])->save();
+        $ownOrder = DB::table('orders')->insertGetId([
+            'order_number' => 'OWN-100',
+            'user_id' => $owner->id,
+            'address_id' => 1,
+            'order_status' => 1,
+            'payment_status' => 2,
+            'delivery_status' => 1,
+            'booking_date' => now(),
+            'booking_type' => 1,
+        ]);
+        $otherOrder = DB::table('orders')->insertGetId([
+            'order_number' => 'OTHER-200',
+            'user_id' => $other->id,
+            'address_id' => 1,
+            'order_status' => 1,
+            'payment_status' => 1,
+            'delivery_status' => 1,
+            'booking_date' => now(),
+            'booking_type' => 2,
+        ]);
+        DB::table('payments')->insert([
+            ['payment_id' => 1, 'order_id' => $ownOrder, 'total_amount' => '499', 'amount' => 499, 'payment_status' => 2, 'created_date' => now(), 'payment_gateway' => 'razorpay', 'payment_state' => 'succeeded', 'gateway_transaction_id' => 'pay_own'],
+            ['payment_id' => 2, 'order_id' => $otherOrder, 'total_amount' => '80', 'amount' => 80, 'payment_status' => 1, 'created_date' => now(), 'payment_gateway' => 'cod', 'payment_state' => 'pending', 'gateway_transaction_id' => null],
+        ]);
+
+        $this->actingAs($owner)->get('/account/profile')
+            ->assertOk()
+            ->assertSee('Payments')
+            ->assertDontSee('OWN-100');
+        $this->actingAs($owner)->get('/account/payments')
+            ->assertOk()
+            ->assertSee('Payment history')
+            ->assertSee('OWN-100')
+            ->assertSee('₹499.00')
+            ->assertSee('Paid online')
+            ->assertSee('pay_own')
+            ->assertDontSee('OTHER-200');
+    }
+
     public function test_login_removes_unavailable_cart_items(): void
     {
         $user = User::create([

@@ -86,6 +86,8 @@ class Product extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'actual_price' => 'decimal:2',
+        'discounted_price' => 'decimal:2',
     ];
 
     /**

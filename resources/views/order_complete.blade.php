@@ -3,7 +3,13 @@
 @section('content')
 <section class="max-w-3xl mx-auto px-4 py-12">
     <h1 class="text-3xl font-semibold">Order placed</h1>
-    <p class="mt-3 text-stone-700">Your cash on delivery order <strong>{{ $order->order_number }}</strong> is pending confirmation.</p>
+    @if((int) $order->booking_type === 1 && (int) $order->payment_status === 2)
+        <p class="mt-3 text-stone-700">Your payment for order <strong>{{ $order->order_number }}</strong> has been received.</p>
+    @elseif((int) $order->booking_type === 2)
+        <p class="mt-3 text-stone-700">Your cash on delivery order <strong>{{ $order->order_number }}</strong> is pending confirmation.</p>
+    @else
+        <p class="mt-3 text-stone-700">Your order <strong>{{ $order->order_number }}</strong> is placed.</p>
+    @endif
     <div class="mt-6 bg-white border border-stone-200 rounded-xl p-5">
         @foreach($details as $detail)
             <p class="flex justify-between gap-3 py-2 border-b border-stone-100">

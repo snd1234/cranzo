@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\LoginTracker;
 use App\Services\Notifier;
 use App\Services\ShopCart;
 use Illuminate\Http\Request;
@@ -28,11 +29,20 @@ class CustomerAuthController extends BaseController
         ]);
 
         $guestSession = $request->session()->getId();
+        $account = User::query()->where('email', $data['email'])->first();
+        if ($account && LoginTracker::locked($account)) {
+            return back()->withErrors(['email' => 'This account is temporarily locked. Try again in a few minutes.'])->onlyInput('email');
+        }
 
         if (! Auth::attempt(['email' => $data['email'], 'password' => $data['password']], $request->boolean('remember'))) {
+            if ($account) {
+                LoginTracker::failed($account);
+            }
+
             return back()->withErrors(['email' => 'Those details do not match an account.'])->onlyInput('email');
         }
 
+        LoginTracker::succeeded($request->user(), $request);
         $request->session()->regenerate();
         $this->claimGuestOrders($guestSession, (int) Auth::id());
         ShopCart::sanitize();

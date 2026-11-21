@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Services\CartRecord;
 use App\Services\CheckoutQuote;
 use App\Services\Inventory;
-use App\Services\Notifier;
+use App\Services\OrderNotice;
+use App\Services\OrderWriter;
+use App\Services\Payments\OnlinePayment;
+use App\Support\CheckoutAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -82,6 +85,14 @@ class CartController extends BaseController
         if ($items->isEmpty()) {
             return redirect()->route('cart.index');
         }
+        $paid = app(OnlinePayment::class)->paidOrderFromSession();
+        if ($paid) {
+            CartRecord::converted();
+            session()->forget(['shop_cart', 'shop_coupon', 'pending_online_order']);
+            session(['last_order_number' => $paid->order_number]);
+
+            return redirect()->route('checkout.complete', $paid->order_number);
+        }
 
         $states = DB::table('state')->where('status', 1)->orderBy('state_name')->get();
         $addresses = auth()->check()
@@ -98,6 +109,7 @@ class CartController extends BaseController
             'quote' => $quote,
             'states' => $states,
             'addresses' => $addresses,
+            'onlineEnabled' => app(OnlinePayment::class)->configured(),
         ]);
     }
 
@@ -109,41 +121,7 @@ class CartController extends BaseController
             'payment_method.in' => 'Online payment is not available yet. Choose cash on delivery.',
         ]);
 
-        if ($request->filled('address_id')) {
-            abort_unless(auth()->check(), 403);
-            $saved = DB::table('address')
-                ->where('id', $request->integer('address_id'))
-                ->where('user_id', auth()->id())
-                ->first();
-            if (! $saved) {
-                throw ValidationException::withMessages(['address_id' => 'Choose one of your saved addresses.']);
-            }
-            $data = [
-                'name' => trim(strip_tags((string) $saved->name)),
-                'mobile_number' => preg_replace('/\s+/', '', (string) $saved->mobile_number) ?? '',
-                'address' => trim(strip_tags((string) $saved->address)),
-                'locality' => trim(strip_tags((string) $saved->locality)),
-                'city' => trim(strip_tags((string) $saved->city)),
-                'state_id' => $saved->state_id,
-                'pincode' => (string) $saved->pincode,
-            ];
-            $check = validator($data, $this->addressRules(), $this->addressMessages());
-            if ($check->fails()) {
-                throw ValidationException::withMessages([
-                    'address_id' => 'This saved address is incomplete. Choose another one or enter a new address.',
-                ]);
-            }
-        } else {
-            $request->merge([
-                'name' => trim(strip_tags((string) $request->input('name'))),
-                'mobile_number' => preg_replace('/\s+/', '', trim(strip_tags((string) $request->input('mobile_number')))) ?? '',
-                'address' => trim(strip_tags((string) $request->input('address'))),
-                'locality' => trim(strip_tags((string) $request->input('locality'))),
-                'city' => trim(strip_tags((string) $request->input('city'))),
-                'pincode' => trim(strip_tags((string) $request->input('pincode'))),
-            ]);
-            $data = $request->validate($this->addressRules(), $this->addressMessages());
-        }
+        $data = CheckoutAddress::fromRequest($request);
 
         $quote = CheckoutQuote::summary((int) $data['state_id']);
         $items = $quote['items'];
@@ -154,128 +132,20 @@ class CartController extends BaseController
             return back()->withErrors(['coupon' => $quote['coupon_error']]);
         }
 
-        $orderNumber = now()->format('YmdHis').random_int(10, 99);
-
         try {
-        DB::transaction(function () use ($data, $items, $orderNumber, $quote) {
-            $addressId = ((int) DB::table('address')->lockForUpdate()->max('id')) + 1;
-            DB::table('address')->insert([
-                'id' => $addressId,
-                'user_id' => auth()->id() ?: 0,
-                'name' => $data['name'],
-                'mobile_number' => $data['mobile_number'],
-                'address' => $data['address'],
-                'pincode' => (int) $data['pincode'],
-                'locality' => $data['locality'],
-                'city' => $data['city'],
-                'state_id' => (string) $data['state_id'],
-                'address_type' => 1,
-                'default_type' => 2,
-                'created_date' => now(),
-            ]);
-
-            $orderId = DB::table('orders')->insertGetId([
-                'session_id' => session()->getId(),
-                'order_number' => $orderNumber,
-                'user_id' => auth()->id() ?: 0,
-                'address_id' => $addressId,
-                'order_status' => 1,
-                'payment_status' => 1,
-                'delivery_status' => 1,
-                'booking_date' => now(),
-                'booking_type' => 2,
-                'delivery_date' => now()->addDays(5),
-            ]);
-
-            $detailId = (int) DB::table('order_details')->max('id');
-            foreach ($items as $item) {
-                $detailId++;
-                DB::table('order_details')->insert([
-                    'id' => $detailId,
-                    'order_id' => $orderId,
-                    'user_id' => auth()->id() ?: 0,
-                    'product_id' => $item->id,
-                    'product_title' => $item->product_title,
-                    'image' => $item->image_name ?: 'no-image.jpg',
-                    'order_quantity' => $item->qty,
-                    'amount_per_item' => (string) (int) $item->price,
-                ]);
-
-                Inventory::deduct((int) $item->id, $item->color_id ? (int) $item->color_id : null, (int) $item->qty, (int) $orderId);
-            }
-
-            $paymentId = ((int) DB::table('payments')->max('payment_id')) + 1;
-            DB::table('payments')->insert([
-                'payment_id' => $paymentId,
-                'order_id' => $orderId,
-                'total_amount' => (string) (int) round($quote['total']),
-                'amount_recieved' => '0',
-                'discount_percent' => null,
-                'payment_status' => 1,
-                'created_date' => now(),
-            ]);
-            if (\Illuminate\Support\Facades\Schema::hasTable('order_adjustments')) {
-                DB::table('order_adjustments')->insert([
-                    'order_id' => $orderId,
-                    'subtotal' => $quote['subtotal'],
-                    'discount' => $quote['discount'],
-                    'tax' => $quote['tax'],
-                    'total' => $quote['total'],
-                    'coupon_code' => $quote['coupon'],
-                    'tax_label' => $quote['tax_label'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-            if ($quote['coupon']) {
-                $coupon = DB::table('coupons')->where('code', $quote['coupon'])->first();
-                if ($coupon) {
-                    DB::table('coupon_redemptions')->insert([
-                        'coupon_id' => $coupon->id,
-                        'user_id' => auth()->id(),
-                        'order_id' => $orderId,
-                        'amount' => $quote['discount'],
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-            }
-        });
+            $placed = OrderWriter::place($data, $quote, 2, true);
         } catch (\RuntimeException $exception) {
             return back()->withErrors(['quantity' => 'Not enough stock to place this order.']);
         }
+        $orderNumber = $placed['order_number'];
 
-        $this->sendOrderMail($data['name'], $orderNumber, $quote['total']);
+        OrderNotice::queue((int) $placed['order_id'], 'placed');
         CartRecord::converted();
         session()->forget('shop_cart');
         session()->forget('shop_coupon');
         session(['last_order_number' => $orderNumber]);
 
         return redirect()->route('checkout.complete', $orderNumber);
-    }
-
-    private function addressRules(): array
-    {
-        return [
-            'name' => ['required', 'string', 'max:128', 'regex:/^[\p{L}\s.\'-]{2,128}$/u'],
-            'mobile_number' => ['required', 'regex:/^[6-9][0-9]{9}$/'],
-            'address' => ['required', 'string', 'max:256'],
-            'locality' => ['required', 'string', 'max:256'],
-            'city' => ['required', 'string', 'max:30', 'regex:/^[\p{L}\s.\'-]{2,30}$/u'],
-            'state_id' => ['required', 'integer', \Illuminate\Validation\Rule::exists('state', 'id')->where('status', 1)],
-            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
-        ];
-    }
-
-    private function addressMessages(): array
-    {
-        return [
-            'name.regex' => 'Enter the recipient name using letters only.',
-            'mobile_number.regex' => 'Enter a 10-digit Indian mobile number.',
-            'city.regex' => 'Enter a city name using letters only.',
-            'state_id.exists' => 'Select a state from the list.',
-            'pincode.regex' => 'Enter a 6-digit PIN code.',
-        ];
     }
 
     public function complete(string $orderNumber)
@@ -319,19 +189,6 @@ class CartController extends BaseController
     private function cartItems()
     {
         return CheckoutQuote::items();
-    }
-
-    private function sendOrderMail(string $name, string $orderNumber, float $total): void
-    {
-        $email = auth()->user()->email ?? null;
-        if (! $email) {
-            return;
-        }
-        app(Notifier::class)->mail(
-            $email,
-            'Order '.$orderNumber.' placed',
-            $name.', your Cranzo order '.$orderNumber.' is placed. Total ₹'.number_format($total, 2).'. Payment is cash on delivery.'
-        );
     }
 
     private function sellableProduct(int $id): object

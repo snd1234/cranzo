@@ -117,5 +117,6 @@ return [
 
     'newsletter_notify' => env('NEWSLETTER_NOTIFY_EMAIL'),
     'contact_notify' => env('CONTACT_NOTIFY_EMAIL'),
+    'order_notify' => env('ORDER_NOTIFY_EMAIL'),
 
 ];
