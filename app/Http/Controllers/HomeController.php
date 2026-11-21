@@ -7,12 +7,11 @@ use App\Models\CmsPage;
 use App\Models\Faq;
 use App\Support\CataloguePath;
 use App\Support\CmsPages;
+use App\Services\Notifier;
 use App\Support\Seo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
-use Throwable;
 
 class HomeController extends BaseController
 {
@@ -99,6 +98,10 @@ class HomeController extends BaseController
             return view('contact_us', compact('page'));
         }
 
+        if ($slug === 'terms-of-use') {
+            return view('terms_of_use', compact('page'));
+        }
+
         return view('cms_page', compact('page'));
     }
 
@@ -131,18 +134,20 @@ class HomeController extends BaseController
 
         DB::table('contact_us')->insert($row);
 
-        $admin = config('mail.contact_notify');
-        if ($admin) {
-            try {
-                Mail::raw($data['full_name'].' <'.$data['email'].">\n".($data['subject'] ?? '')."\n".$data['message'], function ($message) use ($admin) {
-                    $message->to($admin)->subject('New Cranzo contact message');
-                });
-            } catch (Throwable $exception) {
-                report($exception);
-            }
+        $sent = app(Notifier::class)->contact([
+            'name' => $data['full_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'subject' => $data['subject'] ?? '',
+            'message' => $data['message'],
+        ]);
+
+        $notice = 'Thank you. We have received your message.';
+        if ($sent['thanks']) {
+            $notice .= ' A confirmation has been sent to your email.';
         }
 
-        return back()->with('success', 'Thank you. We have received your message.');
+        return back()->with('success', $notice);
     }
 
     public function products(Request $request)

@@ -49,6 +49,7 @@ class CustomerAccountTest extends TestCase
             'mobile_number' => '9988776655',
             'password' => 'password123',
         ]);
+        $user->forceFill(['email_verified_at' => now()])->save();
 
         $this->actingAs($user)->from('/account/profile')->put('/account/profile', [
             'first_name' => 'New',
@@ -60,7 +61,7 @@ class CustomerAccountTest extends TestCase
         $this->assertSame('9988776655', $user->fresh()->mobile_number);
     }
 
-    public function test_customer_can_open_the_account_without_email_verification(): void
+    public function test_unverified_customer_is_sent_to_confirm_email(): void
     {
         $user = User::create([
             'username' => 'new@example.com',
@@ -71,7 +72,15 @@ class CustomerAccountTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $this->actingAs($user)->get('/account')->assertOk();
+        $this->actingAs($user)->get('/account')->assertRedirect(route('verification.notice'));
+
+        $url = \Illuminate\Support\Facades\URL::temporarySignedRoute('verification.verify', now()->addHour(), [
+            'id' => $user->id,
+            'hash' => sha1($user->email),
+        ]);
+
+        $this->actingAs($user)->get($url)->assertRedirect(route('account.dashboard'));
+        $this->assertNotNull($user->fresh()->email_verified_at);
     }
 
     public function test_customer_cannot_view_another_customers_order(): void

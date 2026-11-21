@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Services\CartRecord;
 use App\Services\CheckoutQuote;
 use App\Services\Inventory;
+use App\Services\Notifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
-use Throwable;
 
 class CartController extends BaseController
 {
@@ -328,13 +327,11 @@ class CartController extends BaseController
         if (! $email) {
             return;
         }
-        try {
-            Mail::raw($name.', your Cranzo order '.$orderNumber.' is placed. Total ₹'.number_format($total, 2).'. Payment is cash on delivery.', function ($message) use ($email, $orderNumber) {
-                $message->to($email)->subject('Order '.$orderNumber.' placed');
-            });
-        } catch (Throwable $exception) {
-            report($exception);
-        }
+        app(Notifier::class)->mail(
+            $email,
+            'Order '.$orderNumber.' placed',
+            $name.', your Cranzo order '.$orderNumber.' is placed. Total ₹'.number_format($total, 2).'. Payment is cash on delivery.'
+        );
     }
 
     private function sellableProduct(int $id): object

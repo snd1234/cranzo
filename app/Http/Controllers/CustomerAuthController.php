@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\Notifier;
 use App\Services\ShopCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,10 @@ class CustomerAuthController extends BaseController
         ShopCart::sanitize();
         \App\Http\Controllers\WishlistController::claim($guestSession, (int) Auth::id());
 
+        if (! $request->user()->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
         return redirect()->intended(route('account.dashboard'));
     }
 
@@ -67,12 +72,55 @@ class CustomerAuthController extends BaseController
         ]);
 
         Auth::login($user);
+        $sent = app(Notifier::class)->userCreated($user);
         $request->session()->regenerate();
         $this->claimGuestOrders($guestSession, (int) $user->id);
         ShopCart::sanitize();
         \App\Http\Controllers\WishlistController::claim($guestSession, (int) Auth::id());
 
-        return redirect()->route('account.dashboard');
+        return redirect()->route('verification.notice')->with(
+            $sent ? 'success' : 'error',
+            $sent
+                ? 'Your account is created. Confirm the email we sent before using the account.'
+                : 'Your account is created, but the confirmation email could not be sent. Use the resend button.'
+        );
+    }
+
+    public function verifyNotice(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('account.dashboard');
+        }
+
+        return view('auth.customer_verify');
+    }
+
+    public function sendVerification(Request $request)
+    {
+        $user = $request->user();
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('account.dashboard');
+        }
+
+        $sent = app(Notifier::class)->userCreated($user);
+
+        return back()->with(
+            $sent ? 'success' : 'error',
+            $sent ? 'A fresh confirmation email has been sent.' : 'The confirmation email could not be sent. Try again shortly.'
+        );
+    }
+
+    public function verifyEmail(Request $request, int $id, string $hash)
+    {
+        $user = $request->user();
+        abort_unless($user && (int) $user->id === $id, 403);
+        abort_unless(hash_equals(sha1($user->getEmailForVerification()), $hash), 403);
+
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        return redirect()->route('account.dashboard')->with('success', 'Your email is confirmed.');
     }
 
     public function logout(Request $request)

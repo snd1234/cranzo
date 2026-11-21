@@ -54,6 +54,7 @@ class AccountController extends BaseController
             'mobile_number.unique' => 'That mobile number is already used by another account.',
         ]);
 
+        $emailChanged = strcasecmp((string) $user->email, $data['email']) !== 0;
         $user->fill([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -61,7 +62,16 @@ class AccountController extends BaseController
             'username' => $data['email'],
             'mobile_number' => $data['mobile_number'],
         ]);
+        if ($emailChanged) {
+            $user->email_verified_at = null;
+        }
         $user->save();
+
+        if ($emailChanged) {
+            app(\App\Services\Notifier::class)->userCreated($user);
+
+            return redirect()->route('verification.notice')->with('success', 'Profile updated. Confirm the new email address.');
+        }
 
         return back()->with('success', 'Profile updated.');
     }

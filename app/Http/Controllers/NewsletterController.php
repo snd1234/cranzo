@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Jobs\SendNewsletterCampaign;
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
+use App\Services\Notifier;
 use App\Support\Seo;
 use App\Support\HtmlCleaner;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Throwable;
 
 class NewsletterController extends BaseController
 {
@@ -182,28 +181,17 @@ class NewsletterController extends BaseController
 
     private function confirm(NewsletterSubscriber $subscriber): void
     {
-        try {
-            Mail::raw(
-                "Your Cranzo newsletter request is saved.\n\nUnsubscribe: ".route('newsletter.unsubscribe', $subscriber->token),
-                function ($message) use ($subscriber) {
-                    $message->to($subscriber->email)->subject('Cranzo newsletter subscription');
-                }
-            );
-        } catch (Throwable $exception) {
-            report($exception);
-        }
+        app(Notifier::class)->mail(
+            $subscriber->email,
+            'Cranzo newsletter subscription',
+            "Your Cranzo newsletter request is saved.\n\nUnsubscribe: ".route('newsletter.unsubscribe', $subscriber->token)
+        );
 
         $admin = config('mail.newsletter_notify');
         if (! $admin) {
             return;
         }
 
-        try {
-            Mail::raw('A visitor subscribed: '.$subscriber->email, function ($message) use ($admin) {
-                $message->to($admin)->subject('New Cranzo newsletter subscriber');
-            });
-        } catch (Throwable $exception) {
-            report($exception);
-        }
+        app(Notifier::class)->mail($admin, 'New Cranzo newsletter subscriber', 'A visitor subscribed: '.$subscriber->email);
     }
 }

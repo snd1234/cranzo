@@ -68,7 +68,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [CustomerAuthController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
 });
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->middleware('auth')->name('customer.logout');
-Route::middleware(['auth'])->prefix('account')->group(function () {
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', [CustomerAuthController::class, 'verifyNotice'])->name('verification.notice');
+    Route::post('/email/verification-notification', [CustomerAuthController::class, 'sendVerification'])->middleware('throttle:6,1')->name('verification.send');
+});
+Route::get('/email/verify/{id}/{hash}', [CustomerAuthController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
+Route::middleware(['auth', 'verified'])->prefix('account')->group(function () {
     Route::get('/', [AccountController::class, 'dashboard'])->name('account.dashboard');
     Route::get('/profile', [AccountController::class, 'editProfile'])->name('account.profile');
     Route::put('/profile', [AccountController::class, 'updateProfile'])->middleware('throttle:10,1')->name('account.profile.update');

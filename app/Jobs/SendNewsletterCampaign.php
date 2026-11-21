@@ -4,10 +4,9 @@ namespace App\Jobs;
 
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
+use App\Services\Notifier;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Mail;
-use Throwable;
 
 class SendNewsletterCampaign implements ShouldQueue
 {
@@ -37,14 +36,9 @@ class SendNewsletterCampaign implements ShouldQueue
             ->get();
 
         foreach ($subscribers as $subscriber) {
-            try {
-                $body = $campaign->content.'<p><a href="'.e(route('newsletter.unsubscribe', $subscriber->token)).'">Unsubscribe</a></p>';
-                Mail::html($body, function ($message) use ($campaign, $subscriber) {
-                    $message->to($subscriber->email)->subject($campaign->subject);
-                });
+            $body = $campaign->content.'<p><a href="'.e(route('newsletter.unsubscribe', $subscriber->token)).'">Unsubscribe</a></p>';
+            if (app(Notifier::class)->html($subscriber->email, $campaign->subject, $body)) {
                 $sent++;
-            } catch (Throwable $exception) {
-                report($exception);
             }
         }
 
